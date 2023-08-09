@@ -1,121 +1,108 @@
-import React from "react";
+import React from 'react';
 
 const TermsConditionsContent = () => {
-  return (
-    <>
-      <div className="terms-conditions-area ptb-100">
-        <div className="container">
-          <div className="terms-conditions-content">
-            <h4>Abev Overview</h4>
-            <p>
-              We may collect personal identification information from Users in a
-              variety of ways, including, but not limited to, when Users visit
-              our site, subscribe to the newsletter, fill out a form, and in
-              connection with other activities, services, features or resources
-              we make <a href="#">available</a> on our Site. Users may be asked
-              for, as appropriate, name, email address, mailing address, phone
-              number, company name. We will collect personal{" "}
-              <strong>identification</strong> information from Users only if
-              they voluntarily consent such information to us. Users can always
-              refuse to supply personally identification information, except
-              that it may prevent them from engaging in certain Site related.
-            </p>
-            <h4>General permission to use and access and use limitations</h4>
-            <p>
-              This site is provided by <strong>Abev</strong>.{" "}
-              <strong>Abev</strong> collects information in several ways from
-              different parts of this site.
-            </p>
-            <p>
-              <strong>1.</strong> Complimentary ground shipping within 1 to 7
-              business days <br /> <strong>2.</strong> In-store collection
-              available within 1 to 7 business days <br /> <strong>3.</strong>{" "}
-              Next-day and Express delivery options also available <br />{" "}
-              <strong>4.</strong> Purchases are delivered in an orange box tied
-              with a Bolduc ribbon, with the exception of certain items <br />{" "}
-              <strong>5.</strong> See the delivery FAQs for details on shipping
-              methods, costs and deliverytimes
-            </p>
-            <h4>Confidential information</h4>
-            <p>
-              <strong>Abev</strong> accepts the following paymentmethods:
-            </p>
-            <ul>
-              <li>
-                Credit Card: Visa, MasterCard, Discover, American Express, JCB,
-                Visa Electron. The total will be charged to your card when the
-                order is shipped.
-              </li>
-              <li>
-                <strong>Abev</strong> features a Fast Checkout option, allowing
-                you to securely save your credit card details so that you
-                don&apos;t have to re-enter them for future purchases.
-              </li>
-              <li>
-                PayPal: Shop easily online without having to enter your credit
-                card details on the website.Your account will be charged once
-                the order is completed. To register for a PayPal account, visit
-                the website{" "}
-                <a href="#" target="_blank">
-                  paypal.com.
-                </a>
-              </li>
-            </ul>
-            <h4>Linking to this Site</h4>
-            <p>
-              Items returned within 14 days of their original shipment date in
-              same as new condition will be eligible for a full refund or store
-              credit. Refunds will be charged back form of payment used for
-              purchase. Customer is responsible for shipping charges when making
-              returns and shipping/handling fees of original purchase is
-              non-refundable.
-            </p>
-            <h4>Intellectual property</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-              eget euismod erat, sit amet vulputate enim. Etiam enim tellus,
-              maximus vel augue sed, pharetra hendrerit orci. Vivamus sed massa
-              in nibh imperdiet mattis quis sed augue. Pellentesque erat metus,
-              vestibulum nec nisl.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-              eget euismod erat, sit amet vulputate enim. Etiam enim tellus.
-            </p>
-            <h4>Security and storage</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-              eget euismod erat, sit amet vulputate enim. Etiam enim tellus.
-            </p>
-            <ol>
-              <li>
-                Credit Card: Visa, MasterCard, Discover, American Express, JCB,
-                Visa Electron. The total will be charged to your card when the
-                order is shipped.
-              </li>
-              <li>
-                <strong>Abev</strong> features a Fast Checkout option, allowing
-                you to securely save your credit card details so that you
-                don&apos;t have to re-enter them for future purchases.
-              </li>
-              <li>
-                PayPal: Shop easily online without having to enter your credit
-                card details on the website.Your account will be charged once
-                the order is completed. To register for a PayPal account, visit
-                the website{" "}
-                <a href="#" target="_blank">
-                  paypal.com.
-                </a>
-              </li>
-            </ol>
-            <p>Last updated: September 18, 2021 at 24:00 pm</p>
-            <h4>Our website</h4>
-            <p>Our website address is: https://abev.com/</p>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<div className="terms-conditions-area ptb-100">
+				<div className="container">
+					<div className="terms-conditions-content">
+						<h4>Definitions</h4>
+						<p>
+							We, us, and our refer to <strong>GSTI</strong>, the provider of
+							travel insurance services. You and your refer to the customer
+							purchasing travel insurance from our website. Policy refers to the
+							insurance contract between you and us. Coverage refers to the
+							scope of protection provided by the policy.
+						</p>
+						<h4>Coverage and Benefits</h4>
+						<p>
+							The coverage provided by the policy is outlined in the policy
+							document, which you will receive upon purchase. It is your
+							responsibility to review the coverage, benefits, and exclusions to
+							ensure they meet your travel insurance needs.
+						</p>
+						<h4>Policy Purchase</h4>
+						<p>
+							To purchase a policy, you must provide accurate and complete
+							information about yourself and your trip. Misrepresentation of
+							information may result in denial of coverage or cancellation of
+							the policy without refund.
+						</p>
+						<h4>Payment and Refunds</h4>
+						<p>
+							Payment for the policy is required at the time of purchase.
+							Refunds are subject to the terms outlined in the policy document.
+							Refunds are typically provided only before the start date of the
+							policy or as specified in the policy document.
+						</p>
+						<h4>Policy Modifications and Cancellations</h4>
+						<p>
+							Policy modifications or cancellations must be requested in writing
+							before the policy start date. Depending on the policy type and
+							timing of the request, there may be fees associated with
+							modifications or cancellations.
+						</p>
+						<h4>Claims Process</h4>
+						<p>
+							In the event of a claim, you must follow the claims procedure
+							outlined in the policy document. Provide all necessary
+							documentation to support your claim, such as receipts, medical
+							reports, and incident reports.
+						</p>
+						<h4>Exclusions</h4>
+						<p>
+							The policy does not cover certain events, circumstances, or
+							pre-existing conditions. Please refer to the policy document for a
+							complete list of exclusions.
+						</p>
+						<h4>Pre-existing Conditions</h4>
+						<p>
+							Coverage for pre-existing medical conditions may be subject to
+							specific terms and requirements outlined in the policy document.
+						</p>
+						<h4>Travel Alerts and Advisories</h4>
+						<p>
+							It is your responsibility to stay informed about travel
+							advisories, warnings, and restrictions for your destination.
+							Failure to adhere to travel advisories may affect coverage under
+							the policy.
+						</p>
+						<h4>Personal Responsibility</h4>
+						<p>
+							You are responsible for your own actions, including taking
+							reasonable precautions to safeguard your belongings and personal
+							safety during your trip.
+						</p>
+						<h4>Privacy and Data</h4>
+						<p>
+							We will handle your personal information in accordance with our
+							Privacy Policy, which is available on our website.
+						</p>
+						<h4>Governing Law</h4>
+						<p>
+							These Terms and Conditions are governed by and construed in
+							accordance with the laws of Ghana.
+						</p>
+						<h4>Changes to Terms and Conditions</h4>
+						<p>
+							We reserve the right to modify these Terms and Conditions at any
+							time without prior notice. Changes will be effective upon posting
+							on our website.
+						</p>
+						<h4>Contact Us</h4>
+						<p>
+							If you have any questions or concerns regarding these Terms and
+							Conditions or our services, please contact our customer support.
+							By purchasing travel insurance from our website, you acknowledge
+							that you have read, understood, and agreed to these Terms and
+							Conditions. It is important to review the policy document
+							thoroughly to understand the specific terms of your coverage.
+						</p>
+					</div>
+				</div>
+			</div>
+		</>
+	);
 };
 
 export default TermsConditionsContent;

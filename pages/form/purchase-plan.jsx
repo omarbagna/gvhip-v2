@@ -1545,14 +1545,22 @@ const Form = () => {
 				<Backdrop
 					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
 					open={makePayment.isLoading}>
-					<CircularProgress color="inherit" />
+					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+						<CircularProgress color="inherit" />
+						<p className="tw-text-white">
+							Please wait, You will be redirected to make payment.
+						</p>
+					</div>
 				</Backdrop>
 
-				<div className="tw-hidden lg:tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-0 tw-bg-white tw-w-[30rem] tw-h-[85vh] tw-overflow-y-auto tw-sticky tw-top-32 tw-right-0 tw-px-10 tw-py-10">
+				<div className="tw-hidden lg:tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-0 tw-bg-white tw-w-[30rem] tw-h-[85vh] tw-overflow-y-auto tw-sticky tw-top-32 tw-right-0 tw-px-10 tw-py-8">
 					<p className="tw-font-title tw-font-bold tw-uppercase tw-text-sm tw-text-gray-500 tw-flex tw-justify-center tw-items-end tw-gap-1">
 						selected plan
 					</p>
-					<div className="tw-w-full tw-h-fit tw-p-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-4 tw-rounded-lg tw-border-2 tw-border-t-4 tw-border-t-[#8e6abf]">
+					<div
+						data-aos="fade-up"
+						data-aos-duration="1200"
+						className="tw-w-full tw-h-fit tw-p-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-4 tw-rounded-lg tw-border-2 tw-border-t-4 tw-border-t-[#8e6abf]">
 						<h2 className="tw-w-full tw-font-title tw-font-semibold tw-text-xl tw-text-[#8e6abf] tw-flex tw-justify-start tw-items-end tw-gap-1 tw-pb-3 tw-border-b">
 							{basicData?.plan?.name}
 						</h2>
@@ -1629,7 +1637,11 @@ const Form = () => {
 							</p>
 						</a>
 					</div>
-					<div className="tw-mt-10 tw-w-full tw-h-fit tw-p-3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-4 tw-rounded-lg tw-border-2 tw-border-t-4 tw-border-t-[#8e6abf]">
+					<div
+						data-aos="fade-up"
+						data-aos-duration="1200"
+						data-aos-delay="100"
+						className="tw-mt-10 tw-w-full tw-h-fit tw-p-3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-4 tw-rounded-lg tw-border-2 tw-border-t-4 tw-border-t-[#8e6abf]">
 						<AiFillSafetyCertificate className="tw-text-6xl tw-text-[#8e6abf]" />
 						<h2 className="tw-font-title tw-font-semibold tw-text-xl tw-text-[#8e6abf] tw-flex tw-justify-start tw-items-end tw-gap-1">
 							Price Guarantee

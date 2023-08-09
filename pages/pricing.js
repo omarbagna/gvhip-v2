@@ -21,9 +21,9 @@ const Pricing = () => {
 			</div>
 			<PricingContent />
 			<Features />
-			<Faq />
 			<TestimonialOne />
 			<GetStarted />
+			<Faq />
 			<FooterFour />
 		</>
 	);

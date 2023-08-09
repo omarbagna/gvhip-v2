@@ -7,23 +7,19 @@ import logo from '@/public/images/gsti_logo.jpeg';
 const FooterFour = () => {
 	const currentYear = new Date().getFullYear();
 	return (
-		<div className="template-footer-four pt-100">
+		<div className="template-footer-four pt-100 tw-bg-[#E8FBFE]">
 			<div className="container">
-				<div className="row justify-content-center">
+				<div className="row justify-content-between">
 					<div className="col-lg-3 col-md-6">
 						<div className="single-footer-widget">
 							<h3 className="nunito-font">About Us</h3>
 							<ul className="quick-links">
 								<li>
-									<Link href="/about-us-1">
+									<Link href="/about-us-2">
 										<a>Our Story</a>
 									</Link>
 								</li>
-								<li>
-									<Link href="/contact">
-										<a>Careers</a>
-									</Link>
-								</li>
+
 								<li>
 									<Link href="/blogs/blog-grid">
 										<a>Latest News</a>
@@ -50,44 +46,6 @@ const FooterFour = () => {
 
 					<div className="col-lg-3 col-md-6">
 						<div className="single-footer-widget">
-							<h3 className="nunito-font">Resources</h3>
-							<ul className="quick-links">
-								<li>
-									<Link href="/portfolio/portfolio-details">
-										<a>Business Startup</a>
-									</Link>
-								</li>
-								<li>
-									<Link href="/portfolio/portfolio-details">
-										<a>Finance Consulting</a>
-									</Link>
-								</li>
-								<li>
-									<Link href="/portfolio/portfolio-details">
-										<a>Wealth Management</a>
-									</Link>
-								</li>
-								<li>
-									<Link href="/portfolio/portfolio-details">
-										<a>Business Planning</a>
-									</Link>
-								</li>
-								<li>
-									<Link href="/portfolio/portfolio-details">
-										<a>Data Management</a>
-									</Link>
-								</li>
-								<li>
-									<Link href="/portfolio/portfolio-details">
-										<a>Marketing Planning</a>
-									</Link>
-								</li>
-							</ul>
-						</div>
-					</div>
-
-					<div className="col-lg-3 col-md-6">
-						<div className="single-footer-widget">
 							<h3 className="nunito-font">Quick Links</h3>
 							<ul className="quick-links">
 								<li>
@@ -96,7 +54,7 @@ const FooterFour = () => {
 									</Link>
 								</li>
 								<li>
-									<Link href="/about-us-1">
+									<Link href="/about-us-2">
 										<a>About Us</a>
 									</Link>
 								</li>
@@ -171,7 +129,13 @@ const FooterFour = () => {
 							<div className="logo">
 								<Link href="/">
 									<a>
-										<Image height={40} width={50} src={logo} alt="logo" />
+										<Image
+											height={40}
+											width={50}
+											src={logo}
+											alt="logo"
+											className="tw-rounded-lg"
+										/>
 									</a>
 								</Link>
 							</div>
