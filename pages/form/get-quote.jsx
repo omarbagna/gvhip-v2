@@ -319,7 +319,7 @@ const Quote = () => {
 						</div>
 					</div>
 				) : (
-					<div className="tw-w-fit tw-flex tw-justify-center tw-items-center tw-gap-5 tw-p-3 tw-rounded-md ">
+					<div className="tw-w-fit tw-hidden md:tw-flex tw-justify-center tw-items-center tw-gap-5 tw-p-3 tw-rounded-md ">
 						<div
 							onClick={() => setFormStep(3)}
 							className="tw-cursor-pointer tw-group tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-2">
