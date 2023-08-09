@@ -446,7 +446,7 @@ const Form = () => {
 							<div className="tw-w-full tw-flex tw-flex-wrap-reverse tw-gap-3 tw-justify-between tw-items-center">
 								<span className="">
 									<span className="tw-w-fit tw-flex tw-justify-start tw-items-end tw-gap-1">
-										<h2 className="tw-font-title tw-font-medium text-3xl md:tw-text-5xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
+										<h2 className="tw-font-title tw-font-medium tw-text-3xl md:tw-text-5xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
 											{formStep === 1
 												? 'Traveller Details'
 												: 'Review and Accept Terms'}
