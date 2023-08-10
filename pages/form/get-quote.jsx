@@ -110,7 +110,6 @@ const Quote = () => {
 			return (
 				<div className="tw-w-full tw-flex tw-justify-end tw-items-center">
 					<button
-						//size="lg"
 						className="btn-style-one dark-green-color"
 						disabled={selectedPlan === null ? true : false}
 						type="submit">
