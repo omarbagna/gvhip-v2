@@ -81,7 +81,7 @@ const DashboardNav = () => {
 			</div>
 
 			{/** Side Nav */}
-			<div className="tw-h-full tw-fixed tw-z-40 tw-top-20 tw-left-0 tw-flex tw-flex-col tw-justify-start tw-items-start tw-w-fit tw-bg-white tw-border-r-2">
+			<div className="tw-h-fit lg:tw-h-full tw-fixed lg:tw-z-40 tw-bottom-0 lg:tw-top-20 tw-left-0 tw-flex lg:tw-flex-col tw-justify-center lg:tw-justify-start tw-items-center lg:tw-items-start tw-w-full lg:tw-w-fit tw-bg-white tw-border-t-2 lg:tw-border-t-0 lg:tw-border-r-2">
 				<Link
 					href="/dashboard"
 					activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
