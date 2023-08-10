@@ -7,6 +7,7 @@ import { Avatar, Badge } from '@mui/material';
 import { BsChevronDown } from 'react-icons/bs';
 import { BiHomeAlt, BiUser } from 'react-icons/bi';
 import { useRouter } from 'next/router';
+import { MdOutlineLocalHospital } from 'react-icons/md';
 
 const DashboardNav = () => {
 	const router = useRouter();
@@ -86,6 +87,15 @@ const DashboardNav = () => {
 					activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
 					<a className="tw-w-56 tw-py-4 tw-px-6 tw-flex tw-justify-start tw-items-end tw-gap-2">
 						<BiHomeAlt className="tw-shrink-0 tw-text-2xl" /> Dashboard
+					</a>
+				</Link>
+
+				<Link
+					href="/dashboard/find-doctor"
+					activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
+					<a className="tw-w-56 tw-py-4 tw-px-6 tw-flex tw-justify-start tw-items-end tw-gap-2">
+						<MdOutlineLocalHospital className="tw-shrink-0 tw-text-2xl" /> Find
+						a Doctor
 					</a>
 				</Link>
 				<Link
