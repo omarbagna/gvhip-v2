@@ -44,7 +44,7 @@ const alertError = () => {
 		title: 'Fill all Required Fields',
 		text: 'Some required fields have not been filled on the form, please fill them in and try again',
 		icon: 'error',
-		timer: 4000,
+		timer: 8000,
 		timerProgressBar: true,
 		showConfirmButton: false,
 	});
@@ -1537,7 +1537,9 @@ const Form = () => {
 															<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-3 tw-rounded-md tw-p-3 tw-shadow-sm tw-bg-white/50">
 																{REVIEW_DATA.map(({ name, key }, index) => (
 																	<div
-																		className={person[key] ? 'block' : 'hidden'}
+																		className={
+																			person[key] ? 'tw-block' : 'tw-hidden'
+																		}
 																		key={index}>
 																		<Typography
 																			variant="paragraph"
@@ -1665,7 +1667,7 @@ const Form = () => {
 					open={makePayment.isLoading}>
 					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 						<CircularProgress color="inherit" />
-						<p className="tw-text-white tw-text-center tw-text-lg tw-w-2/3 md:tw-w-1/2">
+						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
 							Please wait, You will be redirected to make payment.
 						</p>
 					</div>
