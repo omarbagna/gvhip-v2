@@ -271,7 +271,7 @@ const Quote = () => {
 	};
 
 	return (
-		<div className="tw-w-full tw-min-h-screen tw-h-full tw-flex tw-flex-col tw-justify-start tw-items-center tw-bg-[#F5F7FA]">
+		<div className="tw-w-full tw-min-h-screen tw-h-full tw-flex tw-flex-col tw-justify-start tw-items-center tw-bg-[#FEFBFB]">
 			<div className="tw-sticky tw-top-0 tw-z-30 tw-w-full tw-h-fit tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-3 tw-bg-white tw-shadow-md tw-px-6 tw-py-3 md:tw-py-5 md:tw-px-10 lg:tw-px-20">
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 					<Link href="/">
@@ -389,7 +389,7 @@ const Quote = () => {
 								<div className="tw-w-full tw-flex tw-flex-wrap-reverse tw-gap-3 tw-justify-between tw-items-center">
 									<span className="tw-w-fit tw-flex tw-justify-start tw-items-end tw-gap-1">
 										<h2 className="tw-font-title tw-font-bold tw-text-2xl lg:tw-text-3xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
-											What country are you flying in from?
+											What country are you travelling in from?
 										</h2>
 									</span>
 								</div>
@@ -429,7 +429,7 @@ const Quote = () => {
 									<div className="tw-w-full tw-flex tw-flex-wrap-reverse tw-gap-3 tw-justify-between tw-items-center">
 										<span className="tw-w-fit tw-flex tw-justify-start tw-items-end tw-gap-1">
 											<h2 className="tw-font-title tw-font-bold tw-text-2xl lg:tw-text-3xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
-												How many travelers?
+												How many travellers?
 											</h2>
 										</span>
 									</div>

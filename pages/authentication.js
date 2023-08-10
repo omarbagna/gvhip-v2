@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '@/components/Layout/Navigations/Navbar4';
 import Login from '@/components/Authentication/Login';
 //import Signup from '@/components/Authentication/Signup';
-import FooterFour from '@/components/Layout/Footer/FooterFour';
+//import FooterFour from '@/components/Layout/Footer/FooterFour';
 
 const Authentication = () => {
 	return (
@@ -12,11 +12,11 @@ const Authentication = () => {
 				<div className="container">
 					<div className="page-title-content">
 						<span className="sub-title">Login</span>
-						<h1>Please check your email for your login details</h1>
+						<h1>Welcome</h1>
 					</div>
 				</div>
 			</div>
-			<div className="profile-authentication-area ptb-100">
+			<div className="profile-authentication-area ptb-75">
 				<div className="container">
 					<div className="row justify-content-center">
 						<Login />
@@ -26,7 +26,6 @@ const Authentication = () => {
 					</div>
 				</div>
 			</div>
-			<FooterFour />
 		</>
 	);
 };

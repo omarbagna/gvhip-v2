@@ -1,12 +1,23 @@
-import React from "react";
+import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Login = () => {
+	const router = useRouter();
+
+	const logIn = (e) => {
+		e.preventDefault();
+		//Cookies.set('loggedin', 'true');
+		router.push('/dashboard');
+	};
 	return (
 		<div className="col-lg-6 col-md-12">
 			<div className="login-form">
+				{/**
 				<h2>Login</h2>
-				<form>
+				 */}
+
+				<form onSubmit={(e) => logIn(e)}>
 					<div className="form-group">
 						<label>Username or email</label>
 						<input
@@ -31,21 +42,14 @@ const Login = () => {
 									type="checkbox"
 									id="remember-me"
 								/>
-								<label
-									className="form-check-label"
-									htmlFor="remember-me"
-								>
+								<label className="form-check-label" htmlFor="remember-me">
 									Remember me
 								</label>
 							</div>
 						</div>
 						<div className="col-lg-6 col-md-6 lost-your-password-wrap">
 							<Link href="/lost-password">
-								<a
-									className="lost-your-password"
-								>
-									Lost your password?
-								</a>
+								<a className="lost-your-password">Lost your password?</a>
 							</Link>
 						</div>
 					</div>

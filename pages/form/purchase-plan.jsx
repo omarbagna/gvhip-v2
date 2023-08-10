@@ -461,7 +461,7 @@ const Form = () => {
 				</div>
 			</div>
 
-			<div className="tw-w-full tw-min-h-screen tw-h-full tw-flex tw-justify-center tw-items-start lg:tw-justify-between tw-bg-[#F5F7FA]">
+			<div className="tw-w-full tw-min-h-screen tw-h-full tw-flex tw-justify-center tw-items-start lg:tw-justify-between tw-bg-[#FEFBFB]">
 				<div className="tw-w-full tw-h-full tw-flex tw-flex-col tw-justify-start tw-items-center tw-my-10 md:tw-my-20">
 					<div className="tw-w-full md:tw-w-5/6 tw-rounded-xl tw-mx-auto">
 						<div className="tw-w-full tw-h-fit tw-px-8">
@@ -532,6 +532,7 @@ const Form = () => {
 															<div
 																key={inputField.id}
 																className="tw-relative tw-w-full tw-h-full tw-flex tw-flex-col tw-gap-5 tw-justify-center tw-items-center ">
+																{/** Personal Information Area */}
 																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-y-2 tw-border-[#171e41] tw-py-10">
 																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
 																		Personal Information
@@ -670,6 +671,8 @@ const Form = () => {
 																		/>
 																	</div>
 																</div>
+
+																{/** Travel Information Area */}
 																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-b-2 tw-border-[#171e41] tw-pb-10">
 																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
 																		Travel Information
@@ -762,6 +765,8 @@ const Form = () => {
 																		)}
 																	/>
 																</div>
+
+																{/** Contact Information Area */}
 																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-b-2 tw-border-[#171e41] tw-pb-10">
 																	<div className="tw-w-full tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start">
 																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
@@ -784,6 +789,14 @@ const Form = () => {
 																				be contacted and assisted on your
 																				purchased insurance and claim process.
 																			</p>
+																			<h6 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-semibold tw-text-xs md:tw-text-sm">
+																				Note
+																			</h6>
+																			<p className="tw-w-full tw-mt-1 tw-text-left tw-text-xs md:tw-text-sm">
+																				Phone numbers must follow the
+																				international standard i.e (country code
+																				then number)
+																			</p>
 																		</span>
 																	</div>
 																	<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
@@ -791,7 +804,15 @@ const Form = () => {
 																			name={`insured_person[${index}].email`}
 																			control={control}
 																			defaultValue={''}
-																			rules={{ required: 'Please enter email' }}
+																			rules={{
+																				pattern: {
+																					value:
+																						/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/gi,
+																					message:
+																						'Please enter a valid email address',
+																				},
+																				required: 'Please enter email',
+																			}}
 																			render={({
 																				field: { ref, ...field },
 																				fieldState: { error, invalid },
@@ -813,6 +834,12 @@ const Form = () => {
 																			name={`insured_person[${index}].telephone`}
 																			control={control}
 																			rules={{
+																				pattern: {
+																					value:
+																						/\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$/gi,
+																					message:
+																						'Please enter a valid phone number. Phone number must follow the international standard',
+																				},
 																				required:
 																					'Please enter telephone number',
 																			}}
@@ -967,6 +994,12 @@ const Form = () => {
 																				control={control}
 																				defaultValue={''}
 																				rules={{
+																					pattern: {
+																						value:
+																							/\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$/gi,
+																						message:
+																							'Please enter a valid phone number. Phone number must follow the international standard',
+																					},
 																					required: 'Please enter phone number',
 																				}}
 																				render={({
@@ -1049,6 +1082,12 @@ const Form = () => {
 																			control={control}
 																			defaultValue={''}
 																			rules={{
+																				pattern: {
+																					value:
+																						/\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$/gi,
+																					message:
+																						'Please enter a valid phone number. Phone number must follow the international standard',
+																				},
 																				required: 'Please enter phone number',
 																			}}
 																			render={({
@@ -1071,6 +1110,7 @@ const Form = () => {
 																	</div>
 																</div>
 
+																{/** Health Information Area */}
 																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start">
 																	<div className="tw-w-full tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start">
 																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
@@ -1276,7 +1316,15 @@ const Form = () => {
 															name={`applicant[${0}].telephone`}
 															defaultValue={''}
 															control={control}
-															rules={{ required: 'Please enter phone number' }}
+															rules={{
+																pattern: {
+																	value:
+																		/\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$/gi,
+																	message:
+																		'Please enter a valid phone number. Phone number must follow the international standard',
+																},
+																required: 'Please enter phone number',
+															}}
 															render={({
 																field: { ref, ...field },
 																fieldState: { error, invalid },
@@ -1296,7 +1344,14 @@ const Form = () => {
 															name={`applicant[${0}].email`}
 															defaultValue={''}
 															control={control}
-															rules={{ required: 'Please enter email address' }}
+															rules={{
+																pattern: {
+																	value:
+																		/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/gi,
+																	message: 'Please enter a valid email address',
+																},
+																required: 'Please enter email address',
+															}}
 															render={({
 																field: { ref, ...field },
 																fieldState: { error, invalid },
@@ -1367,6 +1422,12 @@ const Form = () => {
 															defaultValue={''}
 															control={control}
 															rules={{
+																pattern: {
+																	value:
+																		/\+?(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$/gi,
+																	message:
+																		'Please enter a valid phone number. Phone number must follow the international standard',
+																},
 																required: 'Please enter company phone number',
 															}}
 															render={({
@@ -1388,7 +1449,14 @@ const Form = () => {
 															name={`applicant[${0}].company_email`}
 															defaultValue={''}
 															control={control}
-															rules={{ required: 'Please enter company email' }}
+															rules={{
+																pattern: {
+																	value:
+																		/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/gi,
+																	message: 'Please enter a valid email address',
+																},
+																required: 'Please enter company email',
+															}}
 															render={({
 																field: { ref, ...field },
 																fieldState: { error, invalid },

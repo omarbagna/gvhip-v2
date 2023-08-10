@@ -306,12 +306,16 @@ const Navbar4 = () => {
 													<div className="col-12 col-sm-6 col-md-3 mtb-5">
 														<ul className="megamenu-submenu">
 															<li className="nav-item">
-																<Link href="#" activeClassName="active">
+																<Link
+																	href="/authentication"
+																	activeClassName="active">
 																	<a className="nav-link">Manage your Policy</a>
 																</Link>
 															</li>
 															<li className="nav-item">
-																<Link href="/team" activeClassName="active">
+																<Link
+																	href="/authentication"
+																	activeClassName="active">
 																	<a className="nav-link">
 																		Request Policy ID Card
 																	</a>
@@ -323,14 +327,18 @@ const Navbar4 = () => {
 													<div className="col-12 col-sm-6 col-md-3 mtb-5">
 														<ul className="megamenu-submenu">
 															<li className="nav-item">
-																<Link href="#" activeClassName="active">
+																<Link
+																	href="/authentication"
+																	activeClassName="active">
 																	<a className="nav-link">
 																		Find Doctors & Hospitals
 																	</a>
 																</Link>
 															</li>
 															<li className="nav-item">
-																<Link href="#" activeClassName="active">
+																<Link
+																	href="/get-quote"
+																	activeClassName="active">
 																	<a className="nav-link">Request a Quote</a>
 																</Link>
 															</li>
@@ -345,6 +353,12 @@ const Navbar4 = () => {
 											</div>
 										</li>
 									</ul>
+								</li>
+
+								<li className="nav-item">
+									<Link href="/authentication" activeClassName="active">
+										<a className="nav-link">Sign In</a>
+									</Link>
 								</li>
 							</ul>
 						</div>
