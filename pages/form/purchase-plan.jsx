@@ -6,6 +6,9 @@ import logo from '@/public/images/gsti_logo.jpeg';
 import DefaultInput from '@/components/Input/DefaultInput';
 import SelectInput from '@/components/Input/SelectInput';
 import { format, differenceInDays, parseISO } from 'date-fns';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+const MySwal = withReactContent(Swal);
 import { countries } from '../../data/countriesData';
 import {
 	Accordion,
@@ -34,6 +37,18 @@ import { useMutation } from 'react-query';
 import { MdDelete, MdEdit, MdOutlineExpandMore } from 'react-icons/md';
 import { IoAdd } from 'react-icons/io5';
 import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
+import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
+
+const alertError = () => {
+	MySwal.fire({
+		title: 'Fill all Required Fields',
+		text: 'Some required fields have not been filled on the form, please fill them in and try again',
+		icon: 'error',
+		timer: 4000,
+		timerProgressBar: true,
+		showConfirmButton: false,
+	});
+};
 
 const MAX_STEPS = 2;
 
@@ -150,19 +165,13 @@ const Form = () => {
 		if (data !== null) setBasicData(JSON.parse(data));
 	}, []);
 
-	const goToNext = () => {
-		setFormStep((prev) => prev + 1);
-	};
-	const goToPrevious = () => {
-		setFormStep((prev) => prev - 1);
-	};
-
 	const {
 		watch,
 		control,
 		setValue,
 		reset,
-		formState: { isValid },
+		trigger,
+		formState: { isValid, errors },
 		handleSubmit,
 	} = useForm({
 		mode: 'all',
@@ -182,6 +191,19 @@ const Form = () => {
 		name: 'insured_person',
 		rules: { maxLength: 5 },
 	});
+
+	const goToNext = () => {
+		trigger();
+		if (isValid) {
+			setFormStep((prev) => prev + 1);
+		} else {
+			alertError();
+			scrollIntoViewHelper(errors);
+		}
+	};
+	const goToPrevious = () => {
+		setFormStep((prev) => prev - 1);
+	};
 
 	useEffect(() => {
 		if (applicantType === 'self') {
@@ -262,7 +284,7 @@ const Form = () => {
 					<button
 						//size="lg"
 						className="btn-style-one dark-green-color"
-						disabled={!isValid}
+						//disabled={!isValid}
 						//onClick={goToNext}
 						type="submit">
 						Proceed to Payment <i className="bx bx-chevron-right"></i>
@@ -275,7 +297,7 @@ const Form = () => {
 					<button
 						//size="lg"
 						className="btn-style-one dark-green-color"
-						disabled={!isValid}
+						//disabled={!isValid}
 						onClick={goToNext}
 						type="button">
 						Next <i className="bx bx-chevron-right"></i>
@@ -298,7 +320,7 @@ const Form = () => {
 					<Button
 						//size="lg"
 						//className="tw-w-full tw-bg-gradient-to-br from-[#7862AF] to-[#171E41]"
-						disabled={!isValid}
+						//disabled={!isValid}
 						onClick={goToNext}
 						type="button">
 						Next
@@ -440,7 +462,7 @@ const Form = () => {
 			</div>
 
 			<div className="tw-w-full tw-min-h-screen tw-h-full tw-flex tw-justify-center tw-items-start lg:tw-justify-between tw-bg-[#F5F7FA]">
-				<div className="tw-w-full tw-h-full tw-flex tw-flex-col tw-justify-start tw-items-center tw-my-20">
+				<div className="tw-w-full tw-h-full tw-flex tw-flex-col tw-justify-start tw-items-center tw-my-10 md:tw-my-20">
 					<div className="tw-w-full md:tw-w-5/6 tw-rounded-xl tw-mx-auto">
 						<div className="tw-w-full tw-h-fit tw-px-8">
 							<div className="tw-w-full tw-flex tw-flex-wrap-reverse tw-gap-3 tw-justify-between tw-items-center">
@@ -464,8 +486,8 @@ const Form = () => {
 							<form onSubmit={handleSubmit(submitForm)}>
 								{formStep === 1 && (
 									<>
-										<section className="tw-flex tw-flex-col tw-gap-10">
-											<div className="tw-flex tw-flex-col tw-gap-5">
+										<section className="tw-flex tw-flex-col tw-gap-8">
+											<div className="tw-flex tw-flex-col tw-gap-3">
 												{fields.map((inputField, index) => (
 													<Accordion
 														//animate={customAnimation}
@@ -481,7 +503,7 @@ const Form = () => {
 															}
 															onClick={() => handleOpen(index + 1)}>
 															<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-pr-4">
-																<div className="tw-flex tw-justify-start tw-items-center tw-gap-5">
+																<div className="tw-flex tw-flex-col md:tw-flex-row tw-justify-start tw-items-start md:tw-items-center tw-gap-3 md:tw-gap-5">
 																	<h3 className="tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
 																		Traveller {index + 1}
 																	</h3>
@@ -499,7 +521,7 @@ const Form = () => {
 																{watch('insured_person')?.length > 1 ? (
 																	<div
 																		onClick={() => remove(index)}
-																		className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-6 tw-w-6 tw-text-red-500 hover:tw-text-white tw-border tw-border-red-500 tw-bg-transparent hover:tw-shadow-lg hover:tw-shadow-red-400/50 hover:tw-bg-red-500 cursor-pointer">
+																		className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-6 tw-w-6 tw-text-red-500 hover:tw-text-white tw-bg-transparent hover:tw-shadow-lg hover:tw-shadow-red-400/50 hover:tw-bg-red-500 cursor-pointer">
 																		<MdDelete className="tw-text-base" />
 																	</div>
 																) : null}
@@ -510,7 +532,7 @@ const Form = () => {
 															<div
 																key={inputField.id}
 																className="tw-relative tw-w-full tw-h-full tw-flex tw-flex-col tw-gap-5 tw-justify-center tw-items-center ">
-																<div className="tw-w-full h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-rounded-md tw-shadow-sm tw-bg-blue-gray-100/30">
+																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-y-2 tw-border-[#171e41] tw-py-10">
 																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
 																		Personal Information
 																	</h4>
@@ -648,10 +670,122 @@ const Form = () => {
 																		/>
 																	</div>
 																</div>
-																<div className="tw-w-full h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-rounded-md tw-shadow-sm tw-bg-blue-gray-100/30">
+																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-b-2 tw-border-[#171e41] tw-pb-10">
 																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
-																		Contact Information
+																		Travel Information
 																	</h4>
+																	<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
+																		<Controller
+																			name={`insured_person[${index}].arrival_date`}
+																			control={control}
+																			defaultValue={watch('start_date')}
+																			rules={{ required: 'Date is required.' }}
+																			render={({
+																				field: { ref, ...field },
+																				fieldState: { error, invalid },
+																			}) => (
+																				<DefaultInput
+																					{...field}
+																					ref={ref}
+																					error={invalid}
+																					helpertext={
+																						invalid ? error.message : null
+																					}
+																					label="Arrival date in Ghana"
+																					type="date"
+																					disabled
+																					//required
+																				/>
+																			)}
+																		/>
+																		<Controller
+																			name={`insured_person[${index}].departure_date`}
+																			control={control}
+																			defaultValue={watch('end_date')}
+																			rules={{ required: 'Date is required.' }}
+																			render={({
+																				field: { ref, ...field },
+																				fieldState: { error, invalid },
+																			}) => (
+																				<DefaultInput
+																					{...field}
+																					ref={ref}
+																					error={invalid}
+																					helpertext={
+																						invalid ? error.message : null
+																					}
+																					label="Departure date from Ghana"
+																					type="date"
+																					min={watch(
+																						`insured_person[${index}].arrival_date`
+																					)}
+																					/*
+																max={format(
+																	add(
+																		new Date(
+																			watch(
+																				`insured_person[${index}].arrival_date`
+																			)
+																		),
+																		{
+																			days: 90,
+																		}
+																	),
+																	'yyyy-MM-dd'
+																)}
+																*/
+																					disabled
+																					//required
+																				/>
+																			)}
+																		/>
+																	</div>
+
+																	<Controller
+																		name={`insured_person[${index}].address_ghana`}
+																		control={control}
+																		defaultValue={''}
+																		render={({
+																			field: { ref, ...field },
+																			fieldState: { error, invalid },
+																		}) => (
+																			<DefaultInput
+																				{...field}
+																				ref={ref}
+																				error={invalid}
+																				helpertext={
+																					invalid ? error.message : null
+																				}
+																				label="Address in Ghana"
+																				type="text"
+																			/>
+																		)}
+																	/>
+																</div>
+																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-b-2 tw-border-[#171e41] tw-pb-10">
+																	<div className="tw-w-full tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start">
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
+																			Contact Information
+																		</h4>
+																		<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 tw-rounded-lg">
+																			<p className="tw-w-full tw-text-left tw-text-xs md:tw-text-sm">
+																				Please provide your personal contact
+																				information as well as the information
+																				of your emergency contact in your home
+																				country. We also require a second
+																				emergency contact in Ghana.
+																			</p>
+																			<h6 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-semibold tw-text-xs md:tw-text-sm">
+																				Why do we need this information?
+																			</h6>
+																			<p className="tw-w-full tw-mt-1 tw-text-left tw-text-xs md:tw-text-sm">
+																				In case of any unfortunate event, the
+																				emergency contacts provided below will
+																				be contacted and assisted on your
+																				purchased insurance and claim process.
+																			</p>
+																		</span>
+																	</div>
 																	<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
 																		<Controller
 																			name={`insured_person[${index}].email`}
@@ -724,10 +858,11 @@ const Form = () => {
 																	/>
 
 																	<div className="tw-w-full h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-rounded-md tw-shadow-sm">
-																		<h4 className="tw-w-full tw-text-tw-left tw-text-lg ">
-																			<mark className="tw-p-2 tw-font-title tw-font-medium tw-rounded-md tw-bg-red-400 tw-text-white">
-																				Emergency Contact Information
-																			</mark>
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF] tw-hidden md:tw-block">
+																			Emergency Contact Information
+																		</h4>
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF] md:tw-hidden">
+																			Emergency Contact Info
 																		</h4>
 																		<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
 																			<Controller
@@ -853,104 +988,10 @@ const Form = () => {
 																			/>
 																		</div>
 																	</div>
-																</div>
-																<div className="tw-w-full h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-rounded-md tw-shadow-sm tw-bg-blue-gray-100/30">
-																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
-																		Travel Information
-																	</h4>
-																	<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
-																		<Controller
-																			name={`insured_person[${index}].arrival_date`}
-																			control={control}
-																			defaultValue={watch('start_date')}
-																			rules={{ required: 'Date is required.' }}
-																			render={({
-																				field: { ref, ...field },
-																				fieldState: { error, invalid },
-																			}) => (
-																				<DefaultInput
-																					{...field}
-																					ref={ref}
-																					error={invalid}
-																					helpertext={
-																						invalid ? error.message : null
-																					}
-																					label="Arrival date in Ghana"
-																					type="date"
-																					disabled
-																					//required
-																				/>
-																			)}
-																		/>
-																		<Controller
-																			name={`insured_person[${index}].departure_date`}
-																			control={control}
-																			defaultValue={watch('end_date')}
-																			rules={{ required: 'Date is required.' }}
-																			render={({
-																				field: { ref, ...field },
-																				fieldState: { error, invalid },
-																			}) => (
-																				<DefaultInput
-																					{...field}
-																					ref={ref}
-																					error={invalid}
-																					helpertext={
-																						invalid ? error.message : null
-																					}
-																					label="Departure date from Ghana"
-																					type="date"
-																					min={watch(
-																						`insured_person[${index}].arrival_date`
-																					)}
-																					/*
-																max={format(
-																	add(
-																		new Date(
-																			watch(
-																				`insured_person[${index}].arrival_date`
-																			)
-																		),
-																		{
-																			days: 90,
-																		}
-																	),
-																	'yyyy-MM-dd'
-																)}
-																*/
-																					disabled
-																					//required
-																				/>
-																			)}
-																		/>
-																	</div>
-
-																	<Controller
-																		name={`insured_person[${index}].address_ghana`}
-																		control={control}
-																		defaultValue={''}
-																		render={({
-																			field: { ref, ...field },
-																			fieldState: { error, invalid },
-																		}) => (
-																			<DefaultInput
-																				{...field}
-																				ref={ref}
-																				error={invalid}
-																				helpertext={
-																					invalid ? error.message : null
-																				}
-																				label="Address in Ghana"
-																				type="text"
-																			/>
-																		)}
-																	/>
 
 																	<div className="tw-w-full h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-rounded-md tw-shadow-sm">
-																		<h4 className="tw-w-full tw-text-tw-left tw-text-lg ">
-																			<mark className="tw-p-2 tw-font-title tw-font-medium tw-rounded-md tw-bg-red-400 tw-text-white">
-																				Emergency Contact in Ghana
-																			</mark>
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
+																			Emergency Contact in Ghana
 																		</h4>
 																		<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
 																			<Controller
@@ -1029,10 +1070,20 @@ const Form = () => {
 																		/>
 																	</div>
 																</div>
-																<div className="tw-w-full h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-rounded-md tw-shadow-sm tw-bg-blue-gray-100/30">
-																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
-																		Health Information
-																	</h4>
+
+																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start">
+																	<div className="tw-w-full tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start">
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
+																			Health Information
+																		</h4>
+																		<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 tw-rounded-lg">
+																			<p className="tw-w-full tw-text-left tw-text-xs md:tw-text-sm">
+																				Please let us know if you have any
+																				pre-exixting health conditions and/or
+																				allergies to help us better serve you.
+																			</p>
+																		</span>
+																	</div>
 																	<div className="tw-w-full tw-grid tw-grid-cols-1 tw-gap-5">
 																		<Controller
 																			name={`insured_person[${index}].existing_conditions`}
@@ -1127,7 +1178,6 @@ const Form = () => {
 															<FormControl
 																{...field}
 																ref={ref}
-																className="tw-w-full"
 																onChange={(value) => {
 																	onChange(value);
 																	setApplicantType(value.target.value);
@@ -1137,7 +1187,7 @@ const Form = () => {
 																	row
 																	defaultValue="other"
 																	name="radio-buttons-group"
-																	className="tw-px-3 tw-shadow-inner tw-rounded-lg tw-w-fit tw-mt-3 lg:tw-mt-0">
+																	className="tw-w-fit tw-mt-3 lg:tw-mt-0">
 																	<FormControlLabel
 																		name="applicant_type"
 																		id="self"
@@ -1547,7 +1597,7 @@ const Form = () => {
 					open={makePayment.isLoading}>
 					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 						<CircularProgress color="inherit" />
-						<p className="tw-text-white">
+						<p className="tw-text-white tw-text-center tw-text-lg tw-w-2/3 md:tw-w-1/2">
 							Please wait, You will be redirected to make payment.
 						</p>
 					</div>
