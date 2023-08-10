@@ -55,17 +55,10 @@ const Quote = () => {
 		if (data !== null) setBasicData(JSON.parse(data));
 	}, []);
 
-	const goToNext = () => {
-		setFormStep((prev) => prev + 1);
-	};
-	const goToPrevious = () => {
-		setFormStep((prev) => prev - 1);
-	};
-
 	const {
 		watch,
 		control,
-		setValue,
+		trigger,
 		reset,
 		formState: { isValid },
 		handleSubmit,
@@ -83,6 +76,16 @@ const Quote = () => {
 		name: 'insured_person',
 		rules: { maxLength: 5 },
 	});
+
+	const goToNext = () => {
+		trigger();
+		if (isValid) {
+			setFormStep((prev) => prev + 1);
+		}
+	};
+	const goToPrevious = () => {
+		setFormStep((prev) => prev - 1);
+	};
 
 	useEffect(() => {
 		if (basicData) {
@@ -129,7 +132,7 @@ const Quote = () => {
 					<button
 						//size="lg"
 						className="btn-style-one dark-green-color"
-						disabled={!isValid}
+						//disabled={!isValid}
 						onClick={goToNext}
 						type="button">
 						Get Quotes <i className="bx bx-chevron-right"></i>
@@ -150,7 +153,7 @@ const Quote = () => {
 					<button
 						//size="lg"
 						className="btn-style-one dark-green-color"
-						disabled={!isValid}
+						//disabled={!isValid}
 						onClick={goToNext}
 						type="button">
 						Next <i className="bx bx-chevron-right"></i>
@@ -163,7 +166,7 @@ const Quote = () => {
 					<button
 						//size="lg"
 						className="btn-style-one dark-green-color"
-						disabled={!isValid}
+						//disabled={!isValid}
 						onClick={goToNext}
 						type="button">
 						Next <i className="bx bx-chevron-right"></i>
@@ -186,7 +189,7 @@ const Quote = () => {
 					<Button
 						//size="lg"
 						//className="w-full bg-gradient-to-br from-[#7862AF] to-[#171E41]"
-						disabled={!isValid}
+						//disabled={!isValid}
 						onClick={goToNext}
 						type="button">
 						Next
@@ -429,7 +432,7 @@ const Quote = () => {
 									<div className="tw-w-full tw-flex tw-flex-wrap-reverse tw-gap-3 tw-justify-between tw-items-center">
 										<span className="tw-w-fit tw-flex tw-justify-start tw-items-end tw-gap-1">
 											<h2 className="tw-font-title tw-font-bold tw-text-2xl lg:tw-text-3xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
-												How many travellers?
+												How many travellwers?
 											</h2>
 										</span>
 									</div>
