@@ -7,12 +7,12 @@ import { TbEdit } from 'react-icons/tb';
 
 const Profile = () => {
 	return (
-		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-pt-20 tw-pl-56">
+		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">
 			<DashboardNav />
 			<div className="tw-w-full tw-h-full tw-py-10 tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
 				<h2 className="tw-text-3xl tw-font-semibold">Applicant Profile</h2>
 
-				<div className="tw-w-2/3 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+				<div className="tw-w-full lg:tw-w-2/3 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 					<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 						<h3 className="tw-font-medium tw-text-xl">Profile</h3>
 						<span className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf] hover:tw-text-white hover:tw-bg-[#8e6abf] hover:tw-shadow-lg group-hover:tw-shadow-[#8e6abf]/50">
