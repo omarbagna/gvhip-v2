@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
-import { addDays, differenceInDays, format } from 'date-fns';
+import { addDays, differenceInDays, format, isEqual, parseISO } from 'date-fns';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRange } from 'react-date-range';
@@ -10,8 +10,22 @@ import Accordion from '@/components/Accordion';
 import { planTabsData } from 'data/plansData';
 import { Controller, useForm } from 'react-hook-form';
 import { Checkbox, FormControlLabel, FormHelperText } from '@mui/material';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+const MySwal = withReactContent(Swal);
 //import Signup from '@/components/Authentication/Signup';
 //import FooterFour from '@/components/Layout/Footer/FooterFour';
+
+const alertError = () => {
+	MySwal.fire({
+		title: 'Invalid Extension Start Date',
+		text: 'Extension must start from current coverage end date',
+		icon: 'error',
+		timer: 8000,
+		timerProgressBar: true,
+		showConfirmButton: false,
+	});
+};
 
 const Dashboard = () => {
 	const [managePolicy, setManagePolicy] = useState(false);
@@ -45,8 +59,16 @@ const Dashboard = () => {
 		});
 
 		console.log(data, basicData);
+		let rightExtensionStartDate = isEqual(
+			parseISO(format(new Date(dateState[0]?.startDate), 'yyyy-MM-dd')),
+			parseISO(format(addDays(new Date(), 30), 'yyyy-MM-dd'))
+		);
 
-		setManagePolicy(false);
+		if (!rightExtensionStartDate) {
+			alertError();
+		} else {
+			setManagePolicy(false);
+		}
 
 		reset();
 		//window.localStorage.setItem('basicData', basicData);
