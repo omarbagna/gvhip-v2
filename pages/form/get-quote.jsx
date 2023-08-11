@@ -1,3 +1,5 @@
+'use client';
+
 import Link from '@/utils/ActiveLink';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -667,7 +669,7 @@ const Quote = () => {
 															Price
 														</div>
 														<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-white tw-font-bold">
-															{basicData &&
+															{duration &&
 																Intl.NumberFormat('en-US', {
 																	style: 'currency',
 																	currency: 'USD',

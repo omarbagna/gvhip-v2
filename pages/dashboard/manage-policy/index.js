@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
 import { addDays, differenceInDays, format } from 'date-fns';
