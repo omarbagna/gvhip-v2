@@ -11,7 +11,7 @@ import withReactContent from 'sweetalert2-react-content';
 const MySwal = withReactContent(Swal);
 import { countries } from '../../data/countriesData';
 import {
-	Accordion,
+	Accordion as MuiAccordion,
 	AccordionDetails,
 	AccordionSummary,
 	Backdrop,
@@ -25,7 +25,10 @@ import {
 	RadioGroup,
 	Typography,
 } from '@mui/material';
+import Accordion from '@/components/Accordion';
+
 import {
+	BiMinus,
 	//BiCreditCardFront,
 	BiTime,
 } from 'react-icons/bi';
@@ -38,6 +41,7 @@ import { MdDelete, MdEdit, MdOutlineExpandMore } from 'react-icons/md';
 import { IoAdd } from 'react-icons/io5';
 import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
 import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
+import { planTabsData } from 'data/plansData';
 
 const alertError = () => {
 	MySwal.fire({
@@ -159,6 +163,11 @@ const Form = () => {
 	const [basicData, setBasicData] = useState(null);
 	const [paymentAmount, setPaymentAmount] = useState(0);
 	const [open, setOpen] = useState(1);
+	const [showMore, setShowMore] = useState(false);
+
+	const handleShowDetails = () => {
+		setShowMore((prev) => !prev);
+	};
 
 	useEffect(() => {
 		const data = window.localStorage.getItem('basicData');
@@ -334,6 +343,15 @@ const Form = () => {
 		setOpen(open === value ? 0 : value);
 	};
 
+	const duration = basicData
+		? Number(
+				differenceInDays(
+					new Date(basicData.end_date),
+					new Date(basicData.start_date)
+				)
+		  )
+		: null;
+
 	const paymentRequest = async (data) => {
 		const { data: response } = await axios.post(
 			'https://goldenpartnershipplatform.org/ng-pay/checkout.php',
@@ -489,7 +507,7 @@ const Form = () => {
 										<section className="tw-flex tw-flex-col tw-gap-8">
 											<div className="tw-flex tw-flex-col tw-gap-3">
 												{fields.map((inputField, index) => (
-													<Accordion
+													<MuiAccordion
 														//animate={customAnimation}
 														expanded={open === index + 1}
 														//onChange={handleOpen(index + 1)}
@@ -1169,7 +1187,7 @@ const Form = () => {
 																</div>
 															</div>
 														</AccordionDetails>
-													</Accordion>
+													</MuiAccordion>
 												))}
 											</div>
 
@@ -1193,7 +1211,7 @@ const Form = () => {
 																<IoAdd className="tw-text-base" />
 															</div>
 															<p className="tw-font-bold tw-text-sm tw-text-[#8e6abf]">
-																Add another traveller
+																Add traveller
 															</p>
 														</div>
 													</div>
@@ -1225,7 +1243,7 @@ const Form = () => {
 																name="applicant_type">
 																<RadioGroup
 																	row
-																	defaultValue="other"
+																	defaultValue={watch('applicant_type')}
 																	name="radio-buttons-group"
 																	className="tw-w-fit tw-mt-3 lg:tw-mt-0">
 																	<FormControlLabel
@@ -1492,7 +1510,7 @@ const Form = () => {
 												 */}
 
 												{watch(`insured_person`).map((person, index) => (
-													<Accordion
+													<MuiAccordion
 														//animate={customAnimation}
 														expanded={open === index + 1}
 														//onChange={handleOpen(index + 1)}
@@ -1555,7 +1573,7 @@ const Form = () => {
 																))}
 															</div>
 														</AccordionDetails>
-													</Accordion>
+													</MuiAccordion>
 												))}
 											</div>
 
@@ -1619,15 +1637,28 @@ const Form = () => {
 										<div className="tw-w-full tw-flex tw-items-center tw-justify-between tw-gap-5 tw-bg-white tw-border tw-border-b-black tw-rounded-lg tw-py-3 tw-px-10 tw-shadow-md">
 											<div className="tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-1">
 												<p className="tw-capitalize tw-font-normal tw-text-sm tw-text-gray-700 tw-border-b-2 tw-border-[#7862AF]">
-													{basicData.plan.name}
+													Standard Plan
 												</p>
 
 												<p className="tw-text-lg">
-													{Intl.NumberFormat('en-US', {
-														style: 'currency',
-														currency: 'USD',
-													}).format(Number(basicData.plan.price))}{' '}
-													per person x {watch('insured_person').length}
+													{duration &&
+														Intl.NumberFormat('en-US', {
+															style: 'currency',
+															currency: 'USD',
+														}).format(
+															duration <= 30
+																? 45
+																: duration > 30 && duration <= 60
+																? 90
+																: duration > 60 && duration <= 90
+																? 135
+																: duration > 90 && duration <= 120
+																? 180
+																: duration > 120 && duration <= 150
+																? 225
+																: duration > 150 && duration <= 180 && 270
+														)}{' '}
+													x {watch('insured_person').length}
 												</p>
 											</div>
 
@@ -1638,13 +1669,24 @@ const Form = () => {
 
 												<span className="tw-relative tw-flex tw-justify-center tw-items-end tw-gap-1">
 													<h2 className="tw-font-title tw-font-bold tw-text-xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
-														{Intl.NumberFormat('en-US', {
-															style: 'currency',
-															currency: 'USD',
-														}).format(
-															Number(basicData.plan.price) *
-																watch('insured_person').length
-														)}
+														{duration &&
+															Intl.NumberFormat('en-US', {
+																style: 'currency',
+																currency: 'USD',
+															}).format(
+																(duration <= 30
+																	? 45
+																	: duration > 30 && duration <= 60
+																	? 90
+																	: duration > 60 && duration <= 90
+																	? 135
+																	: duration > 90 && duration <= 120
+																	? 180
+																	: duration > 120 && duration <= 150
+																	? 225
+																	: duration > 150 && duration <= 180 && 270) *
+																	watch('insured_person').length
+															)}
 													</h2>
 												</span>
 											</div>
@@ -1675,14 +1717,14 @@ const Form = () => {
 
 				<div className="tw-hidden lg:tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-0 tw-bg-white tw-w-[30rem] tw-h-[85vh] tw-overflow-y-auto tw-sticky tw-top-32 tw-right-0 tw-px-10 tw-py-8">
 					<p className="tw-font-title tw-font-bold tw-uppercase tw-text-sm tw-text-gray-500 tw-flex tw-justify-center tw-items-end tw-gap-1">
-						selected plan
+						best plan
 					</p>
 					<div
 						data-aos="fade-up"
 						data-aos-duration="1200"
 						className="tw-w-full tw-h-fit tw-p-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-4 tw-rounded-lg tw-border-2 tw-border-t-4 tw-border-t-[#8e6abf]">
-						<h2 className="tw-w-full tw-font-title tw-font-semibold tw-text-xl tw-text-[#8e6abf] tw-flex tw-justify-start tw-items-end tw-gap-1 tw-pb-3 tw-border-b">
-							{basicData?.plan?.name}
+						<h2 className="tw-w-full tw-capitalize tw-font-title tw-font-semibold tw-text-xl tw-text-[#8e6abf] tw-flex tw-justify-start tw-items-end tw-gap-1 tw-pb-3 tw-border-b">
+							standard plan
 						</h2>
 
 						<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-pb-3 tw-border-b">
@@ -1734,16 +1776,48 @@ const Form = () => {
 								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-600">
 									Price
 								</div>
-								<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-3 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
-									{Intl.NumberFormat('en-US', {
-										style: 'currency',
-										currency: 'USD',
-									}).format(Number(basicData?.plan?.price))}{' '}
+								<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-0 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+									{duration &&
+										Intl.NumberFormat('en-US', {
+											style: 'currency',
+											currency: 'USD',
+										}).format(
+											duration <= 30
+												? 45
+												: duration > 30 && duration <= 60
+												? 90
+												: duration > 60 && duration <= 90
+												? 135
+												: duration > 90 && duration <= 120
+												? 180
+												: duration > 120 && duration <= 150
+												? 225
+												: duration > 150 && duration <= 180 && 270
+										)}{' '}
 									<p className="tw-text-gray-500 tw-font-light tw-text-xs">
 										/person
 									</p>
 								</span>
 							</div>
+							{duration && duration > 30 ? (
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-600">
+										Discount
+									</div>
+									<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-3 tw-text-lg tw-text-[#8e6abf] tw-font-bold">
+										{duration > 30 && duration <= 60
+											? '10'
+											: duration > 60 && duration <= 90
+											? '15'
+											: duration > 90 && duration <= 120
+											? '20'
+											: duration > 120 && duration <= 150
+											? '25'
+											: duration > 150 && duration <= 180 && '30'}{' '}
+										%
+									</span>
+								</div>
+							) : null}
 						</div>
 
 						<a
@@ -1756,6 +1830,26 @@ const Form = () => {
 								Plan Brochure
 							</p>
 						</a>
+					</div>
+					{showMore && (
+						<div className="tw-block">
+							<Accordion questionsAnswers={planTabsData} />
+						</div>
+					)}
+
+					<div
+						onClick={handleShowDetails}
+						className="tw-group tw-cursor-pointer tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-2 tw-pt-2 tw-mt-6">
+						<div className="tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-4 tw-w-4 tw-text-white tw-bg-[#8e6abf] group-hover:tw-shadow-lg group-hover:tw-shadow-[#8e6abf]/50">
+							{!showMore ? (
+								<IoAdd className="tw-text-sm" />
+							) : (
+								<BiMinus className="tw-text-sm" />
+							)}
+						</div>
+						<p className="tw-font-bold tw-text-sm tw-text-[#8e6abf]">
+							{!showMore ? 'Show details' : 'Hide details'}
+						</p>
 					</div>
 					<div
 						data-aos="fade-up"

@@ -1,4 +1,5 @@
 import React from 'react';
+import { BsDot } from 'react-icons/bs';
 
 const AccordionItem = ({
 	showDescription,
@@ -15,6 +16,7 @@ const AccordionItem = ({
 				aria-controls={`faq${index + 1}_desc`}
 				data-qa="faq__question-button"
 				className={`faq__question-button ${fontWeightBold}`}
+				type="button"
 				onClick={onClick}>
 				{item?.question || item?.name}
 			</button>
@@ -35,9 +37,9 @@ const AccordionItem = ({
 						className={`faq__desc ${showDescription}`}>
 						{item?.content?.map((item, index) => (
 							<li
-								className="tw-mb-2 tw-border-b-2 tw-pb-2 tw-text-sm tw-flex tw-justify-start tw-items-start tw-gap-2"
+								className="tw-mb-2 tw-pb-2 tw-text-sm tw-flex tw-justify-start tw-items-start tw-gap-2"
 								key={index}>
-								<i className="flaticon-draw-check-mark tw-mt-1"></i>
+								<BsDot className="tw-text-lg tw-shrink-0" />
 								{item}
 							</li>
 						))}

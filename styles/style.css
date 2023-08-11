@@ -2392,7 +2392,7 @@ FAQ Area CSS
 	border-radius: 0;
 	box-shadow: unset;
 	position: relative;
-	background-color: transparent;
+	background-color: var(--whiteColor);
 	color: var(--blackColor) !important;
 	font-size: 19px;
 	font-weight: 600;

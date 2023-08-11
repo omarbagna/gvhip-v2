@@ -24,7 +24,7 @@ const Banner = () => {
 								data-aos-duration="1200"
 								data-aos-delay="100"
 								className="nunito-font">
-								Ghana Safe Travel Initiative
+								Ghana Safe Stay Program
 							</h1>
 							<p
 								data-aos="fade-up"

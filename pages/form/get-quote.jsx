@@ -13,28 +13,28 @@ import { DateRange } from 'react-date-range';
 
 import { countries } from '../../data/countriesData';
 import logo from '@/public/images/gsti_logo.jpeg';
-import { Button } from '@mui/material';
+import {
+	Button,
+	Checkbox,
+	FormControlLabel,
+	FormHelperText,
+} from '@mui/material';
 
 import { IoAdd } from 'react-icons/io5';
 import { AiOutlineClose, AiOutlineFilePdf } from 'react-icons/ai';
 
 import { MdDelete } from 'react-icons/md';
-import { BiMinus, BiSolidTime } from 'react-icons/bi';
 import Accordion from '@/components/Accordion';
 import DetailsTabs from '@/components/Courses/Details/DetailsTabs';
-import { plans } from 'data/plansData';
-import {
-	BsFillCheckCircleFill,
-	BsGlobeEuropeAfrica,
-	BsPeopleFill,
-} from 'react-icons/bs';
+import { planTabsData } from 'data/plansData';
+
+import { TbEdit } from 'react-icons/tb';
 
 const MAX_STEPS = 3;
 
 const Quote = () => {
 	const [formStep, setFormStep] = useState(1);
 	const [basicData, setBasicData] = useState(null);
-	const [selectedPlan, setSelectedPlan] = useState(null);
 	const [dateState, setDateState] = useState([
 		{
 			startDate: new Date(),
@@ -103,15 +103,29 @@ const Quote = () => {
 		}
 	}, [reset, basicData]);
 
+	let duration = Number(
+		differenceInDays(
+			new Date(dateState[0].endDate),
+			new Date(dateState[0].startDate)
+		) + 1
+	);
 	const renderButton = () => {
 		if (formStep > 4) {
 			return null;
 		} else if (formStep === 4) {
 			return (
-				<div className="tw-w-full tw-flex tw-justify-end tw-items-center">
+				<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
+					<span
+						//size="lg"
+						className="btn-style-back crimson-color tw-w-10 tw-h-10 tw-rounded-full tw-flex tw-rotate-180 tw-shadow-md tw-justify-center tw-items-center tw-text-3xl"
+						onClick={goToPrevious}
+						//color="red"
+					>
+						<i className="bx bx-chevron-right"></i>
+					</span>
 					<button
 						className="btn-style-one dark-green-color"
-						disabled={selectedPlan === null ? true : false}
+						//disabled={selectedPlan === null ? true : false}
 						type="submit">
 						Purchase Plan <i className="bx bx-chevron-right"></i>
 					</button>
@@ -134,7 +148,7 @@ const Quote = () => {
 						//disabled={!isValid}
 						onClick={goToNext}
 						type="button">
-						Get Quotes <i className="bx bx-chevron-right"></i>
+						Get Quote <i className="bx bx-chevron-right"></i>
 					</button>
 				</div>
 			);
@@ -240,10 +254,10 @@ const Quote = () => {
 			end_date: format(dateState[0]?.endDate, 'yyyy-MM-dd'),
 			country: data?.country,
 			insured_person: data?.insured_person,
-			plan: selectedPlan,
+			//plan: selectedPlan,
 		});
 
-		console.log(basicData);
+		//console.log(basicData);
 		window.localStorage.setItem('basicData', basicData);
 
 		router.push(`/form/purchase-plan`);
@@ -273,7 +287,7 @@ const Quote = () => {
 	};
 
 	return (
-		<div className="tw-w-full tw-min-h-screen tw-h-full tw-flex tw-flex-col tw-justify-start tw-items-center tw-bg-[#FEFBFB]">
+		<div className="tw-w-full tw-min-h-screen tw-h-fit tw-flex tw-flex-col tw-justify-start tw-items-center tw-bg-[#FEFBFB]">
 			<div className="tw-sticky tw-top-0 tw-z-30 tw-w-full tw-h-fit tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-3 tw-bg-white tw-shadow-md tw-px-6 tw-py-3 md:tw-py-5 md:tw-px-10 lg:tw-px-20">
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 					<Link href="/">
@@ -291,7 +305,7 @@ const Quote = () => {
 					<h2 className="tw-hidden md:tw-flex tw-capitalize tw-font-title tw-font-bold tw-text-3xl lg:tw-text-4xl tw-text-[#171e41]  tw-justify-center tw-items-end tw-gap-1">
 						{formStep !== 4
 							? 'Lets get some basic information'
-							: 'Best plans for you'}
+							: 'Best plan for you'}
 					</h2>
 
 					{formStep !== 4 && (
@@ -320,68 +334,15 @@ const Quote = () => {
 							/>
 						</div>
 					</div>
-				) : (
-					<div className="tw-w-fit tw-hidden md:tw-flex tw-justify-center tw-items-center tw-gap-5 tw-p-3 tw-rounded-md ">
-						<div
-							onClick={() => setFormStep(3)}
-							className="tw-cursor-pointer tw-group tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-2">
-							<span className="tw-flex tw-justify-start tw-items-center tw-gap-1">
-								<BiSolidTime className="tw-text-lg tw-text-gray-700" />
-								<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-700 tw-border-b-2 tw-border-[#7862AF]">
-									Duration
-								</p>
-							</span>
-							<p className="tw-transition-all tw-duration-200 tw-ease-in-out group-hover:tw-text-[#7862AF] hover:tw-font-bold">
-								{differenceInDays(
-									new Date(dateState[0].endDate),
-									new Date(dateState[0].startDate)
-								) + 1}{' '}
-								days
-							</p>
-						</div>
-
-						<div className="tw-w-[2px] tw-h-8 tw-bg-gray-200 tw-rounded-full" />
-
-						<div
-							onClick={() => setFormStep(1)}
-							className="tw-cursor-pointer tw-group tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-2">
-							<span className="tw-flex tw-justify-start tw-items-center tw-gap-1">
-								<BsGlobeEuropeAfrica className="tw-text-lg tw-text-gray-700" />
-								<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-700 tw-border-b-2 tw-border-[#7862AF]">
-									Country of Residence
-								</p>
-							</span>
-							<p className="tw-transition-all tw-duration-200 tw-ease-in-out group-hover:tw-text-[#7862AF] hover:tw-font-bold">
-								{watch('country')}{' '}
-							</p>
-						</div>
-
-						<div className="tw-w-[2px] tw-h-8 tw-bg-gray-200 tw-rounded-full" />
-
-						<div
-							onClick={() => setFormStep(2)}
-							className="tw-cursor-pointer tw-group tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-2">
-							<span className="tw-flex tw-justify-start tw-items-center tw-gap-1">
-								<BsPeopleFill className="tw-text-lg tw-text-gray-700" />
-								<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-700 tw-border-b-2 tw-border-[#7862AF]">
-									No of Travellers
-								</p>
-							</span>
-							<p className="tw-transition-all tw-duration-200 tw-ease-in-out group-hover:tw-text-[#7862AF] hover:tw-font-bold">
-								{watch('insured_person')?.length}{' '}
-								{watch('insured_person')?.length > 1 ? 'people' : 'person'}
-							</p>
-						</div>
-					</div>
-				)}
+				) : null}
 			</div>
 			<div
 				className={
 					formStep !== 4
-						? 'tw-w-full md:tw-w-5/6 lg:tw-w-4/6 tw-rounded-xl md:tw-shadow-lg md:tw-bg-white tw-mx-auto tw-my-20'
-						: 'tw-w-full tw-h-full md:tw-bg-[#f1f5fd]'
+						? 'tw-w-full tw-h-full md:tw-w-5/6 lg:tw-w-4/6 tw-rounded-xl md:tw-shadow-lg md:tw-bg-white tw-mx-auto tw-my-20'
+						: 'tw-w-full tw-h-full'
 				}>
-				<div className="tw-px-4 tw-py-5 md:tw-px-8 md:tw-py-10">
+				<div className="tw-px-4 tw-py-5 md:tw-px-8 md:tw-py-10 tw-w-full tw-h-full">
 					<form onSubmit={handleSubmit(submitForm)}>
 						{formStep === 1 && (
 							<section
@@ -431,19 +392,19 @@ const Quote = () => {
 									<div className="tw-w-full tw-flex tw-flex-wrap-reverse tw-gap-3 tw-justify-between tw-items-center">
 										<span className="tw-w-fit tw-flex tw-justify-start tw-items-end tw-gap-1">
 											<h2 className="tw-font-title tw-font-bold tw-text-2xl lg:tw-text-3xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
-												How many travellwers?
+												How many travellers?
 											</h2>
 										</span>
 									</div>
 									<div className="tw-relative tw-w-full tw-flex tw-flex-col tw-gap-5 tw-justify-center tw-items-center tw-border-y-2 tw-px-2 tw-py-5 md:tw-p-4">
 										{fields.map((inputField, index) => (
 											<div
-												data-aos="fade-left"
-												data-aos-duration="800"
+												data-aos="zoom-in"
+												data-aos-duration="500"
 												key={inputField.id}
 												className="tw-w-full tw-h-full tw-flex tw-gap-8 lg:tw-gap-5 tw-justify-between tw-items-center lg:tw-items-center">
 												<div className="tw-w-full tw-h-full tw-flex tw-flex-col lg:tw-flex-row tw-justify-start tw-items-start lg:tw-items-center tw-gap-3">
-													<h6 className="tw-font-bold tw-text-lg tw-text-[#8e6abf] tw-shrink-0">
+													<h6 className="tw-font-bold tw-text-lg tw-text-[#8e6abf] tw-shrink-0 tw-mr-5">
 														Traveller {index + 1}
 													</h6>
 													<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-5">
@@ -497,7 +458,7 @@ const Quote = () => {
 												{watch('insured_person')?.length > 1 ? (
 													<div
 														onClick={() => remove(index)}
-														className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-6 tw-w-6 tw-text-red-500 hover:tw-text-white tw-border tw-border-red-500 tw-bg-transparent hover:tw-shadow-lg hover:tw-shadow-red-400/50 hover:tw-bg-red-500 cursor-pointer">
+														className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-6 tw-w-6 tw-text-red-500 hover:tw-text-white tw-bg-transparent hover:tw-shadow-lg hover:tw-shadow-red-400/50 hover:tw-bg-red-500 cursor-pointer">
 														<MdDelete className="tw-text-base" />
 													</div>
 												) : (
@@ -593,7 +554,7 @@ const Quote = () => {
 											ranges={dateState}
 											rangeColors={['#8e6abf']}
 											minDate={new Date()}
-											maxDate={addDays(dateState[0].startDate, 89)}
+											maxDate={addDays(dateState[0].startDate, 179)}
 											className="tw-rounded-md tw-shadow-md"
 										/>
 									</div>
@@ -608,6 +569,9 @@ const Quote = () => {
 										</p>
 										<p className="tw-text-sm">
 											Arrival date and departure date included
+											<br />
+											<strong>NB:</strong> Insurance covers a period of not more
+											than 180 days
 										</p>
 									</div>
 								</div>
@@ -618,101 +582,177 @@ const Quote = () => {
 							<section
 								data-aos="fade-up"
 								data-aos-duration="1200"
-								className="tw-flex tw-flex-col tw-items-center tw-gap-10">
-								<div className="pricing-area">
-									<div className="container">
-										<div className="row justify-content-center">
-											{plans?.map((plan) => (
-												<div
-													key={plan.id}
-													className="col-lg-4 col-md-6 tw-transition-all"
-													data-aos="fade-up"
-													data-aos-duration="1200">
-													<div className="tw-relative single-pricing-box">
-														{selectedPlan?.id === plan.id && (
-															<BsFillCheckCircleFill className="tw-text-3xl tw-text-[#171e41] tw-absolute tw-top-4 tw-right-4" />
-														)}
-														<h3>{plan?.name}</h3>
-														<p>{plan?.coverage}</p>
-														<div className="tw-w-full tw-flex tw-flex-col tw-items-start tw-mb-6">
-															<div>
-																<div className="price">
-																	{plan?.price}
-																	<span>/person</span>
-																</div>
-																<button
-																	type="button"
-																	onClick={() => setSelectedPlan(plan)}>
-																	<a className="btn-style-one light-green-color">
-																		Choose Plan{' '}
-																		<i className="bx bx-chevron-right"></i>
-																	</a>
-																</button>
-															</div>
-
-															<ul className="features-list">
-																{plan?.features?.map((item, index) => (
-																	<li key={index}>
-																		<i className="flaticon-draw-check-mark"></i>
-																		{item}
-																	</li>
-																))}
-															</ul>
+								className="tw-flex tw-flex-col tw-items-start tw-gap-10">
+								<div className="tw-w-full tw-h-full">
+									<div className="tw-flex tw-justify-center tw-items-center tw-w-full tw-h-full">
+										<div
+											className="tw-w-full tw-flex tw-flex-col md:tw-flex-row-reverse tw-gap-10 tw-justify-center tw-items-start tw-transition-all"
+											data-aos="fade-up"
+											data-aos-duration="1200">
+											<div className="tw-w-full md:tw-w-1/2 xl:tw-w-1/3 tw-h-fit tw-bg-gradient-to-tl tw-from-[#524380] tw-to-[#8e6abf] tw-text-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+												<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
+													<h3 className="tw-font-medium tw-text-xl tw-text-white">
+														Standard Plan
+													</h3>
+												</div>
+												<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
+													<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-50 tw-flex tw-justify-start tw-items-end">
+														Trip details
+													</h2>
+													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+															Country of Origin
 														</div>
-
-														{showMore === plan?.id && (
-															<>
-																<div
-																	className="tw-hidden "
-																	data-aos="fade-up"
-																	data-aos-duration="1200">
-																	<DetailsTabs tabsData={plan?.tabsData} />
-																</div>
-
-																<div className="tw-block">
-																	<Accordion
-																		questionsAnswers={plan?.tabsData}
-																	/>
-																</div>
-															</>
-														)}
-
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-white tw-font-bold">
+															Ghana
+															<span
+																onClick={() => setFormStep(1)}
+																className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-white">
+																<TbEdit className="tw-text-xl" />
+															</span>
+														</p>
+													</div>
+													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+															Coverage Starts
+														</div>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-white tw-font-bold">
+															{format(
+																new Date(dateState[0].startDate),
+																'MMM dd, yyyy'
+															)}
+														</p>
+													</div>
+													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+															Coverage Ends
+														</div>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-2 tw-text-white tw-font-bold">
+															{format(
+																new Date(dateState[0].endDate),
+																'MMM dd, yyyy'
+															)}
+														</p>
+													</div>
+													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
+														<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-100">
+															Duration
+														</div>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-white tw-font-bold">
+															{duration} days
+															<span
+																onClick={() => setFormStep(3)}
+																className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-white">
+																<TbEdit className="tw-text-xl" />
+															</span>
+														</p>
+													</div>
+													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
 														<div
-															onClick={() => handleShowDetails(plan.id)}
-															className="tw-group tw-cursor-pointer tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-2 tw-border-t-2 tw-pt-2 tw-mt-6">
-															<div className="tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-6 tw-w-6 tw-text-white tw-bg-[#8e6abf] group-hover:tw-shadow-lg group-hover:tw-shadow-[#8e6abf]/50">
-																{showMore !== plan?.id ? (
-																	<IoAdd className="tw-text-base" />
-																) : (
-																	<BiMinus className="tw-text-base" />
-																)}
-															</div>
-															<p className="tw-font-bold tw-text-sm tw-text-[#8e6abf]">
-																{showMore !== plan?.id
-																	? 'Show details'
-																	: 'Hide details'}
-															</p>
+															onClick={() => setFormStep(2)}
+															className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+															No of Travellers
 														</div>
-
-														<a
-															href="#"
-															target="_blank"
-															rel="noreferrer"
-															className="tw-group tw-w-full tw-flex tw-justify-start tw-items-center tw-gap-1 tw-pb-3 tw-mt-8">
-															<AiOutlineFilePdf />
-															<p className="tw-font-bold !tw-text-sm tw-text-[#8e6abf] hover:tw-underline">
-																Plan Brochure
-															</p>
-														</a>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-white tw-font-bold">
+															2
+															<span className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-white">
+																<TbEdit className="tw-text-xl" />
+															</span>
+														</p>
 													</div>
 												</div>
-											))}
+												<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
+													<div className="tw-grid tw-grid-cols-2">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-100">
+															Price
+														</div>
+														<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-white tw-font-bold">
+															{basicData &&
+																Intl.NumberFormat('en-US', {
+																	style: 'currency',
+																	currency: 'USD',
+																}).format(
+																	duration <= 30
+																		? 45
+																		: duration > 30 && duration <= 60
+																		? 90
+																		: duration > 60 && duration <= 90
+																		? 135
+																		: duration > 90 && duration <= 120
+																		? 180
+																		: duration > 120 && duration <= 150
+																		? 225
+																		: duration > 150 && duration <= 180 && 270
+																)}{' '}
+															<p className="tw-text-gray-100 tw-font-light tw-text-xs">
+																/person
+															</p>
+														</span>
+													</div>
+													{duration && duration > 30 ? (
+														<div className="tw-grid tw-grid-cols-2">
+															<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-100">
+																Discount
+															</div>
+															<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-white tw-font-bold">
+																{duration > 30 && duration <= 60
+																	? '10'
+																	: duration > 60 && duration <= 90
+																	? '15'
+																	: duration > 90 && duration <= 120
+																	? '20'
+																	: duration > 120 && duration <= 150
+																	? '25'
+																	: duration > 150 &&
+																	  duration <= 180 &&
+																	  '30'}{' '}
+																%
+															</span>
+														</div>
+													) : null}
+												</div>
+											</div>
+											<div className="tw-w-full md:tw-w-1/2 xl:tw-w-2/3">
+												<Accordion questionsAnswers={planTabsData} />
+											</div>
 										</div>
 									</div>
 								</div>
+
+								<div className="block ">
+									<Controller
+										control={control}
+										name={'proceed_purchase'}
+										defaultValue={false}
+										rules={{
+											required: 'Please check here to proceed',
+										}}
+										render={({
+											field: { ref, ...field },
+											fieldState: { error, invalid },
+										}) => (
+											<>
+												<FormControlLabel
+													control={
+														<Checkbox
+															{...field}
+															ref={ref}
+															color="secondary"
+															checked={watch(`proceed_purchase`)}
+														/>
+													}
+													label={'I want to proceed to purchase'}
+												/>
+												<FormHelperText error>
+													{invalid ? error.message : null}
+												</FormHelperText>
+											</>
+										)}
+									/>
+								</div>
 							</section>
 						)}
-						<div className="tw-w-full tw-flex tw-justify-center tw-items-center tw-mt-4">
+						<div className="tw-w-full xl:tw-fixed tw-bottom-10 tw-left-0 tw-flex tw-justify-center tw-items-center tw-mt-8 xl:tw-px-20">
 							{renderButton()}
 						</div>
 					</form>

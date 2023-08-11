@@ -20,7 +20,7 @@
 }
 .faq__question-button {
 	color: var(--blackColor) !important;
-	background-color: transparent;
+	background-color: var(--whiteColor);
 	box-shadow: unset !important;
 	border: 0 !important;
 	position: relative;
