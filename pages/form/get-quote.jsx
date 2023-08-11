@@ -721,7 +721,7 @@ const Quote = () => {
 									</div>
 								</div>
 
-								<div className="block ">
+								<div className="block tw-mb-10">
 									<Controller
 										control={control}
 										name={'proceed_purchase'}
