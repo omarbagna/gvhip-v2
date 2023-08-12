@@ -1,3 +1,4 @@
+import { SessionProvider } from 'next-auth/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import React from 'react';
@@ -35,7 +36,10 @@ function MyApp({ Component, pageProps }) {
 			</Head>
 
 			<QueryClientProvider client={queryClient}>
-				<Component {...pageProps} />
+				<SessionProvider session={pageProps.session}>
+					<Component {...pageProps} />
+				</SessionProvider>
+
 				<ReactQueryDevtools initialIsOpen={false} position="bottom-left" />
 			</QueryClientProvider>
 

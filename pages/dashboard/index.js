@@ -80,55 +80,55 @@ const Dashboard = () => {
 							</div>
 						</div>
 					</div>
-					<div className="tw-w-full tw-h-fit tw-row-start-1 tw-col-start-2 tw-row-span-2 lg:tw-row-span-1 xl:tw-col-start-3 xl:tw-row-start-1 xl:tw-row-span-2 tw-bg-gradient-to-tl tw-from-[#524380] tw-to-[#8e6abf] tw-text-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+					<div className="tw-w-full tw-h-fit tw-row-start-1 tw-col-start-2 tw-row-span-2 lg:tw-row-span-1 xl:tw-col-start-3 xl:tw-row-start-1 xl:tw-row-span-2 tw-bg-white tw-text-[#8e6abf] tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 						<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
-							<h3 className="tw-font-medium tw-text-xl tw-text-white">
+							<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
 								Standard Plan
 							</h3>
 						</div>
 						<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
-							<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-50 tw-flex tw-justify-start tw-items-end">
+							<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
 								Trip details
 							</h2>
 							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 									Country of Origin
 								</div>
-								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-white tw-font-bold">
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 									Ghana
 								</p>
 							</div>
 							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 									Coverage Starts
 								</div>
-								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-white tw-font-bold">
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 									{format(new Date(), 'MMM dd, yyyy')}
 								</p>
 							</div>
 							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 									Coverage Ends
 								</div>
-								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-white tw-font-bold">
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 									{format(addDays(new Date(), 30), 'MMM dd, yyyy')}
 								</p>
 							</div>
 							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-100">
+								<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 									Duration
 								</div>
-								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-white tw-font-bold">
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 									{differenceInDays(addDays(new Date(), 30), new Date())} days
 								</p>
 							</div>
 						</div>
 						<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 									No of Travellers
 								</div>
-								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-white tw-font-bold">
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 									2
 								</p>
 							</div>

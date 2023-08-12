@@ -106,7 +106,7 @@ const Dashboard = () => {
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 										Country of Origin
 									</div>
-									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
+									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										Ghana
 									</p>
 								</div>
@@ -114,7 +114,7 @@ const Dashboard = () => {
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 										Coverage Starts
 									</div>
-									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
+									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										{format(new Date(), 'MMM dd, yyyy')}
 									</p>
 								</div>
@@ -122,7 +122,7 @@ const Dashboard = () => {
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 										Coverage Ends
 									</div>
-									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
+									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										{format(addDays(new Date(), 30), 'MMM dd, yyyy')}
 									</p>
 								</div>
@@ -130,7 +130,7 @@ const Dashboard = () => {
 									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 										Duration
 									</div>
-									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
+									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										{differenceInDays(addDays(new Date(), 30), new Date())} days
 									</p>
 								</div>
@@ -295,7 +295,7 @@ const Dashboard = () => {
 											</div>
 											<div className="tw-grid tw-grid-cols-2 tw-w-full tw-pb-2">
 												<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
-													Extension Duration
+													Duration
 												</div>
 												<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#524380] tw-font-bold">
 													{differenceInDays(

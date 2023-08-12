@@ -591,34 +591,34 @@ const Quote = () => {
 											className="tw-w-full tw-flex tw-flex-col md:tw-flex-row-reverse tw-gap-10 tw-justify-center tw-items-start tw-transition-all"
 											data-aos="fade-up"
 											data-aos-duration="1200">
-											<div className="tw-w-full md:tw-w-1/2 xl:tw-w-1/3 tw-h-fit tw-bg-gradient-to-tl tw-from-[#524380] tw-to-[#8e6abf] tw-text-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+											<div className="tw-w-full md:tw-w-1/2 xl:tw-w-1/3 tw-h-fit tw-bg-white tw-text-[#8e6abf] tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 												<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
-													<h3 className="tw-font-medium tw-text-xl tw-text-white">
+													<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
 														Standard Plan
 													</h3>
 												</div>
 												<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
-													<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-50 tw-flex tw-justify-start tw-items-end">
+													<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
 														Trip details
 													</h2>
 													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
-														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 															Country of Origin
 														</div>
-														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-white tw-font-bold">
-															Ghana
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 tw-font-bold">
+															{watch('country')}
 															<span
 																onClick={() => setFormStep(1)}
-																className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-white">
+																className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
 																<TbEdit className="tw-text-xl" />
 															</span>
 														</p>
 													</div>
 													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
-														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 															Coverage Starts
 														</div>
-														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-white tw-font-bold">
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 tw-font-bold">
 															{format(
 																new Date(dateState[0].startDate),
 																'MMM dd, yyyy'
@@ -626,10 +626,10 @@ const Quote = () => {
 														</p>
 													</div>
 													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
-														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 															Coverage Ends
 														</div>
-														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-2 tw-text-white tw-font-bold">
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-2 tw-text-gray-600 tw-font-bold">
 															{format(
 																new Date(dateState[0].endDate),
 																'MMM dd, yyyy'
@@ -637,14 +637,14 @@ const Quote = () => {
 														</p>
 													</div>
 													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
-														<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-100">
+														<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 															Duration
 														</div>
-														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-white tw-font-bold">
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 tw-font-bold">
 															{duration} days
 															<span
 																onClick={() => setFormStep(3)}
-																className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-white">
+																className="tw-cursor-pointer  tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
 																<TbEdit className="tw-text-xl" />
 															</span>
 														</p>
@@ -652,12 +652,13 @@ const Quote = () => {
 													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
 														<div
 															onClick={() => setFormStep(2)}
-															className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-100">
+															className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 															No of Travellers
 														</div>
-														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-white tw-font-bold">
-															2
-															<span className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-white">
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 tw-font-bold">
+															{watch('insured_person').length}
+
+															<span className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
 																<TbEdit className="tw-text-xl" />
 															</span>
 														</p>
@@ -665,10 +666,10 @@ const Quote = () => {
 												</div>
 												<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 													<div className="tw-grid tw-grid-cols-2">
-														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-100">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
 															Price
 														</div>
-														<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-white tw-font-bold">
+														<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
 															{duration &&
 																Intl.NumberFormat('en-US', {
 																	style: 'currency',
@@ -686,17 +687,17 @@ const Quote = () => {
 																		? 225
 																		: duration > 150 && duration <= 180 && 270
 																)}{' '}
-															<p className="tw-text-gray-100 tw-font-light tw-text-xs">
+															<p className="tw-text-gray-600 tw-font-light tw-text-xs">
 																/person
 															</p>
 														</span>
 													</div>
 													{duration && duration > 30 ? (
 														<div className="tw-grid tw-grid-cols-2">
-															<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-100">
+															<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
 																Discount
 															</div>
-															<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-white tw-font-bold">
+															<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
 																{duration > 30 && duration <= 60
 																	? '10'
 																	: duration > 60 && duration <= 90
