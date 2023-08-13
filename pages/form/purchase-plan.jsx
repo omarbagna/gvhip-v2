@@ -77,6 +77,15 @@ const Form = () => {
 		if (data !== null) setBasicData(JSON.parse(data));
 	}, []);
 
+	const duration = basicData
+		? Number(
+				differenceInDays(
+					new Date(basicData.end_date),
+					new Date(basicData.start_date)
+				)
+		  )
+		: null;
+
 	const {
 		watch,
 		control,
@@ -249,15 +258,6 @@ const Form = () => {
 	const handleOpen = (value) => {
 		setOpen(open === value ? 0 : value);
 	};
-
-	const duration = basicData
-		? Number(
-				differenceInDays(
-					new Date(basicData.end_date),
-					new Date(basicData.start_date)
-				)
-		  )
-		: null;
 
 	const paymentRequest = async (data) => {
 		const { data: response } = await axios.post('/register', data);
