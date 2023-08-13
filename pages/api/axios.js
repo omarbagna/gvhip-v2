@@ -1,6 +1,6 @@
 import axios from 'axios';
-//const BASE_URL = 'http://gssp-backend-api.rxhealthbeta.com/api/v1';
-const BASE_URL = 'https://goldenpartnershipplatform.org/corp/api/';
+const BASE_URL = 'http://gssp-backend-api.rxhealthbeta.com/api/v1';
+//const BASE_URL = 'https://goldenpartnershipplatform.org/corp/api/';
 
 export default axios.create({
 	baseURL: BASE_URL,
@@ -9,8 +9,8 @@ export default axios.create({
 export const axiosPrivate = axios.create({
 	baseURL: BASE_URL,
 	headers: {
-		//'Content-Type': 'application/json',
-		'Content-Type': 'multipart/form-data',
+		'Content-Type': 'application/json',
+		//'Content-Type': 'multipart/form-data',
 		'Access-Control-Allow-Origin': '*',
 	},
 });
