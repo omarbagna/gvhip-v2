@@ -6,20 +6,18 @@ import logo from '@/public/images/gsti_logo.jpeg';
 import { Avatar, Badge } from '@mui/material';
 import { BsChevronDown } from 'react-icons/bs';
 import { BiHomeAlt, BiUser } from 'react-icons/bi';
-import { useRouter } from 'next/router';
 import { MdOutlinePolicy } from 'react-icons/md';
+import { signOut } from 'next-auth/react';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 const DashboardNav = () => {
-	const router = useRouter();
-
 	const [menu, setMenu] = React.useState(false);
 	const toggleDropdown = () => {
 		setMenu((prev) => !prev);
 	};
 
 	const logOut = () => {
-		//Cookies.remove('loggedin');
-		router.push('/');
+		signOut({ callbackUrl: '/' });
 	};
 
 	return (
@@ -90,6 +88,13 @@ const DashboardNav = () => {
 					</a>
 				</Link>
 
+				<Link
+					href="/dashboard/find-policy"
+					activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
+					<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+						<AiOutlineSearch className="tw-shrink-0 tw-text-2xl" /> Find Policy
+					</a>
+				</Link>
 				<Link
 					href="/dashboard/manage-policy"
 					activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">

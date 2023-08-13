@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
 import { Avatar } from '@mui/material';

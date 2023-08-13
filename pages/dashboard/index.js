@@ -1,13 +1,23 @@
+'use client';
+
 import React from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
 import { Badge } from '@mui/material';
 import { addDays, differenceInDays, format } from 'date-fns';
 import { HiOutlineLocationMarker, HiOutlineMail } from 'react-icons/hi';
 import { BsPhone } from 'react-icons/bs';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 //import Signup from '@/components/Authentication/Signup';
 //import FooterFour from '@/components/Layout/Footer/FooterFour';
 
 const Dashboard = () => {
+	const router = useRouter();
+
+	const { status, data } = useSession();
+
+	console.log(status, data);
+
 	return (
 		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">
 			<DashboardNav />

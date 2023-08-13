@@ -5,8 +5,11 @@ import Image from 'next/image';
 import logo from '@/public/images/gsti_logo.jpeg';
 import supportImg from '@/public/images/supportImg.jpg';
 import learnImg from '@/public/images/learnImg.jpg';
+import { signIn, useSession } from 'next-auth/react';
 
 const Navbar4 = () => {
+	const { data } = useSession();
+
 	const [menu, setMenu] = React.useState(true);
 	const toggleNavbar = () => {
 		setMenu(!menu);
@@ -355,19 +358,34 @@ const Navbar4 = () => {
 									</ul>
 								</li>
 
+								{/**
 								<li className="nav-item">
 									<Link href="/authentication" activeClassName="active">
 										<a className="nav-link">Sign In</a>
 									</Link>
 								</li>
+								 */}
 							</ul>
 						</div>
 
-						<div className="others-option">
-							<Link href="/pricing" activeClassName="active">
-								<a className="btn-style-one crimson-color">Show Plans</a>
-							</Link>
-						</div>
+						{data ? (
+							<div className="others-option">
+								<Link href="/dashboard" activeClassName="active">
+									<a className="btn-style-one crimson-color tw-cursor-pointer">
+										Dashboard
+									</a>
+								</Link>
+							</div>
+						) : (
+							<div className="others-option">
+								<span // href="/authentication"
+									onClick={() => signIn()}>
+									<a className="btn-style-one crimson-color tw-cursor-pointer">
+										Sign In
+									</a>
+								</span>
+							</div>
+						)}
 					</nav>
 				</div>
 			</div>

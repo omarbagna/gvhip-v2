@@ -36,7 +36,7 @@ import {
 } from 'react-icons/bi';
 import { BsGlobeEuropeAfrica } from 'react-icons/bs';
 //import { RiSecurePaymentLine } from 'react-icons/ri';
-import axios from 'axios';
+//import axios from 'axios';
 import { useMutation } from 'react-query';
 //import Button from '../../components/Button/Button';
 import { MdDelete, MdEdit, MdOutlineExpandMore } from 'react-icons/md';
@@ -44,6 +44,7 @@ import { IoAdd } from 'react-icons/io5';
 import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
 import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
 import { planTabsData } from 'data/plansData';
+import axios from 'pages/api/axios';
 
 const alertError = () => {
 	MySwal.fire({
@@ -58,112 +59,12 @@ const alertError = () => {
 
 const MAX_STEPS = 2;
 
-const REVIEW_DATA = [
-	{
-		name: 'first name',
-		key: 'first_name',
-	},
-	{
-		name: 'last name',
-		key: 'last_name',
-	},
-	{
-		name: 'passport number',
-		key: 'passport_number',
-	},
-	{
-		name: 'Date of Birth',
-		key: 'dob',
-	},
-	{
-		name: 'email',
-		key: 'email',
-	},
-	{
-		name: 'telephone',
-		key: 'telephone',
-	},
-	{
-		name: 'address',
-		key: 'address',
-	},
-	{
-		name: 'country',
-		key: 'country',
-	},
-	{
-		name: 'company name',
-		key: 'company_name',
-	},
-	{
-		name: 'company address',
-		key: 'company_address',
-	},
-	{
-		name: 'company phone number',
-		key: 'company_telephone',
-	},
-	{
-		name: 'company email',
-		key: 'company_email',
-	},
-
-	{
-		name: 'emergency contact first name',
-		key: 'emergency_contact_first_name',
-	},
-	{
-		name: 'emergency contact last name',
-		key: 'emergency_contact_last_name',
-	},
-	{
-		name: 'emergency contact address',
-		key: 'emergency_contact_address',
-	},
-	{
-		name: 'emergency contact country',
-		key: 'emergency_contact_country',
-	},
-	{
-		name: 'emergency contact phone number',
-		key: 'emergency_contact_telephone',
-	},
-	{
-		name: 'arrival date in ghana',
-		key: 'arrival_date',
-	},
-	{
-		name: 'departure date from ghana',
-		key: 'departure_date',
-	},
-	{ name: 'address in ghana', key: 'address_ghana' },
-	{
-		name: 'emergency contact in ghana first name',
-		key: 'emergency_contact_ghana_first_name',
-	},
-	{
-		name: 'emergency contact in ghana last name',
-		key: 'emergency_contact_ghana_last_name',
-	},
-	{
-		name: 'emergency contact in ghana phone number',
-		key: 'emergency_contact_ghana_telephone',
-	},
-	{
-		name: 'Pre-existing Medical Conditions',
-		key: 'existing_conditions',
-	},
-	{
-		name: 'allergies',
-		key: 'allergies',
-	},
-];
-
 const Form = () => {
 	const [formStep, setFormStep] = useState(1);
 	const [applicantType, setApplicantType] = useState('other');
 	const [basicData, setBasicData] = useState(null);
 	const [paymentAmount, setPaymentAmount] = useState(0);
+	const [paymentDiscount, setPaymentDiscount] = useState(0);
 	const [open, setOpen] = useState(1);
 	const [showMore, setShowMore] = useState(false);
 
@@ -260,23 +161,27 @@ const Form = () => {
 
 	useEffect(() => {
 		if (basicData) {
-			if (
-				differenceInDays(
-					new Date(basicData.end_date),
-					new Date(basicData.start_date)
-				) <= '30'
-			) {
+			if (duration <= 30) {
 				setPaymentAmount(45 * watch('insured_person').length);
-			} else if (
-				differenceInDays(
-					new Date(basicData.end_date),
-					new Date(basicData.start_date)
-				) > '30'
-			) {
-				setPaymentAmount(80 * watch('insured_person').length);
+				setPaymentDiscount(0);
+			} else if (duration > 30 && duration <= 60) {
+				setPaymentAmount(90 * watch('insured_person').length);
+				setPaymentDiscount(10);
+			} else if (duration > 60 && duration <= 90) {
+				setPaymentAmount(135 * watch('insured_person').length);
+				setPaymentDiscount(15);
+			} else if (duration > 90 && duration <= 120) {
+				setPaymentAmount(180 * watch('insured_person').length);
+				setPaymentDiscount(20);
+			} else if (duration > 120 && duration <= 150) {
+				setPaymentAmount(225 * watch('insured_person').length);
+				setPaymentDiscount(25);
+			} else if (duration > 150 && duration <= 180) {
+				setPaymentAmount(270 * watch('insured_person').length);
+				setPaymentDiscount(30);
 			}
 		}
-	}, [watch, basicData]);
+	}, [watch, duration, basicData]);
 
 	const renderButton = () => {
 		if (formStep > 2) {
@@ -355,14 +260,7 @@ const Form = () => {
 		: null;
 
 	const paymentRequest = async (data) => {
-		const { data: response } = await axios.post(
-			'https://goldenpartnershipplatform.org/ng-pay/checkout.php',
-			data,
-			{
-				headers: { 'Content-Type': 'application/json' },
-				//withCredentials: true,
-			}
-		);
+		const { data: response } = await axios.post('/register', data);
 		return response;
 	};
 
@@ -372,7 +270,8 @@ const Form = () => {
 			onSuccess: (data) => {
 				console.log('Success response ', data);
 				if (data?.resp_code === '000') {
-					window.location.replace(data.redirect_url);
+					//window.location.replace(data.redirect_url);
+					console.log(data);
 				}
 			},
 			onError: (error) => {
@@ -383,8 +282,7 @@ const Form = () => {
 
 	const submitForm = (data) => {
 		//console.log(data?.applicant[0]);
-		window.localStorage.setItem('basicData', null);
-		window.localStorage.setItem('applicationData', JSON.stringify(data));
+		window.localStorage.setItem('basicData', JSON.stringify(data));
 
 		const formData = JSON.stringify({
 			method: 'REQUEST_PAYMENT',
@@ -408,7 +306,33 @@ const Form = () => {
 			callback_url: 'https://gsti-test.netlify.app/',
 		});
 
-		makePayment.mutate(formData);
+		const onboardingData = JSON.stringify({
+			first_name:
+				data?.applicant_type === 'company'
+					? data?.applicant[0]?.company_name
+					: data?.applicant[0]?.first_name,
+			last_name:
+				data?.applicant_type === 'company'
+					? null
+					: data?.applicant[0]?.last_name,
+			email:
+				data?.applicant_type === 'company'
+					? data?.applicant[0]?.company_email
+					: data?.applicant[0]?.email,
+			telephone:
+				data?.applicant_type === 'company'
+					? data?.applicant[0]?.company_telephone
+					: data?.applicant[0]?.telephone,
+			country: data?.country,
+			insured_person: data?.insured_person,
+			start_date: data?.start_date,
+			end_date: data?.end_date,
+			duration: data?.duration,
+			price: paymentAmount,
+			discount: paymentDiscount,
+		});
+
+		makePayment.mutate(onboardingData);
 
 		//console.log(formData);
 		//goToNext();
