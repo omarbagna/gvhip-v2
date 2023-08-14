@@ -343,9 +343,9 @@ const Form = () => {
 			discount: paymentDiscount,
 		});
 
+		console.log(onboardingData);
 		makePayment.mutate(onboardingData);
 
-		//console.log(formData);
 		//goToNext();
 	};
 
