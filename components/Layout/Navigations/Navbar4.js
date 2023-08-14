@@ -364,7 +364,7 @@ const Navbar4 = () => {
 									<li className="nav-item">
 										<span // href="/authentication"
 											onClick={() => signOut({ callbackUrl: '/' })}>
-											<a className="nav-link">Sign Out</a>
+											<a className="nav-link tw-cursor-pointer">Sign Out</a>
 										</span>
 									</li>
 								)}
