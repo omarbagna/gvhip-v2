@@ -90,6 +90,9 @@ export default NextAuth({
 			session.user = token;
 			return session;
 		},
+		async redirect({ url, baseUrl }) {
+			return '/dashboard';
+		},
 	},
 	pages: {
 		signIn: '/authentication',
