@@ -16,6 +16,7 @@ import '/styles/style.css';
 import '/styles/header.css';
 import '/styles/footer.css';
 import '/styles/responsive.css';
+import NextNProgress from 'nextjs-progressbar';
 
 import ScrollToTop from '@/components/Layout/ScrollToTop';
 
@@ -37,6 +38,7 @@ function MyApp({ Component, pageProps }) {
 
 			<QueryClientProvider client={queryClient}>
 				<SessionProvider session={pageProps.session}>
+					<NextNProgress color="#8e6abf" />
 					<Component {...pageProps} />
 				</SessionProvider>
 
