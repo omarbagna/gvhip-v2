@@ -5,14 +5,14 @@ export default withAuth(
 	function middleware(req) {
 		if (
 			req.nextUrl.pathname.startsWith('/dashboard') &&
-			req.nextauth.token?.role !== 'user'
+			req.nextauth.token?.user?.role !== 'guest'
 		) {
-			return NextResponse.redirect(new URL('/admin', req.url));
+			return NextResponse.redirect(new URL('/immigration', req.url));
 		}
 
 		if (
 			req.nextUrl.pathname.startsWith('/admin') &&
-			req.nextauth.token?.role !== 'admin'
+			req.nextauth.token?.user?.role !== 'immigration'
 		) {
 			return NextResponse.redirect(new URL('/dashboard', req.url));
 		}
@@ -24,4 +24,4 @@ export default withAuth(
 	}
 );
 
-export const config = { matcher: ['/dashboard/:path*', '/admin/:path*'] };
+export const config = { matcher: ['/dashboard/:path*', '/immigration/:path*'] };

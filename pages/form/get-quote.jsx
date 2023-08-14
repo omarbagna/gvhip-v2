@@ -23,11 +23,10 @@ import {
 } from '@mui/material';
 
 import { IoAdd } from 'react-icons/io5';
-import { AiOutlineClose, AiOutlineFilePdf } from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
 
 import { MdDelete } from 'react-icons/md';
 import Accordion from '@/components/Accordion';
-import DetailsTabs from '@/components/Courses/Details/DetailsTabs';
 import { planTabsData } from 'data/plansData';
 
 import { TbEdit } from 'react-icons/tb';
@@ -502,7 +501,7 @@ const Quote = () => {
 										</h2>
 									</span>
 								</div>
-								<div className="tw-w-full tw-h-fit tw-flex tw-flex-col lg:tw-flex-row tw-justify-center lg:tw-justify-between tw-gap-4 tw-items-center tw-border-y-2 tw-px-2 tw-py-5 md:tw-p-4">
+								<div className="tw-w-full tw-h-fit tw-flex tw-flex-col tw-justify-center tw-gap-4 tw-items-center tw-border-y-2 tw-px-2 tw-py-5 md:tw-p-4">
 									<div className="tw-w-full md:tw-w-fit tw-flex tw-justify-center lg:tw-justify-start tw-items-center tw-gap-2 tw-shrink-0">
 										{/**
 										<LocalizationProvider
@@ -548,19 +547,34 @@ const Quote = () => {
 											/>
 										</LocalizationProvider>
 										 */}
-
-										<DateRange
-											editableDateInputs={true}
-											onChange={(item) => setDateState([item.selection])}
-											moveRangeOnFirstSelection={false}
-											ranges={dateState}
-											rangeColors={['#8e6abf']}
-											minDate={new Date()}
-											maxDate={addDays(dateState[0].startDate, 179)}
-											className="tw-rounded-md tw-shadow-md"
-										/>
+										<div className="lg:tw-block tw-hidden">
+											<DateRange
+												editableDateInputs={true}
+												onChange={(item) => setDateState([item.selection])}
+												moveRangeOnFirstSelection={false}
+												ranges={dateState}
+												months={2}
+												direction="horizontal"
+												rangeColors={['#8e6abf']}
+												minDate={new Date()}
+												maxDate={addDays(dateState[0].startDate, 179)}
+												className="tw-rounded-md tw-shadow-md"
+											/>
+										</div>
+										<div className="lg:tw-hidden tw-block">
+											<DateRange
+												editableDateInputs={true}
+												onChange={(item) => setDateState([item.selection])}
+												moveRangeOnFirstSelection={false}
+												ranges={dateState}
+												rangeColors={['#8e6abf']}
+												minDate={new Date()}
+												maxDate={addDays(dateState[0].startDate, 179)}
+												className="tw-rounded-md tw-shadow-md"
+											/>
+										</div>
 									</div>
-									<div className="tw-w-full lg:tw-w-fit tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-items-start lg:tw-border-l-2 lg:tw-pl-4">
+									<div className="tw-w-full tw-flex tw-flex-col tw-justify-center tw-items-center ">
 										<p className="tw-font-bold tw-text-base xl:tw-text-lg tw-mb-0 tw-text-[#8e6abf]">
 											Duration:{' '}
 											{differenceInDays(
@@ -669,49 +683,106 @@ const Quote = () => {
 														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
 															Price
 														</div>
-														<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
-															{duration &&
-																Intl.NumberFormat('en-US', {
-																	style: 'currency',
-																	currency: 'USD',
-																}).format(
-																	duration <= 30
-																		? 45
-																		: duration > 30 && duration <= 60
-																		? 90
-																		: duration > 60 && duration <= 90
-																		? 135
-																		: duration > 90 && duration <= 120
-																		? 180
-																		: duration > 120 && duration <= 150
-																		? 225
-																		: duration > 150 && duration <= 180 && 270
-																)}{' '}
+														<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-base tw-text-[#8e6abf] tw-font-bold">
+															{duration > 30 ? (
+																<s>
+																	{duration &&
+																		Intl.NumberFormat('en-US', {
+																			style: 'currency',
+																			currency: 'USD',
+																		}).format(
+																			duration <= 30
+																				? 45
+																				: duration > 30 && duration <= 60
+																				? 90
+																				: duration > 60 && duration <= 90
+																				? 135
+																				: duration > 90 && duration <= 120
+																				? 180
+																				: duration > 120 && duration <= 150
+																				? 225
+																				: duration > 150 &&
+																				  duration <= 180 &&
+																				  270
+																		)}
+																</s>
+															) : (
+																<>
+																	{duration &&
+																		Intl.NumberFormat('en-US', {
+																			style: 'currency',
+																			currency: 'USD',
+																		}).format(
+																			duration <= 30
+																				? 45
+																				: duration > 30 && duration <= 60
+																				? 90
+																				: duration > 60 && duration <= 90
+																				? 135
+																				: duration > 90 && duration <= 120
+																				? 180
+																				: duration > 120 && duration <= 150
+																				? 225
+																				: duration > 150 &&
+																				  duration <= 180 &&
+																				  270
+																		)}
+																</>
+															)}{' '}
 															<p className="tw-text-gray-600 tw-font-light tw-text-xs">
 																/person
 															</p>
 														</span>
 													</div>
 													{duration && duration > 30 ? (
-														<div className="tw-grid tw-grid-cols-2">
-															<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
-																Discount
+														<>
+															<div className="tw-grid tw-grid-cols-2">
+																<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
+																	Discount
+																</div>
+																<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+																	{duration > 30 && duration <= 60
+																		? '10'
+																		: duration > 60 && duration <= 90
+																		? '15'
+																		: duration > 90 && duration <= 120
+																		? '20'
+																		: duration > 120 && duration <= 150
+																		? '25'
+																		: duration > 150 &&
+																		  duration <= 180 &&
+																		  '30'}{' '}
+																	%
+																</span>
 															</div>
-															<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
-																{duration > 30 && duration <= 60
-																	? '10'
-																	: duration > 60 && duration <= 90
-																	? '15'
-																	: duration > 90 && duration <= 120
-																	? '20'
-																	: duration > 120 && duration <= 150
-																	? '25'
-																	: duration > 150 &&
-																	  duration <= 180 &&
-																	  '30'}{' '}
-																%
-															</span>
-														</div>
+															<div className="tw-grid tw-grid-cols-2">
+																<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
+																	Total Price
+																</div>
+																<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+																	{duration &&
+																		Intl.NumberFormat('en-US', {
+																			style: 'currency',
+																			currency: 'USD',
+																		}).format(
+																			duration > 30 && duration <= 60
+																				? 90 - 90 / 10
+																				: duration > 60 && duration <= 90
+																				? 135 - 135 / 15
+																				: duration > 90 && duration <= 120
+																				? 180 - 180 / 20
+																				: duration > 120 && duration <= 150
+																				? 225 - 225 / 25
+																				: duration > 150 &&
+																				  duration <= 180 &&
+																				  270 - 270 / 30
+																		)}{' '}
+																	<p className="tw-text-gray-600 tw-font-light tw-text-xs">
+																		/person
+																	</p>
+																</span>
+															</div>
+														</>
 													) : null}
 												</div>
 											</div>
@@ -755,7 +826,7 @@ const Quote = () => {
 								</div>
 							</section>
 						)}
-						<div className="tw-w-full xl:tw-fixed tw-bottom-10 tw-left-0 tw-flex tw-justify-center tw-items-center tw-mt-8 xl:tw-px-20">
+						<div className="tw-w-full tw-flex tw-justify-center tw-items-center tw-mt-8 ">
 							{renderButton()}
 						</div>
 					</form>

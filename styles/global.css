@@ -9,6 +9,7 @@ Global CSS
 	--fontFamily: 'Be Vietnam Pro', sans-serif;
 	--nunitoFontFamily: 'Nunito Sans', sans-serif;
 	--redLightColor: #b894ea;
+	--redColor: #f73d21;
 	--blueDarkColor: #171e41;
 	--lightGreenColor: #343e70;
 	--darkGreenColor: #171e41;
@@ -217,6 +218,16 @@ p:last-child {
 	right: 25px;
 	top: 50%;
 	font-size: 23px;
+}
+.btn-style-back.red-light-color {
+	background-color: var(--whiteColor);
+	border-color: var(--redColor);
+	color: var(--redColor);
+}
+.btn-style-back.red-light-color:hover {
+	background-color: var(--redColor);
+	border-color: var(--redColor);
+	color: var(--whiteColor);
 }
 .btn-style-one.red-light-color {
 	background-color: var(--redLightColor);

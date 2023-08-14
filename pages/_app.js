@@ -1,7 +1,7 @@
 import { SessionProvider } from 'next-auth/react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import React from 'react';
+import React, { useState } from 'react';
 import AOS from 'aos';
 import '../node_modules/aos/dist/aos.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,9 +22,8 @@ import ScrollToTop from '@/components/Layout/ScrollToTop';
 
 import Head from 'next/head';
 
-const queryClient = new QueryClient();
-
 function MyApp({ Component, pageProps }) {
+	const [queryClient] = useState(() => new QueryClient());
 	React.useEffect(() => {
 		AOS.init();
 	}, []);
@@ -37,10 +36,12 @@ function MyApp({ Component, pageProps }) {
 			</Head>
 
 			<QueryClientProvider client={queryClient}>
-				<SessionProvider session={pageProps.session}>
-					<NextNProgress color="#8e6abf" />
-					<Component {...pageProps} />
-				</SessionProvider>
+				<Hydrate state={pageProps.dehydratedState}>
+					<SessionProvider session={pageProps.session}>
+						<NextNProgress color="#8e6abf" />
+						<Component {...pageProps} />
+					</SessionProvider>
+				</Hydrate>
 
 				<ReactQueryDevtools initialIsOpen={false} position="bottom-left" />
 			</QueryClientProvider>

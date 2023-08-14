@@ -16,9 +16,8 @@ export default NextAuth({
 				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials) {
-				const { email, password } = credentials;
+				//const { email, password } = credentials;
 
-				/*
 				try {
 					const response = await axios.post('/login', {
 						method: 'POST',
@@ -39,7 +38,8 @@ export default NextAuth({
 							id: data.user.id,
 							email: data.user.email,
 						});
-						
+						*/
+
 						return data;
 					} else {
 						return Promise.resolve(null);
@@ -48,7 +48,6 @@ export default NextAuth({
 					console.error('Login error:', error);
 					return Promise.resolve(null);
 				}
-				*/
 
 				/*
 				const res = await axios.post('/login', {
@@ -62,22 +61,22 @@ export default NextAuth({
 				console.log(res);
 
 				const user = res.json();
-				*/
-
+				
 				const user = {
 					id: 1,
 					first_name: 'John',
 					last_name: 'Smith',
 					email: 'bagna@email.com',
 					password: '1234',
-					role: 'user',
+					role: 'admin',
 				};
-
+				
 				if (user.email === email && user.password === password) {
 					return user;
 				} else {
 					return null;
 				}
+				*/
 			},
 		}),
 	],

@@ -45,6 +45,7 @@ import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
 import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
 import { planTabsData } from 'data/plansData';
 import axios from 'pages/api/axios';
+import { useRouter } from 'next/router';
 
 const alertError = () => {
 	MySwal.fire({
@@ -60,6 +61,8 @@ const alertError = () => {
 const MAX_STEPS = 2;
 
 const Form = () => {
+	const router = useRouter();
+
 	const [formStep, setFormStep] = useState(1);
 	const [applicantType, setApplicantType] = useState('other');
 	const [basicData, setBasicData] = useState(null);
@@ -174,19 +177,19 @@ const Form = () => {
 				setPaymentAmount(45 * watch('insured_person').length);
 				setPaymentDiscount(0);
 			} else if (duration > 30 && duration <= 60) {
-				setPaymentAmount(90 * watch('insured_person').length);
+				setPaymentAmount((90 - 90 / 10) * watch('insured_person').length);
 				setPaymentDiscount(10);
 			} else if (duration > 60 && duration <= 90) {
-				setPaymentAmount(135 * watch('insured_person').length);
+				setPaymentAmount((135 - 135 / 15) * watch('insured_person').length);
 				setPaymentDiscount(15);
 			} else if (duration > 90 && duration <= 120) {
-				setPaymentAmount(180 * watch('insured_person').length);
+				setPaymentAmount((180 - 180 / 20) * watch('insured_person').length);
 				setPaymentDiscount(20);
 			} else if (duration > 120 && duration <= 150) {
-				setPaymentAmount(225 * watch('insured_person').length);
+				setPaymentAmount((225 - 225 / 25) * watch('insured_person').length);
 				setPaymentDiscount(25);
 			} else if (duration > 150 && duration <= 180) {
-				setPaymentAmount(270 * watch('insured_person').length);
+				setPaymentAmount((270 - 270 / 30) * watch('insured_person').length);
 				setPaymentDiscount(30);
 			}
 		}
@@ -269,7 +272,8 @@ const Form = () => {
 		{
 			onSuccess: (data) => {
 				console.log('Success response ', data);
-				if (data?.resp_code === '000') {
+				if (data?.status === 201) {
+					router.push(`/authentication`);
 					//window.location.replace(data.redirect_url);
 					console.log(data);
 				}
@@ -330,10 +334,11 @@ const Form = () => {
 					? data?.applicant[0]?.company_telephone
 					: data?.applicant[0]?.telephone,
 			country: data?.country,
+			applicant_type: data?.applicant_type,
 			insured_person: data?.insured_person,
 			start_date: data?.start_date,
 			end_date: data?.end_date,
-			duration: data?.duration,
+			duration: duration,
 			price: paymentAmount,
 			discount: paymentDiscount,
 		});
@@ -484,7 +489,7 @@ const Form = () => {
 																className="tw-relative tw-w-full tw-h-full tw-flex tw-flex-col tw-gap-5 tw-justify-center tw-items-center ">
 																{/** Personal Information Area */}
 																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-y-2 tw-border-[#171e41] tw-py-10">
-																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
+																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF]">
 																		Personal Information
 																	</h4>
 																	<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
@@ -568,6 +573,42 @@ const Form = () => {
 																		/>
 
 																		<Controller
+																			name={`insured_person[${index}].gender`}
+																			control={control}
+																			defaultValue={''}
+																			rules={{
+																				required: 'Please select gender',
+																			}}
+																			render={({
+																				field: { ref, ...field },
+																				fieldState: { error, invalid },
+																			}) => (
+																				<SelectInput
+																					{...field}
+																					ref={ref}
+																					error={invalid}
+																					helpertext={
+																						invalid ? error.message : null
+																					}
+																					label="Gender"
+																					options={[
+																						{
+																							name: 'male',
+																							value: 'male',
+																						},
+																						{
+																							name: 'female',
+																							value: 'female',
+																						},
+																					]}
+																					required
+																				/>
+																			)}
+																		/>
+																	</div>
+
+																	<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
+																		<Controller
 																			control={control}
 																			name={`insured_person[${index}].country`}
 																			defaultValue={watch('country')}
@@ -591,9 +632,7 @@ const Form = () => {
 																				/>
 																			)}
 																		/>
-																	</div>
 
-																	<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
 																		<Controller
 																			name={`insured_person[${index}].passport_number`}
 																			control={control}
@@ -624,7 +663,7 @@ const Form = () => {
 
 																{/** Travel Information Area */}
 																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-b-2 tw-border-[#171e41] tw-pb-10">
-																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
+																	<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF]">
 																		Travel Information
 																	</h4>
 																	<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
@@ -719,7 +758,7 @@ const Form = () => {
 																{/** Contact Information Area */}
 																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-b-2 tw-border-[#171e41] tw-pb-10">
 																	<div className="tw-w-full tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start">
-																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF]">
 																			Contact Information
 																		</h4>
 																		<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 tw-rounded-lg">
@@ -835,10 +874,10 @@ const Form = () => {
 																	/>
 
 																	<div className="tw-w-full h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-rounded-md tw-shadow-sm">
-																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF] tw-hidden md:tw-block">
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF] tw-hidden md:tw-block">
 																			Emergency Contact Information
 																		</h4>
-																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF] md:tw-hidden">
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF] md:tw-hidden">
 																			Emergency Contact Info
 																		</h4>
 																		<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
@@ -973,7 +1012,7 @@ const Form = () => {
 																	</div>
 
 																	<div className="tw-w-full h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start tw-rounded-md tw-shadow-sm">
-																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF]">
 																			Emergency Contact in Ghana
 																		</h4>
 																		<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
@@ -1063,7 +1102,7 @@ const Form = () => {
 																{/** Health Information Area */}
 																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start">
 																	<div className="tw-w-full tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start">
-																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#7862AF]">
+																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF]">
 																			Health Information
 																		</h4>
 																		<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 tw-rounded-lg">
@@ -1486,315 +1525,239 @@ const Form = () => {
 														>
 															{/** Personal Information Area */}
 
-															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-t-2 tw-border-[#171e41] tw-pb-4">
-																<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#171e41]">
+															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-[#171e41] tw-pb-4">
+																<h4 className="tw-w-full tw-pb-2 tw-border-b-2 tw-border-[#171e41] tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
 																	Personal Information
 																</h4>
 																<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-5 tw-rounded-md tw-p-3">
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			First name
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['first_name']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			last name
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['last_name']}
-																		</Typography>
+																		</p>
+																	</div>
+																	<div>
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																			gender
+																		</p>
+																		<p className="tw-capitalize tw-font-medium tw-text-base tw-text-[#171e41]">
+																			{person['gender']}
+																		</p>
 																	</div>
 
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			passport number
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['passport_number']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			date of birth
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['dob']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			email
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['email']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			telephone
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['telephone']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			address
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['address']}
-																		</Typography>
+																		</p>
 																	</div>
 																</div>
 															</div>
 
 															{/** Travel Information Area */}
 
-															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-t-2 tw-border-[#171e41] tw-pb-4">
-																<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#171e41]">
+															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-[#171e41] tw-pb-4">
+																<h4 className="tw-w-full tw-pb-2 tw-border-b-2 tw-border-[#171e41] tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
 																	Travel Information
 																</h4>
 																<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-5 tw-rounded-md tw-p-3">
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			country of origin
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['country']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			arrival date
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['arrival_date']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			departure date
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['departure_date']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			address in ghana
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['address_ghana']}
-																		</Typography>
+																		</p>
 																	</div>
 																</div>
 															</div>
 
 															{/** Emergency Contact Information Area */}
 
-															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-t-2 tw-border-[#171e41] tw-pb-4">
-																<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#171e41]">
+															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-[#171e41] tw-pb-4">
+																<h4 className="tw-w-full tw-pb-2 tw-border-b-2 tw-border-[#171e41] tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
 																	Emergency Contact Information
 																</h4>
 																<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-5 tw-rounded-md tw-p-3">
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			first name
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['emergency_contact_first_name']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			last name
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['emergency_contact_last_name']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			address
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['emergency_contact_address']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			phone number
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['emergency_contact_telephone']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			country
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['emergency_contact_country']}
-																		</Typography>
+																		</p>
 																	</div>
 																</div>
 															</div>
 
 															{/** Emergency Contact in Ghana Information Area */}
 
-															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-t-2 tw-border-[#171e41] tw-pb-4">
-																<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#171e41]">
+															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-[#171e41] tw-pb-4">
+																<h4 className="tw-w-full tw-pb-2 tw-border-b-2 tw-border-[#171e41] tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
 																	Emergency Contact in Ghana Information
 																</h4>
 																<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-5 tw-rounded-md tw-p-3">
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			first name
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{
 																				person[
 																					'emergency_contact_ghana_first_name'
 																				]
 																			}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			last name
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{
 																				person[
 																					'emergency_contact_ghana_last_name'
 																				]
 																			}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			phone number
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{
 																				person[
 																					'emergency_contact_ghana_telephone'
 																				]
 																			}
-																		</Typography>
+																		</p>
 																	</div>
 																</div>
 															</div>
 
 															{/** Health Information Area */}
 
-															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-t-2 tw-border-[#171e41] tw-pb-4">
-																<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-xl tw-text-[#171e41]">
+															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-[#171e41] tw-pb-4">
+																<h4 className="tw-w-full tw-pb-2 tw-border-b-2 tw-border-[#171e41] tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
 																	Health Information
 																</h4>
 																<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-5 tw-rounded-md tw-p-3">
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			Pre-existing Medical Conditions
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['existing_conditions']}
-																		</Typography>
+																		</p>
 																	</div>
 																	<div>
-																		<Typography
-																			variant="paragraph"
-																			className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																			allergies
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			className="tw-font-medium tw-text-lg">
+																		</p>
+																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																			{person['allergies']}
-																		</Typography>
+																		</p>
 																	</div>
 																</div>
 															</div>
@@ -1812,105 +1775,73 @@ const Form = () => {
 												{watch('applicant_type') !== 'company' ? (
 													<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-3">
 														<div>
-															<Typography
-																variant="paragraph"
-																className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+															<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																First name
-															</Typography>
-															<Typography
-																variant="h6"
-																className="tw-font-medium tw-text-lg">
+															</p>
+															<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																{watch(`applicant[${0}].first_name`)}
-															</Typography>
+															</p>
 														</div>
 														<div>
-															<Typography
-																variant="paragraph"
-																className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+															<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																last name
-															</Typography>
-															<Typography
-																variant="h6"
-																className="tw-font-medium tw-text-lg">
+															</p>
+															<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																{watch(`applicant[${0}].last_name`)}
-															</Typography>
+															</p>
 														</div>
 
 														<div>
-															<Typography
-																variant="paragraph"
-																className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+															<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																email
-															</Typography>
-															<Typography
-																variant="h6"
-																className="tw-font-medium tw-text-lg">
+															</p>
+															<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																{watch(`applicant[${0}].telephone`)}
-															</Typography>
+															</p>
 														</div>
 														<div>
-															<Typography
-																variant="paragraph"
-																className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+															<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																telephone
-															</Typography>
-															<Typography
-																variant="h6"
-																className="tw-font-medium tw-text-lg">
+															</p>
+															<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																{watch(`applicant[${0}].email`)}
-															</Typography>
+															</p>
 														</div>
 													</div>
 												) : (
 													<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-3">
 														<div>
-															<Typography
-																variant="paragraph"
-																className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+															<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																company name
-															</Typography>
-															<Typography
-																variant="h6"
-																className="tw-font-medium tw-text-lg">
+															</p>
+															<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																{watch(`applicant[${0}].company_name`)}
-															</Typography>
+															</p>
 														</div>
 														<div>
-															<Typography
-																variant="paragraph"
-																className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+															<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																company address
-															</Typography>
-															<Typography
-																variant="h6"
-																className="tw-font-medium tw-text-lg">
+															</p>
+															<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																{watch(`applicant[${0}].company_address`)}
-															</Typography>
+															</p>
 														</div>
 
 														<div>
-															<Typography
-																variant="paragraph"
-																className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+															<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																company email
-															</Typography>
-															<Typography
-																variant="h6"
-																className="tw-font-medium tw-text-lg">
+															</p>
+															<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																{watch(`applicant[${0}].company_telephone`)}
-															</Typography>
+															</p>
 														</div>
 														<div>
-															<Typography
-																variant="paragraph"
-																className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+															<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
 																company telephone
-															</Typography>
-															<Typography
-																variant="h6"
-																className="tw-font-medium tw-text-lg">
+															</p>
+															<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
 																{watch(`applicant[${0}].company_email`)}
-															</Typography>
+															</p>
 														</div>
 													</div>
 												)}
@@ -1962,14 +1893,16 @@ const Form = () => {
 															duration <= 30
 																? 45
 																: duration > 30 && duration <= 60
-																? 90
+																? 90 - 90 / 10
 																: duration > 60 && duration <= 90
-																? 135
+																? 135 - 135 / 15
 																: duration > 90 && duration <= 120
-																? 180
+																? 180 - 180 / 20
 																: duration > 120 && duration <= 150
-																? 225
-																: duration > 150 && duration <= 180 && 270
+																? 225 - 225 / 25
+																: duration > 150 &&
+																  duration <= 180 &&
+																  270 - 270 / 30
 														)}{' '}
 													x {watch('insured_person').length}
 												</p>
@@ -1990,14 +1923,16 @@ const Form = () => {
 																(duration <= 30
 																	? 45
 																	: duration > 30 && duration <= 60
-																	? 90
+																	? 90 - 90 / 10
 																	: duration > 60 && duration <= 90
-																	? 135
+																	? 135 - 135 / 15
 																	: duration > 90 && duration <= 120
-																	? 180
+																	? 180 - 180 / 20
 																	: duration > 120 && duration <= 150
-																	? 225
-																	: duration > 150 && duration <= 180 && 270) *
+																	? 225 - 225 / 25
+																	: duration > 150 &&
+																	  duration <= 180 &&
+																	  270 - 270 / 30) *
 																	watch('insured_person').length
 															)}
 													</h2>
@@ -2084,52 +2019,105 @@ const Form = () => {
 								</p>
 							</div>
 						</div>
-						<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-pb-3 tw-border-b">
+						<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-600">
+								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
 									Price
 								</div>
-								<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-0 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
-									{duration &&
-										Intl.NumberFormat('en-US', {
-											style: 'currency',
-											currency: 'USD',
-										}).format(
-											duration <= 30
-												? 45
-												: duration > 30 && duration <= 60
-												? 90
-												: duration > 60 && duration <= 90
-												? 135
-												: duration > 90 && duration <= 120
-												? 180
-												: duration > 120 && duration <= 150
-												? 225
-												: duration > 150 && duration <= 180 && 270
-										)}{' '}
-									<p className="tw-text-gray-500 tw-font-light tw-text-xs">
+								<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-base tw-text-[#8e6abf] tw-font-bold">
+									{duration > 30 ? (
+										<s>
+											{duration &&
+												Intl.NumberFormat('en-US', {
+													style: 'currency',
+													currency: 'USD',
+												}).format(
+													duration <= 30
+														? 45
+														: duration > 30 && duration <= 60
+														? 90
+														: duration > 60 && duration <= 90
+														? 135
+														: duration > 90 && duration <= 120
+														? 180
+														: duration > 120 && duration <= 150
+														? 225
+														: duration > 150 && duration <= 180 && 270
+												)}
+										</s>
+									) : (
+										<>
+											{duration &&
+												Intl.NumberFormat('en-US', {
+													style: 'currency',
+													currency: 'USD',
+												}).format(
+													duration <= 30
+														? 45
+														: duration > 30 && duration <= 60
+														? 90
+														: duration > 60 && duration <= 90
+														? 135
+														: duration > 90 && duration <= 120
+														? 180
+														: duration > 120 && duration <= 150
+														? 225
+														: duration > 150 && duration <= 180 && 270
+												)}
+										</>
+									)}{' '}
+									<p className="tw-text-gray-600 tw-font-light tw-text-xs">
 										/person
 									</p>
 								</span>
 							</div>
 							{duration && duration > 30 ? (
-								<div className="tw-grid tw-grid-cols-2">
-									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-600">
-										Discount
+								<>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
+											Discount
+										</div>
+										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+											{duration > 30 && duration <= 60
+												? '10'
+												: duration > 60 && duration <= 90
+												? '15'
+												: duration > 90 && duration <= 120
+												? '20'
+												: duration > 120 && duration <= 150
+												? '25'
+												: duration > 150 && duration <= 180 && '30'}{' '}
+											%
+										</span>
 									</div>
-									<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-3 tw-text-lg tw-text-[#8e6abf] tw-font-bold">
-										{duration > 30 && duration <= 60
-											? '10'
-											: duration > 60 && duration <= 90
-											? '15'
-											: duration > 90 && duration <= 120
-											? '20'
-											: duration > 120 && duration <= 150
-											? '25'
-											: duration > 150 && duration <= 180 && '30'}{' '}
-										%
-									</span>
-								</div>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
+											Total Price
+										</div>
+										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+											{duration &&
+												Intl.NumberFormat('en-US', {
+													style: 'currency',
+													currency: 'USD',
+												}).format(
+													duration > 30 && duration <= 60
+														? 90 - 90 / 10
+														: duration > 60 && duration <= 90
+														? 135 - 135 / 15
+														: duration > 90 && duration <= 120
+														? 180 - 180 / 20
+														: duration > 120 && duration <= 150
+														? 225 - 225 / 25
+														: duration > 150 &&
+														  duration <= 180 &&
+														  270 - 270 / 30
+												)}{' '}
+											<p className="tw-text-gray-600 tw-font-light tw-text-xs">
+												/person
+											</p>
+										</span>
+									</div>
+								</>
 							) : null}
 						</div>
 
