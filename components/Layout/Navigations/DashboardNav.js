@@ -115,14 +115,24 @@ const DashboardNav = () => {
 					</>
 				) : (
 					session?.user?.role === 'admin' && (
-						<Link
-							href="/admin"
-							activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-							<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
-								<AiOutlineSearch className="tw-shrink-0 tw-text-2xl" /> Find
-								Policy
-							</a>
-						</Link>
+						<>
+							<Link
+								href="/admin"
+								activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
+								<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+									<AiOutlineSearch className="tw-shrink-0 tw-text-2xl" /> Find
+									Policy
+								</a>
+							</Link>
+							<Link
+								href="/admin/manage-policy"
+								activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
+								<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+									<MdOutlinePolicy className="tw-shrink-0 tw-text-2xl" /> Manage
+									Policy
+								</a>
+							</Link>
+						</>
 					)
 				)}
 			</div>

@@ -70,7 +70,7 @@ export default NextAuth({
 					last_name: 'Smith',
 					email: 'bagna@email.com',
 					password: '1234',
-					role: 'admin',
+					role: 'user',
 				};
 
 				if (user.email === email && user.password === password) {
