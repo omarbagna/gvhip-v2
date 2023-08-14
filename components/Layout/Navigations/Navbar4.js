@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from '@/utils/ActiveLink';
 import Image from 'next/image';
@@ -5,10 +7,10 @@ import Image from 'next/image';
 import logo from '@/public/images/gsti_logo.jpeg';
 import supportImg from '@/public/images/supportImg.jpg';
 import learnImg from '@/public/images/learnImg.jpg';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 const Navbar4 = () => {
-	const { data } = useSession();
+	const { data: session, status } = useSession();
 
 	const [menu, setMenu] = React.useState(true);
 	const toggleNavbar = () => {
@@ -358,6 +360,15 @@ const Navbar4 = () => {
 									</ul>
 								</li>
 
+								{status === 'authenticated' && session && (
+									<li className="nav-item">
+										<span // href="/authentication"
+											onClick={() => signOut({ callbackUrl: '/' })}>
+											<a className="nav-link">Sign Out</a>
+										</span>
+									</li>
+								)}
+
 								{/**
 								<li className="nav-item">
 									<Link href="/authentication" activeClassName="active">
@@ -368,7 +379,7 @@ const Navbar4 = () => {
 							</ul>
 						</div>
 
-						{data ? (
+						{status === 'authenticated' && session ? (
 							<div className="others-option">
 								<Link href="/dashboard" activeClassName="active">
 									<a className="btn-style-one crimson-color tw-cursor-pointer">
@@ -377,14 +388,17 @@ const Navbar4 = () => {
 								</Link>
 							</div>
 						) : (
-							<div className="others-option">
-								<span // href="/authentication"
-									onClick={() => signIn()}>
-									<a className="btn-style-one crimson-color tw-cursor-pointer">
-										Sign In
-									</a>
-								</span>
-							</div>
+							status === 'unauthenticated' &&
+							!session && (
+								<div className="others-option">
+									<span // href="/authentication"
+										onClick={() => signIn()}>
+										<a className="btn-style-one crimson-color tw-cursor-pointer">
+											Sign In
+										</a>
+									</span>
+								</div>
+							)
 						)}
 					</nav>
 				</div>

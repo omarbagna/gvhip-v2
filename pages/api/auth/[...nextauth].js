@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from '../axios';
+//import axios from '../axios';
 
 export default NextAuth({
 	providers: [
@@ -14,9 +15,42 @@ export default NextAuth({
 				},
 				password: { label: 'Password', type: 'password' },
 			},
-			async authorize(credentials, req) {
+			async authorize(credentials) {
 				const { email, password } = credentials;
 
+				/*
+				try {
+					const response = await axios.post('/login', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(credentials),
+					});
+
+					console.log(response);
+
+					const data = response;
+
+					if (
+						//response.ok && data.user
+						data
+					) {
+						/*
+						return Promise.resolve({
+							id: data.user.id,
+							email: data.user.email,
+						});
+						
+						return data;
+					} else {
+						return Promise.resolve(null);
+					}
+				} catch (error) {
+					console.error('Login error:', error);
+					return Promise.resolve(null);
+				}
+				*/
+
+				/*
 				const res = await axios.post('/login', {
 					//method: 'POST',
 					body: JSON.stringify({
@@ -28,17 +62,18 @@ export default NextAuth({
 				console.log(res);
 
 				const user = res.json();
+				*/
 
-				/*
 				const user = {
-                    id: '1',
-					firstName: 'John',
-					lastName: 'Smith',
+					id: '1',
+					first_name: 'John',
+					last_name: 'Smith',
+					email: 'bagna@email.com',
+					password: '1234',
 					role: 'user',
 				};
-                */
 
-				if (user) {
+				if (user.email === email && user.password === password) {
 					return user;
 				} else {
 					return null;
@@ -46,20 +81,14 @@ export default NextAuth({
 			},
 		}),
 	],
+
 	callbacks: {
-		session({ session, token }) {
-			session.user.id = token.id;
-			session.user.username = token.username;
-			return session;
+		async jwt({ token, user }) {
+			return { ...token, ...user };
 		},
-		jwt({ token, account, user }) {
-			if (account) {
-				token.accessToken = account.access_token;
-				token.id = user.id;
-				token.username = user.username;
-				console.log({ user });
-			}
-			return token;
+		async session({ session, token, user }) {
+			session.user = token;
+			return session;
 		},
 	},
 	pages: {

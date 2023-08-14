@@ -15,6 +15,7 @@ export const axiosPrivate = axios.create({
 	},
 });
 
+/*
 axiosPrivate.interceptors.request.use(
 	async (req) => {
 		let token = window.sessionStorage.getItem('userToken')
@@ -32,3 +33,4 @@ axiosPrivate.interceptors.request.use(
 		return Promise.reject(error);
 	}
 );
+*/

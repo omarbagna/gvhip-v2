@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from '@/utils/ActiveLink';
 import Image from 'next/image';
@@ -7,10 +9,14 @@ import { Avatar, Badge } from '@mui/material';
 import { BsChevronDown } from 'react-icons/bs';
 import { BiHomeAlt, BiUser } from 'react-icons/bi';
 import { MdOutlinePolicy } from 'react-icons/md';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { AiOutlineSearch } from 'react-icons/ai';
 
 const DashboardNav = () => {
+	const { data: session } = useSession();
+
+	console.log(session);
+
 	const [menu, setMenu] = React.useState(false);
 	const toggleDropdown = () => {
 		setMenu((prev) => !prev);
@@ -46,11 +52,12 @@ const DashboardNav = () => {
 							badgeContent=" "
 							variant="dot">
 							<Avatar src="#" className="tw-uppercase tw-scale-75">
-								BO
+								{session?.user?.first_name[0]}
+								{session?.user?.last_name[0]}
 							</Avatar>
 						</Badge>
 						<h3 className="tw-font-semibold tw-text-base tw-capitalize tw-hidden lg:tw-block">
-							Bagna Omar
+							{session?.user?.first_name} {session?.user?.last_name}
 						</h3>
 						<BsChevronDown />
 					</div>
@@ -80,36 +87,44 @@ const DashboardNav = () => {
 
 			{/** Side Nav */}
 			<div className="tw-h-fit lg:tw-h-full tw-fixed lg:tw-z-40 tw-bottom-0 lg:tw-top-20 tw-left-0 tw-flex lg:tw-flex-col tw-justify-center lg:tw-justify-start tw-items-center lg:tw-items-start tw-w-full lg:tw-w-fit tw-bg-white tw-border-t-2 lg:tw-border-t-0 lg:tw-border-r-2">
-				<Link
-					href="/dashboard"
-					activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-					<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
-						<BiHomeAlt className="tw-shrink-0 tw-text-2xl" /> Dashboard
-					</a>
-				</Link>
+				{session?.user?.role === 'user' ? (
+					<>
+						<Link
+							href="/dashboard"
+							activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
+							<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+								<BiHomeAlt className="tw-shrink-0 tw-text-2xl" /> Dashboard
+							</a>
+						</Link>
 
-				<Link
-					href="/dashboard/find-policy"
-					activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-					<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
-						<AiOutlineSearch className="tw-shrink-0 tw-text-2xl" /> Find Policy
-					</a>
-				</Link>
-				<Link
-					href="/dashboard/manage-policy"
-					activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-					<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
-						<MdOutlinePolicy className="tw-shrink-0 tw-text-2xl" /> Manage
-						Policy
-					</a>
-				</Link>
-				<Link
-					href="/dashboard/profile"
-					activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-					<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
-						<BiUser className="tw-shrink-0 tw-text-2xl" /> Profile
-					</a>
-				</Link>
+						<Link
+							href="/dashboard/manage-policy"
+							activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
+							<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+								<MdOutlinePolicy className="tw-shrink-0 tw-text-2xl" /> Manage
+								Policy
+							</a>
+						</Link>
+						<Link
+							href="/dashboard/profile"
+							activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
+							<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+								<BiUser className="tw-shrink-0 tw-text-2xl" /> Profile
+							</a>
+						</Link>
+					</>
+				) : (
+					session?.user?.role === 'admin' && (
+						<Link
+							href="/admin"
+							activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
+							<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+								<AiOutlineSearch className="tw-shrink-0 tw-text-2xl" /> Find
+								Policy
+							</a>
+						</Link>
+					)
+				)}
 			</div>
 		</div>
 	);

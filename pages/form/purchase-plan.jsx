@@ -73,7 +73,7 @@ const Form = () => {
 	};
 
 	useEffect(() => {
-		const data = window.localStorage.getItem('basicData');
+		const data = window.sessionStorage.getItem('basicData');
 		if (data !== null) setBasicData(JSON.parse(data));
 	}, []);
 
@@ -282,8 +282,9 @@ const Form = () => {
 
 	const submitForm = (data) => {
 		//console.log(data?.applicant[0]);
-		window.localStorage.setItem('basicData', JSON.stringify(data));
+		window.sessionStorage.setItem('basicData', JSON.stringify(data));
 
+		/*
 		const formData = JSON.stringify({
 			method: 'REQUEST_PAYMENT',
 			api_key: 'd37e4e08a0fc40b39abf5ce36a8d70c75fe05b83',
@@ -305,8 +306,13 @@ const Form = () => {
 			redirect_url: 'https://gsti-test.netlify.app/authentication',
 			callback_url: 'https://gsti-test.netlify.app/',
 		});
+		*/
 
 		const onboardingData = JSON.stringify({
+			name:
+				data?.applicant_type === 'company'
+					? data?.applicant[0]?.company_name
+					: data?.applicant[0]?.first_name,
 			first_name:
 				data?.applicant_type === 'company'
 					? data?.applicant[0]?.company_name

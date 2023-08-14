@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
 import { addDays, differenceInDays, format, isEqual, parseISO } from 'date-fns';
 import 'react-date-range/dist/styles.css'; // main style file
@@ -9,26 +9,40 @@ import { DateRange } from 'react-date-range';
 import Accordion from '@/components/Accordion';
 import { planTabsData } from 'data/plansData';
 import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, FormControlLabel, FormHelperText } from '@mui/material';
+import {
+	Backdrop,
+	Checkbox,
+	CircularProgress,
+	FormControlLabel,
+	FormHelperText,
+	Skeleton,
+	Stack,
+} from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import useAxiosAuth from 'hooks/useAxiosAuth';
+//import { axiosPrivate } from 'pages/api/axios';
 const MySwal = withReactContent(Swal);
-//import Signup from '@/components/Authentication/Signup';
-//import FooterFour from '@/components/Layout/Footer/FooterFour';
 
-const alertError = () => {
+const alert = (title = null, text = null, icon = null) => {
 	MySwal.fire({
-		title: 'Invalid Extension Start Date',
-		text: 'Extension must start from current coverage end date',
-		icon: 'error',
+		title: title,
+		text: text,
+		icon: icon,
 		timer: 8000,
 		timerProgressBar: true,
 		showConfirmButton: false,
 	});
 };
 
-const Dashboard = () => {
+const ManagePolicy = () => {
+	const axiosPrivate = useAxiosAuth();
+
+	const queryClient = useQueryClient();
+
 	const [managePolicy, setManagePolicy] = useState(false);
+	const [paymentAmount, setPaymentAmount] = useState(0);
 	const [dateState, setDateState] = useState([
 		{
 			startDate: addDays(new Date(), 30),
@@ -44,6 +58,28 @@ const Dashboard = () => {
 		) + 1
 	);
 
+	useEffect(() => {
+		if (duration <= 30) {
+			setPaymentAmount(45);
+			//setPaymentDiscount(0);
+		} else if (duration > 30 && duration <= 60) {
+			setPaymentAmount(90);
+			//setPaymentDiscount(10);
+		} else if (duration > 60 && duration <= 90) {
+			setPaymentAmount(135);
+			//setPaymentDiscount(15);
+		} else if (duration > 90 && duration <= 120) {
+			setPaymentAmount(180);
+			//setPaymentDiscount(20);
+		} else if (duration > 120 && duration <= 150) {
+			setPaymentAmount(225);
+			//setPaymentDiscount(25);
+		} else if (duration > 150 && duration <= 180) {
+			setPaymentAmount(270);
+			//setPaymentDiscount(30);
+		}
+	}, [duration]);
+
 	const { reset, watch, control, handleSubmit } = useForm({
 		mode: 'all',
 		reValidateMode: 'onChange',
@@ -52,28 +88,99 @@ const Dashboard = () => {
 		},
 	});
 
+	const getUserDetails = async () => {
+		const response = await axiosPrivate.get('/account/dashboard');
+
+		return response;
+	};
+
+	const userDetails = useQuery('user', getUserDetails, {
+		onSuccess: (userData) => {
+			if (userData?.status === 200) {
+				setDateState([
+					{
+						startDate: new Date(
+							userData?.data?.user_policy_transaction?.end_date
+						),
+						endDate: addDays(
+							new Date(userData?.data?.user_policy_transaction?.end_date),
+							30
+						),
+						key: 'selection',
+					},
+				]);
+			}
+		},
+
+		/*
+		onError: (error) => {
+			toast.error(`${error?.response?.data?.STATUSMSG}`);
+			//logout();
+		},
+		*/
+
+		staleTime: 500000,
+	});
+
+	const USER_DETAILS = userDetails?.data?.data ? userDetails?.data?.data : null;
+
+	const submitExtendPolicy = async (data) => {
+		const { data: response } = await axiosPrivate.put(
+			'/account/extend-policy',
+			data
+		);
+		return response;
+	};
+
+	const extendPolicy = useMutation(
+		(extensionData) => submitExtendPolicy(extensionData),
+		{
+			onSuccess: (data) => {
+				console.log('Success response ', data);
+				if (data?.status === 200) {
+					//window.location.replace(data.redirect_url);
+					alert('Success', data?.message, 'success');
+					reset();
+					queryClient.invalidateQueries({ queryKey: ['user'] });
+					setManagePolicy(false);
+				} else if (data?.status !== 200) {
+					alert('Failed to extend policy', 'Please try again later', 'error');
+				}
+			},
+			onError: (error) => {
+				console.log(error);
+			},
+		}
+	);
+
 	const submitExtensionRequest = (data) => {
-		const basicData = JSON.stringify({
+		const extensionData = JSON.stringify({
 			extension_start_date: format(dateState[0]?.startDate, 'yyyy-MM-dd'),
 			extension_end_date: format(dateState[0]?.endDate, 'yyyy-MM-dd'),
+			extension_duration: duration,
+			extension_price: paymentAmount,
 		});
 
-		console.log(data, basicData);
+		console.log(data);
 		let rightExtensionStartDate = isEqual(
 			parseISO(format(new Date(dateState[0]?.startDate), 'yyyy-MM-dd')),
-			parseISO(format(addDays(new Date(), 30), 'yyyy-MM-dd'))
+			parseISO(
+				format(
+					new Date(USER_DETAILS?.user_policy_transaction?.end_date),
+					'yyyy-MM-dd'
+				)
+			)
 		);
 
 		if (!rightExtensionStartDate) {
-			alertError();
+			alert(
+				'Invalid Extension Start Date',
+				'Extension must start from current coverage end date',
+				'error'
+			);
 		} else {
-			setManagePolicy(false);
+			extendPolicy.mutate(extensionData);
 		}
-
-		reset();
-		//window.localStorage.setItem('basicData', basicData);
-
-		//router.push(`/form/purchase-plan`);
 	};
 
 	return (
@@ -91,93 +198,137 @@ const Dashboard = () => {
 						</div>
 					</div>
 
-					<div className="tw-w-full tw-h-fit tw-row-start-1 tw-col-start-2 tw-row-span-2 lg:tw-row-span-1 xl:tw-col-start-3 xl:tw-row-start-1 xl:tw-row-span-2 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
-						<div className="tw-w-full tw-h-fit tw-bg-white tw-text-[#8e6abf] tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
-							<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
-								<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
-									Standard Plan
-								</h3>
-							</div>
-							<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
-								<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
-									Trip details
-								</h2>
-								<div className="tw-grid tw-grid-cols-2">
-									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-										Country of Origin
-									</div>
-									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										Ghana
-									</p>
-								</div>
-								<div className="tw-grid tw-grid-cols-2">
-									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-										Coverage Starts
-									</div>
-									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{format(new Date(), 'MMM dd, yyyy')}
-									</p>
-								</div>
-								<div className="tw-grid tw-grid-cols-2">
-									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-										Coverage Ends
-									</div>
-									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{format(addDays(new Date(), 30), 'MMM dd, yyyy')}
-									</p>
-								</div>
-								<div className="tw-grid tw-grid-cols-2">
-									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
-										Duration
-									</div>
-									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{differenceInDays(addDays(new Date(), 30), new Date())} days
-									</p>
-								</div>
-							</div>
-							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
-								<div className="tw-grid tw-grid-cols-2">
-									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
-										Price
-									</div>
-									<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+					{!userDetails.isLoading && USER_DETAILS && (
+						<div className="tw-w-full tw-h-fit tw-row-start-1 tw-col-start-2 tw-row-span-2 lg:tw-row-span-1 xl:tw-col-start-3 xl:tw-row-start-1 xl:tw-row-span-2 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+							<div className="tw-w-full tw-h-fit tw-bg-white tw-text-[#8e6abf] tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+								<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
+									<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
 										{
-											/*duration &&
-										Intl.NumberFormat('en-US', {
-											style: 'currency',
-											currency: 'USD',
-										}).format(
-											duration <= 30
-												? 45
-												: duration > 30 && duration <= 60
-												? 90
-												: duration > 60 && duration <= 90
-												? 135
-												: duration > 90 && duration <= 120
-												? 180
-												: duration > 120 && duration <= 150
-												? 225
-												: duration > 150 && duration <= 180 && 270
-                                        )*/
-											Intl.NumberFormat('en-US', {
+											USER_DETAILS?.user_policy_transaction?.trip_policy
+												?.plan_name
+										}
+									</h3>
+								</div>
+								<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
+									<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
+										Trip details
+									</h2>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+											Country of Origin
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{USER_DETAILS?.country}
+										</p>
+									</div>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+											Coverage Starts
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{format(
+												new Date(
+													USER_DETAILS?.user_policy_transaction?.start_date
+												),
+												'MMM dd, yyyy'
+											)}
+										</p>
+									</div>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+											Coverage Ends
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{format(
+												new Date(
+													USER_DETAILS?.user_policy_transaction?.end_date
+												),
+												'MMM dd, yyyy'
+											)}
+										</p>
+									</div>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+											Duration
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{USER_DETAILS?.user_policy_transaction?.duration} days
+										</p>
+									</div>
+								</div>
+								<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
+											Price
+										</div>
+										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+											{Intl.NumberFormat('en-US', {
 												style: 'currency',
 												currency: 'USD',
-											}).format(45)
-										}{' '}
-									</span>
+											}).format(
+												USER_DETAILS?.user_policy_transaction?.trip_policy
+													?.plan_price
+											)}{' '}
+										</span>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<div className="tw-w-full tw-flex tw-justify-end tw-items-end">
-							<button
-								className="btn-style-one dark-green-color"
-								onClick={() => setManagePolicy(true)}
-								type="button">
-								Extend Policy <i className="bx bx-chevron-right"></i>
-							</button>
+							<div className="tw-w-full tw-flex tw-justify-end tw-items-end">
+								<button
+									className="btn-style-one dark-green-color"
+									onClick={() => setManagePolicy(true)}
+									type="button">
+									Extend Policy <i className="bx bx-chevron-right"></i>
+								</button>
+							</div>
 						</div>
-					</div>
+					)}
+
+					{userDetails.isLoading && (
+						<div className="tw-w-full tw-h-fit tw-row-start-1 tw-col-start-2 tw-row-span-2 lg:tw-row-span-1 xl:tw-col-start-3 xl:tw-row-start-1 xl:tw-row-span-2 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+							<div className="tw-w-full tw-h-fit tw-bg-white tw-text-[#8e6abf] tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+								<Stack spacing={1} sx={{ width: '100%' }}>
+									<Skeleton
+										variant="text"
+										sx={{ fontSize: '2rem', width: '100%' }}
+									/>
+									<Skeleton
+										variant="text"
+										sx={{ fontSize: '1rem', width: '100%' }}
+									/>
+									<Skeleton
+										variant="text"
+										sx={{ fontSize: '1rem', width: '100%' }}
+									/>
+									<Skeleton
+										variant="text"
+										sx={{ fontSize: '1rem', width: '100%' }}
+									/>
+									<Skeleton
+										variant="text"
+										sx={{ fontSize: '1rem', width: '100%' }}
+									/>
+									<Skeleton
+										variant="text"
+										sx={{ fontSize: '1rem', width: '100%' }}
+									/>
+									<Skeleton
+										variant="text"
+										sx={{ fontSize: '2rem', width: '100%' }}
+									/>
+									<Skeleton
+										variant="text"
+										sx={{ fontSize: '2rem', width: '100%' }}
+									/>
+								</Stack>
+							</div>
+						</div>
+					)}
+
+					{!userDetails.isLoading && !USER_DETAILS && (
+						<h2>Failed to load data. Please reload this page to try again</h2>
+					)}
 				</div>
 			</div>
 
@@ -399,8 +550,19 @@ const Dashboard = () => {
 					</div>
 				</div>
 			)}
+
+			<Backdrop
+				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+				open={extendPolicy.isLoading}>
+				<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+					<CircularProgress color="inherit" />
+					<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
+						Extending current policy, please wait...
+					</p>
+				</div>
+			</Backdrop>
 		</div>
 	);
 };
 
-export default Dashboard;
+export default ManagePolicy;

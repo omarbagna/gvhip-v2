@@ -53,7 +53,7 @@ const Quote = () => {
 	const router = useRouter();
 
 	useEffect(() => {
-		const data = window.localStorage.getItem('basicData');
+		const data = window.sessionStorage.getItem('basicData');
 		if (data !== null) setBasicData(JSON.parse(data));
 	}, []);
 
@@ -260,7 +260,7 @@ const Quote = () => {
 		});
 
 		//console.log(basicData);
-		window.localStorage.setItem('basicData', basicData);
+		window.sessionStorage.setItem('basicData', basicData);
 
 		router.push(`/form/purchase-plan`);
 

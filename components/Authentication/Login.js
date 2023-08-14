@@ -22,10 +22,11 @@ const Login = () => {
 	const logIn = (data) => {
 		signIn('credentials', {
 			...data,
-			redirect: false,
+			//redirect: false,
 			callbackUrl: '/dashboard',
 		});
 	};
+
 	return (
 		<div className="col-lg-6 col-md-12">
 			<div className="login-form">
@@ -38,7 +39,13 @@ const Login = () => {
 						control={control}
 						name={`email`}
 						defaultValue={''}
-						rules={{ required: 'Please enter your email' }}
+						rules={{
+							pattern: {
+								value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/gi,
+								message: 'Please enter a valid email address',
+							},
+							required: 'Please enter your email',
+						}}
 						render={({
 							field: { ref, ...field },
 							fieldState: { error, invalid },
@@ -100,7 +107,7 @@ const Login = () => {
 						</div>
 						<div className="col-lg-6 col-md-6 lost-your-password-wrap">
 							<Link href="/lost-password">
-								<a className="lost-your-password">Lost your password?</a>
+								<a className="lost-your-password">Forgot your password?</a>
 							</Link>
 						</div>
 					</div>
