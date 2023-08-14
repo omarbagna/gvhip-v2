@@ -7,14 +7,14 @@ export default withAuth(
 			req.nextUrl.pathname.startsWith('/dashboard') &&
 			req.nextauth.token?.role !== 'user'
 		) {
-			return NextResponse.rewrite(new URL('/admin', req.url));
+			return NextResponse.redirect(new URL('/admin', req.url));
 		}
 
 		if (
 			req.nextUrl.pathname.startsWith('/admin') &&
 			req.nextauth.token?.role !== 'admin'
 		) {
-			return NextResponse.rewrite(new URL('/dashboard', req.url));
+			return NextResponse.redirect(new URL('/dashboard', req.url));
 		}
 	},
 	{
