@@ -65,7 +65,7 @@ export default NextAuth({
 				*/
 
 				const user = {
-					id: '1',
+					id: 1,
 					first_name: 'John',
 					last_name: 'Smith',
 					email: 'bagna@email.com',
