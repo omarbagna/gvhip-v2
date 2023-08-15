@@ -462,7 +462,7 @@ const FindPolicy = () => {
 										Authorization status
 									</div>
 									<p
-										className={`tw-w-full tw-uppercase tw-flex tw-justify-end lg:tw-justify-start xl:tw-justify-end tw-text-base ${
+										className={`tw-w-full tw-uppercase tw-flex tw-justify-end tw-text-base ${
 											policyHolder?.user_policy_transaction?.status ===
 											'verified'
 												? 'tw-text-green-600'
@@ -475,7 +475,7 @@ const FindPolicy = () => {
 									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
 										Authorized by
 									</div>
-									<p className="tw-w-full tw-capitalize tw-flex tw-justify-end lg:tw-justify-start xl:tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
+									<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
 										{
 											policyHolder?.user_policy_transaction?.status_updated_by
 												?.first_name
@@ -490,7 +490,7 @@ const FindPolicy = () => {
 									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
 										Authorized at
 									</div>
-									<p className="tw-w-full tw-capitalize tw-flex tw-justify-end lg:tw-justify-start xl:tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
+									<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
 										{policyHolder?.user_policy_transaction?.status_update_date}
 									</p>
 								</div>
