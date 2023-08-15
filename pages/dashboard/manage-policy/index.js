@@ -433,6 +433,7 @@ const ManagePolicy = () => {
 											<div className="xl:tw-block tw-hidden">
 												<DateRange
 													months={2}
+													direction="horizontal"
 													editableDateInputs={true}
 													onChange={(item) => setDateState([item.selection])}
 													moveRangeOnFirstSelection={false}
