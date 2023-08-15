@@ -18,7 +18,7 @@ const PortfolioDetails = () => {
 							<li>
 								<a href="#">Portfolio</a>
 							</li>
-							<li>Finance Consulting</li>
+							<li>Insurance Consulting</li>
 						</ul>
 					</div>
 				</div>

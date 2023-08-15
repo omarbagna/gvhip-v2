@@ -319,13 +319,14 @@ const Navbar4 = () => {
 															<ul className="megamenu-submenu">
 																<li className="nav-item">
 																	<Link
-																		href="/authentication"
+																		href="/dashboard/manage-policy"
 																		activeClassName="active">
 																		<a className="nav-link">
 																			Manage your Policy
 																		</a>
 																	</Link>
 																</li>
+																{/**
 																<li className="nav-item">
 																	<Link
 																		href="/authentication"
@@ -335,6 +336,7 @@ const Navbar4 = () => {
 																		</a>
 																	</Link>
 																</li>
+																 */}
 															</ul>
 														</div>
 
@@ -351,7 +353,7 @@ const Navbar4 = () => {
 																</li>
 																<li className="nav-item">
 																	<Link
-																		href="/get-quote"
+																		href="/form/get-quote"
 																		activeClassName="active">
 																		<a className="nav-link">Request a Quote</a>
 																	</Link>
