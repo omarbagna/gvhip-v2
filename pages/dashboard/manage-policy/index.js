@@ -276,7 +276,7 @@ const ManagePolicy = () => {
 										</p>
 									</div>
 									{USER_DETAILS?.user_policy_transaction
-										?.extension_start_date && (
+										?.extension_start_date ? (
 										<div className="tw-grid tw-grid-cols-2">
 											<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 												Extension Starts
@@ -290,10 +290,9 @@ const ManagePolicy = () => {
 												)}
 											</p>
 										</div>
-									)}
+									) : null}
 
-									{USER_DETAILS?.user_policy_transaction
-										?.extension_end_date && (
+									{USER_DETAILS?.user_policy_transaction?.extension_end_date ? (
 										<div className="tw-grid tw-grid-cols-2">
 											<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 												Extension Ends
@@ -307,9 +306,8 @@ const ManagePolicy = () => {
 												)}
 											</p>
 										</div>
-									)}
-									{USER_DETAILS?.user_policy_transaction
-										?.extension_duration && (
+									) : null}
+									{USER_DETAILS?.user_policy_transaction?.extension_duration ? (
 										<div className="tw-grid tw-grid-cols-2">
 											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 												Extension Duration
@@ -322,7 +320,7 @@ const ManagePolicy = () => {
 												days
 											</p>
 										</div>
-									)}
+									) : null}
 								</div>
 								<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 									<div className="tw-grid tw-grid-cols-2">
