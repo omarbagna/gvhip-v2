@@ -441,8 +441,8 @@ const Navbar4 = () => {
 				open={loading}>
 				<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 					<CircularProgress color="inherit" />
-					<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
-						Signing Out
+					<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-full">
+						Signing out
 					</p>
 				</div>
 			</Backdrop>
