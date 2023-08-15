@@ -273,6 +273,7 @@ const Form = () => {
 			onSuccess: (data) => {
 				console.log('Success response ', data);
 				if (data?.status === 201) {
+					window.sessionStorage.clear();
 					router.push(`/authentication`);
 					//window.location.replace(data.redirect_url);
 					console.log(data);
