@@ -85,7 +85,7 @@ export const countries = [
 	{ name: 'Gambia', value: 'Gambia' },
 	{ name: 'Georgia', value: 'Georgia' },
 	{ name: 'Germany', value: 'Germany' },
-	{ name: 'Ghana', value: 'Ghana' },
+	//{ name: 'Ghana', value: 'Ghana' },
 	{ name: 'Gibraltar', value: 'Gibraltar' },
 	{ name: 'Greece', value: 'Greece' },
 	{ name: 'Greenland', value: 'Greenland' },

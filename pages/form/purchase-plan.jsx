@@ -345,7 +345,7 @@ const Form = () => {
 			discount: paymentDiscount,
 		};
 
-		console.log(onboardingData);
+		//console.log(onboardingData);
 		makePayment.mutate(onboardingData);
 
 		//goToNext();
