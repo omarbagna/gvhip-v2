@@ -430,16 +430,31 @@ const ManagePolicy = () => {
 
 									<div className="tw-w-full tw-h-fit tw-flex tw-flex-col lg:tw-flex-row tw-justify-center tw-gap-4 tw-items-center tw-border-y-2 tw-px-2 tw-py-3">
 										<div className="tw-w-full md:tw-w-fit tw-flex tw-justify-center lg:tw-justify-start tw-items-center tw-gap-2 tw-shrink-0">
-											<DateRange
-												editableDateInputs={true}
-												onChange={(item) => setDateState([item.selection])}
-												moveRangeOnFirstSelection={false}
-												ranges={dateState}
-												rangeColors={['#8e6abf']}
-												minDate={dateState[0].startDate}
-												maxDate={addDays(dateState[0].startDate, 179)}
-												className="tw-rounded-md tw-shadow-md"
-											/>
+											<div className="xl:tw-block tw-hidden">
+												<DateRange
+													months={2}
+													editableDateInputs={true}
+													onChange={(item) => setDateState([item.selection])}
+													moveRangeOnFirstSelection={false}
+													ranges={dateState}
+													rangeColors={['#8e6abf']}
+													minDate={dateState[0].startDate}
+													maxDate={addDays(dateState[0].startDate, 179)}
+													className="tw-rounded-md tw-shadow-md"
+												/>
+											</div>
+											<div className="xl:tw-hidden tw-block">
+												<DateRange
+													editableDateInputs={true}
+													onChange={(item) => setDateState([item.selection])}
+													moveRangeOnFirstSelection={false}
+													ranges={dateState}
+													rangeColors={['#8e6abf']}
+													minDate={dateState[0].startDate}
+													maxDate={addDays(dateState[0].startDate, 179)}
+													className="tw-rounded-md tw-shadow-md"
+												/>
+											</div>
 										</div>
 										<div className="tw-w-full tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-ml-10">
 											<div className="tw-hidden lg:tw-grid tw-grid-cols-2 tw-w-full tw-pb-2">
