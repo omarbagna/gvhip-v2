@@ -117,9 +117,13 @@ const Login = () => {
 							</Link>
 						</div>
 					</div>
-					<button type="submit" disabled={loading}>
-						{loading ? <CircularProgress color="inherit" /> : 'Log In'}
-					</button>
+					{!loading ? (
+						<button type="submit">Log In</button>
+					) : (
+						<button type="button">
+							<CircularProgress color="inherit" />
+						</button>
+					)}
 				</form>
 			</div>
 		</div>

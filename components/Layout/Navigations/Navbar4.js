@@ -7,14 +7,11 @@ import Image from 'next/image';
 import logo from '@/public/images/gsti_logo.jpeg';
 import supportImg from '@/public/images/supportImg.jpg';
 import learnImg from '@/public/images/learnImg.jpg';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import { axiosPrivate } from 'pages/api/axios';
-import { Backdrop, CircularProgress } from '@mui/material';
+import { signIn, useSession } from 'next-auth/react';
 
 const Navbar4 = () => {
 	const { data: session, status } = useSession();
 
-	const [loading, setLoading] = React.useState(false);
 	const [menu, setMenu] = React.useState(true);
 	const toggleNavbar = () => {
 		setMenu(!menu);
@@ -29,23 +26,6 @@ const Navbar4 = () => {
 			}
 		});
 	});
-
-	const logOut = async (e) => {
-		e.preventDefault();
-
-		setLoading(true);
-
-		if (session?.user?.user?.role === 'guest') {
-			const res = await axiosPrivate.post('/account/logout');
-
-			if (res.status === 200) {
-				signOut({ callbackUrl: '/' });
-			}
-		} else {
-			signOut({ callbackUrl: '/' });
-		}
-		setLoading(false);
-	};
 
 	const classOne = menu
 		? 'collapse navbar-collapse mean-menu'
@@ -391,15 +371,6 @@ const Navbar4 = () => {
 										</ul>
 									</li>
 
-									{status === 'authenticated' && session && (
-										<li className="nav-item">
-											<span // href="/authentication"
-												onClick={(e) => logOut(e)}>
-												<a className="nav-link tw-cursor-pointer">Sign Out</a>
-											</span>
-										</li>
-									)}
-
 									{/**
 								<li className="nav-item">
 									<Link href="/authentication" activeClassName="active">
@@ -435,17 +406,6 @@ const Navbar4 = () => {
 					</div>
 				</div>
 			</div>
-
-			<Backdrop
-				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-				open={loading}>
-				<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
-					<CircularProgress color="inherit" />
-					<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-full">
-						Signing out
-					</p>
-				</div>
-			</Backdrop>
 		</>
 	);
 };
