@@ -403,10 +403,12 @@ const Navbar4 = () => {
 								</div>
 							) : (
 								status === 'loading' && (
-									<Skeleton
-										variant="text"
-										sx={{ fontSize: '2rem', width: '120px' }}
-									/>
+									<div className="others-option">
+										<Skeleton
+											variant="text"
+											sx={{ fontSize: '2rem', width: '120px' }}
+										/>
+									</div>
 								)
 							)}
 						</nav>

@@ -6,6 +6,20 @@ import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { Backdrop, CircularProgress } from '@mui/material';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+const MySwal = withReactContent(Swal);
+
+const alert = (title = null, text = null, icon = null) => {
+	MySwal.fire({
+		title: title,
+		text: text,
+		icon: icon,
+		timer: 8000,
+		timerProgressBar: true,
+		showConfirmButton: false,
+	});
+};
 
 const Login = () => {
 	const [loading, setLoading] = useState(false);
@@ -27,8 +41,19 @@ const Login = () => {
 		setLoading(true);
 		await signIn('credentials', {
 			...data,
-			//redirect: false,
+			redirect: false,
 			callbackUrl: '/dashboard',
+		}).then(({ ok, error }) => {
+			if (ok) {
+				setLoading(false);
+
+				window.location.replace('/dashboard');
+			} else {
+				console.log(error);
+				setLoading(false);
+
+				alert('Sign in failed', 'Invalid email or password', 'error');
+			}
 		});
 		setLoading(false);
 	};
