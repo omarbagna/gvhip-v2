@@ -148,12 +148,13 @@ const Profile = () => {
 								src="#"
 								className="tw-uppercase"
 								sx={{ width: '100px', height: '100px' }}>
-								{USER_PROFILE?.name?.[0]}
+								{USER_PROFILE?.first_name?.[0]}
+								{USER_PROFILE?.last_name?.[0]}
 							</Avatar>
 
 							<div className="tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-3">
 								<h4 className="tw-font-medium tw-text-lg">
-									{USER_PROFILE?.name}
+									{USER_PROFILE?.first_name} {USER_PROFILE?.last_name}
 								</h4>
 								<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
 									<HiOutlineLocationMarker className="tw-text-xl tw-shrink-0 tw-text-gray-500" />

@@ -40,7 +40,6 @@ const LostPasswordForm = () => {
 		(resetPasswordData) => triggerPasswordReset(resetPasswordData),
 		{
 			onSuccess: (data) => {
-				console.log('Success response ', data);
 				if (data?.status === 200) {
 					//window.location.replace(data.redirect_url);
 					alert('Success', 'Reset link sent successfully', 'success');
@@ -60,10 +59,6 @@ const LostPasswordForm = () => {
 		const passwordResetData = JSON.stringify(data);
 
 		resetPassword.mutate(passwordResetData);
-
-		//window.sessionStorage.setItem('basicData', basicData);
-
-		//router.push(`/form/purchase-plan`);
 	};
 
 	return (
