@@ -38,7 +38,7 @@ const Quote = () => {
 	const [basicData, setBasicData] = useState(null);
 	const [dateState, setDateState] = useState([
 		{
-			startDate: new Date(),
+			startDate: addDays(new Date(), 1),
 			endDate: addDays(new Date(), 29),
 			key: 'selection',
 		},
@@ -556,7 +556,7 @@ const Quote = () => {
 												months={2}
 												direction="horizontal"
 												rangeColors={['#8e6abf']}
-												minDate={new Date()}
+												minDate={addDays(new Date(), 1)}
 												maxDate={addDays(dateState[0].startDate, 179)}
 												className="tw-rounded-md tw-shadow-md"
 											/>
@@ -568,7 +568,7 @@ const Quote = () => {
 												moveRangeOnFirstSelection={false}
 												ranges={dateState}
 												rangeColors={['#8e6abf']}
-												minDate={new Date()}
+												minDate={addDays(new Date(), 1)}
 												maxDate={addDays(dateState[0].startDate, 179)}
 												className="tw-rounded-md tw-shadow-md"
 											/>
