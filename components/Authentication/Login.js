@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 //import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
+import { CircularProgress } from '@mui/material';
 
 const Login = () => {
+	const [loading, setLoading] = useState(false);
 	const {
 		control,
 
@@ -20,11 +22,13 @@ const Login = () => {
 	//const router = useRouter();
 
 	const logIn = (data) => {
+		setLoading(true);
 		signIn('credentials', {
 			...data,
 			//redirect: false,
 			callbackUrl: '/dashboard',
 		});
+		setLoading(false);
 	};
 
 	return (
@@ -111,7 +115,9 @@ const Login = () => {
 							</Link>
 						</div>
 					</div>
-					<button type="submit">Log In</button>
+					<button type="submit" disabled={loading}>
+						{loading ? <CircularProgress color="inherit" /> : 'Log In'}
+					</button>
 				</form>
 			</div>
 		</div>

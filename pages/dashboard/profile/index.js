@@ -120,10 +120,6 @@ const Profile = () => {
 		const passwordData = JSON.stringify(data);
 
 		changePassword.mutate(passwordData);
-
-		//window.sessionStorage.setItem('basicData', basicData);
-
-		//router.push(`/form/purchase-plan`);
 	};
 
 	return (

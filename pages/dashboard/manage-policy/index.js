@@ -275,6 +275,54 @@ const ManagePolicy = () => {
 											{USER_DETAILS?.user_policy_transaction?.duration} days
 										</p>
 									</div>
+									{USER_DETAILS?.user_policy_transaction
+										?.extension_start_date && (
+										<div className="tw-grid tw-grid-cols-2">
+											<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+												Extension Starts
+											</div>
+											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+												{format(
+													new Date(
+														USER_DETAILS?.user_policy_transaction?.extension_start_date
+													),
+													'MMM dd, yyyy'
+												)}
+											</p>
+										</div>
+									)}
+
+									{USER_DETAILS?.user_policy_transaction
+										?.extension_end_date && (
+										<div className="tw-grid tw-grid-cols-2">
+											<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+												Extension Ends
+											</div>
+											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+												{format(
+													new Date(
+														USER_DETAILS?.user_policy_transaction?.extension_end_date
+													),
+													'MMM dd, yyyy'
+												)}
+											</p>
+										</div>
+									)}
+									{USER_DETAILS?.user_policy_transaction
+										?.extension_duration && (
+										<div className="tw-grid tw-grid-cols-2">
+											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+												Extension Duration
+											</div>
+											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+												{
+													USER_DETAILS?.user_policy_transaction
+														?.extension_duration
+												}{' '}
+												days
+											</p>
+										</div>
+									)}
 								</div>
 								<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 									<div className="tw-grid tw-grid-cols-2">
@@ -286,8 +334,7 @@ const ManagePolicy = () => {
 												style: 'currency',
 												currency: 'USD',
 											}).format(
-												USER_DETAILS?.user_policy_transaction?.trip_policy
-													?.plan_price
+												USER_DETAILS?.user_policy_transaction?.price
 											)}{' '}
 										</span>
 									</div>
@@ -367,57 +414,86 @@ const ManagePolicy = () => {
 							</h2>
 
 							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
+								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 									Coverage Starts
 								</div>
-								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
-									{format(new Date(), 'MMM dd, yyyy')}
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+									{format(
+										new Date(USER_DETAILS?.user_policy_transaction?.start_date),
+										'MMM dd, yyyy'
+									)}
 								</p>
 							</div>
 							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
+								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 									Coverage Ends
 								</div>
-								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
-									{format(addDays(new Date(), 30), 'MMM dd, yyyy')}
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+									{format(
+										new Date(USER_DETAILS?.user_policy_transaction?.end_date),
+										'MMM dd, yyyy'
+									)}
 								</p>
 							</div>
 							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+								<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 									Duration
 								</div>
-								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
-									{differenceInDays(addDays(new Date(), 30), new Date())} days
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+									{USER_DETAILS?.user_policy_transaction?.duration} days
 								</p>
 							</div>
+							{USER_DETAILS?.user_policy_transaction?.extension_start_date && (
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+										Extension Starts
+									</div>
+									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+										{format(
+											new Date(
+												USER_DETAILS?.user_policy_transaction?.extension_start_date
+											),
+											'MMM dd, yyyy'
+										)}
+									</p>
+								</div>
+							)}
+
+							{USER_DETAILS?.user_policy_transaction?.extension_end_date && (
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+										Extension Ends
+									</div>
+									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+										{format(
+											new Date(
+												USER_DETAILS?.user_policy_transaction?.extension_end_date
+											),
+											'MMM dd, yyyy'
+										)}
+									</p>
+								</div>
+							)}
+							{USER_DETAILS?.user_policy_transaction?.extension_duration && (
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+										Extension Duration
+									</div>
+									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+										{USER_DETAILS?.user_policy_transaction?.extension_duration}{' '}
+										days
+									</p>
+								</div>
+							)}
 							<div className="tw-grid tw-grid-cols-2">
 								<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
 									Price
 								</div>
 								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
-									{
-										/*§duration &&
-										Intl.NumberFormat('en-US', {
-											style: 'currency',
-											currency: 'USD',
-										}).format(
-											duration <= 30
-												? 45
-												: duration > 30 && duration <= 60
-												? 90
-												: duration > 60 && duration <= 90
-												? 135
-												: duration > 90 && duration <= 120
-												? 180
-												: duration > 120 && duration <= 150
-												? 225
-												: duration > 150 && duration <= 180 && 270
-                                        )*/
-										Intl.NumberFormat('en-US', {
-											style: 'currency',
-											currency: 'USD',
-										}).format(45)
-									}
+									{Intl.NumberFormat('en-US', {
+										style: 'currency',
+										currency: 'USD',
+									}).format(USER_DETAILS?.user_policy_transaction?.price)}
 								</p>
 							</div>
 						</div>

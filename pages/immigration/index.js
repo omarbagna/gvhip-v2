@@ -97,7 +97,7 @@ const FindPolicy = () => {
 
 	const triggerDeclinePolicy = async (data) => {
 		const { data: response } = await axiosPrivate.post(
-			'/admin/decline-policy',
+			'/admin/verify-user-trip',
 			data
 		);
 		return response;
@@ -108,14 +108,14 @@ const FindPolicy = () => {
 		{
 			onSuccess: (data) => {
 				console.log('Success response ', data);
-				if (data?.status === 200) {
+				if (data?.status === 'success') {
 					//window.location.replace(data.redirect_url);
 					alert('Success', 'Policy holder decline successful', 'success');
 					setPolicyHolder(null);
 					setNotFound(false);
 					setDeclinePolicyModal(false);
 					declineReset();
-				} else if (data?.status !== 200) {
+				} else if (data?.status !== 'success') {
 					alert(
 						'Decline failed',
 						'Policy holder decline failed. Please try again later',
@@ -130,12 +130,11 @@ const FindPolicy = () => {
 	);
 
 	const submitDeclinePolicy = (data) => {
-		const declineData = JSON.stringify({
-			reason: data.reason,
-			desc: data.reason === 'other' ? data.desc : null,
-		});
-
-		console.log(data, declineData);
+		const declineData = {
+			status: 'declined',
+			policy_no: policyHolder?.user_policy_transaction?.policy_no,
+			reason: data.reason === 'other' ? data.desc : data.reason,
+		};
 
 		declinePolicy.mutate(declineData);
 
@@ -144,38 +143,45 @@ const FindPolicy = () => {
 		//router.push(`/form/purchase-plan`);
 	};
 
-	const triggerVerifyPolicy = async () => {
+	const triggerVerifyPolicy = async (data) => {
 		const { data: response } = await axiosPrivate.post(
-			'/admin/verify-policy'
-			//data
+			'/admin/verify-user-trip',
+			data
 		);
 		return response;
 	};
 
-	const verifyPolicy = useMutation(() => triggerVerifyPolicy(), {
-		onSuccess: (data) => {
-			console.log('Success response ', data);
-			if (data?.status === 200) {
-				alert('Success', 'Policy holder verified successfully', 'success');
-				setPolicyHolder(null);
-				setNotFound(false);
-			} else if (data?.status !== 200) {
-				alert(
-					'Verification failed',
-					'Policy holder verification failed. Please try again later',
-					'error'
-				);
-			}
-		},
-		onError: (error) => {
-			console.log(error);
-		},
-	});
+	const verifyPolicy = useMutation(
+		(verificationData) => triggerVerifyPolicy(verificationData),
+		{
+			onSuccess: (data) => {
+				if (data?.status === 'success') {
+					alert('Success', 'Policy holder verified successfully', 'success');
+					setPolicyHolder(null);
+					setNotFound(false);
+				} else if (data?.status !== 'success') {
+					alert(
+						'Verification failed',
+						'Policy holder verification failed. Please try again later',
+						'error'
+					);
+				}
+			},
+			onError: (error) => {
+				console.log(error);
+			},
+		}
+	);
 
 	const submitVerifyPolicy = (e) => {
 		e.preventDefault();
 
-		verifyPolicy.mutate();
+		const verifyData = {
+			status: 'verified',
+			policy_no: policyHolder?.user_policy_transaction?.policy_no,
+		};
+
+		verifyPolicy.mutate(verifyData);
 	};
 
 	return (

@@ -9,10 +9,12 @@ import supportImg from '@/public/images/supportImg.jpg';
 import learnImg from '@/public/images/learnImg.jpg';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { axiosPrivate } from 'pages/api/axios';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const Navbar4 = () => {
 	const { data: session, status } = useSession();
 
+	const [loading, setLoading] = React.useState(false);
 	const [menu, setMenu] = React.useState(true);
 	const toggleNavbar = () => {
 		setMenu(!menu);
@@ -31,6 +33,8 @@ const Navbar4 = () => {
 	const logOut = async (e) => {
 		e.preventDefault();
 
+		setLoading(true);
+
 		if (session?.user?.user?.role === 'guest') {
 			const res = await axiosPrivate.post('/account/logout');
 
@@ -40,6 +44,7 @@ const Navbar4 = () => {
 		} else {
 			signOut({ callbackUrl: '/' });
 		}
+		setLoading(false);
 	};
 
 	const classOne = menu
@@ -50,42 +55,43 @@ const Navbar4 = () => {
 		: 'navbar-toggler navbar-toggler-right';
 
 	return (
-		<div id="navbar" className="navbar-area">
-			<div className="main-nav">
-				<div className="container-fluid">
-					<nav className="navbar navbar-expand-lg navbar-light bg-light">
-						<Link href="/">
-							<a className="navbar-brand p-1">
-								<Image src={logo} alt="site logo" className="rounded-2" />
-							</a>
-						</Link>
+		<>
+			<div id="navbar" className="navbar-area">
+				<div className="main-nav">
+					<div className="container-fluid">
+						<nav className="navbar navbar-expand-lg navbar-light bg-light">
+							<Link href="/">
+								<a className="navbar-brand p-1">
+									<Image src={logo} alt="site logo" className="rounded-2" />
+								</a>
+							</Link>
 
-						<button
-							onClick={toggleNavbar}
-							className={classTwo}
-							type="button"
-							data-toggle="collapse"
-							data-target="#navbarSupportedContent"
-							aria-controls="navbarSupportedContent"
-							aria-expanded="false"
-							aria-label="Toggle navigation">
-							<span className="icon-bar top-bar"></span>
-							<span className="icon-bar middle-bar"></span>
-							<span className="icon-bar bottom-bar"></span>
-						</button>
+							<button
+								onClick={toggleNavbar}
+								className={classTwo}
+								type="button"
+								data-toggle="collapse"
+								data-target="#navbarSupportedContent"
+								aria-controls="navbarSupportedContent"
+								aria-expanded="false"
+								aria-label="Toggle navigation">
+								<span className="icon-bar top-bar"></span>
+								<span className="icon-bar middle-bar"></span>
+								<span className="icon-bar bottom-bar"></span>
+							</button>
 
-						<div className={classOne} id="navbarSupportedContent">
-							<ul className="navbar-nav">
-								<li className="nav-item">
-									<Link href="/" activeClassName="active">
-										<a className="nav-link">Home</a>
-									</Link>
-								</li>
-								<li className="nav-item">
-									<Link href="/about-us-2" activeClassName="active">
-										<a className="nav-link">About Us</a>
-									</Link>
-									{/**
+							<div className={classOne} id="navbarSupportedContent">
+								<ul className="navbar-nav">
+									<li className="nav-item">
+										<Link href="/" activeClassName="active">
+											<a className="nav-link">Home</a>
+										</Link>
+									</li>
+									<li className="nav-item">
+										<Link href="/about-us-2" activeClassName="active">
+											<a className="nav-link">About Us</a>
+										</Link>
+										{/**
 										<ul className="dropdown-menu">
 											<li className="nav-item">
 												<a href="#" className="dropdown-toggle nav-link">
@@ -227,198 +233,220 @@ const Navbar4 = () => {
 											</li>
 										</ul>
 									 */}
-								</li>
-								<li className="nav-item megamenu">
-									<Link href="#">
-										<a className="dropdown-toggle nav-link">Learn</a>
-									</Link>
-									<ul className="dropdown-menu">
-										<li className="nav-item">
-											<div className="container">
-												<div className="row">
-													<div className="col-12 col-sm-6 col-md-3 mtb-5">
-														<a className="d-block p-2">
-															<Image
-																src={learnImg}
-																alt="learn megamenu"
-																className="rounded-3 overflow-hidden"
-															/>
-														</a>
-													</div>
-
-													<div className="col-12 col-sm-6 col-md-3 mtb-5" />
-
-													<div className="col-12 col-sm-6 col-md-3 mtb-5">
-														<ul className="megamenu-submenu">
-															<li className="nav-item">
-																<Link href="/features" activeClassName="active">
-																	<a className="nav-link">Features</a>
-																</Link>
-															</li>
-															<li className="nav-item">
-																<Link href="/team" activeClassName="active">
-																	<a className="nav-link">Team</a>
-																</Link>
-															</li>
-															<li className="nav-item">
-																<Link href="/pricing" activeClassName="active">
-																	<a className="nav-link">Plans</a>
-																</Link>
-															</li>
-															<li className="nav-item">
-																<Link
-																	href="/blogs/blog-grid"
-																	activeClassName="active">
-																	<a className="nav-link">Blog</a>
-																</Link>
-															</li>
-														</ul>
-													</div>
-
-													<div className="col-12 col-sm-6 col-md-3 mtb-5">
-														<ul className="megamenu-submenu">
-															<li className="nav-item">
-																<Link
-																	href="/blogs/blog-grid"
-																	activeClassName="active">
-																	<a className="nav-link">Knowledge Center</a>
-																</Link>
-															</li>
-															<li className="nav-item">
-																<Link
-																	href="/blogs/blog-grid"
-																	activeClassName="active">
-																	<a className="nav-link">Learn About Claims</a>
-																</Link>
-															</li>
-															<li className="nav-item">
-																<Link href="/faq" activeClassName="active">
-																	<a className="nav-link">FAQ</a>
-																</Link>
-															</li>
-														</ul>
-													</div>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</li>
-								<li className="nav-item megamenu">
-									<Link href="#">
-										<a className="dropdown-toggle nav-link">Support</a>
-									</Link>
-									<ul className="dropdown-menu">
-										<li className="nav-item">
-											<div className="container">
-												<div className="row">
-													<div className="col-12 col-sm-6 col-md-3 mtb-5">
-														<a className="d-block p-2">
-															<Image
-																src={supportImg}
-																alt="support megamenu"
-																className="rounded-3 overflow-hidden"
-															/>
-														</a>
-													</div>
-
-													<div className="col-12 col-sm-6 col-md-3 mtb-5" />
-
-													<div className="col-12 col-sm-6 col-md-3 mtb-5">
-														<ul className="megamenu-submenu">
-															<li className="nav-item">
-																<Link
-																	href="/authentication"
-																	activeClassName="active">
-																	<a className="nav-link">Manage your Policy</a>
-																</Link>
-															</li>
-															<li className="nav-item">
-																<Link
-																	href="/authentication"
-																	activeClassName="active">
-																	<a className="nav-link">
-																		Request Policy ID Card
-																	</a>
-																</Link>
-															</li>
-														</ul>
-													</div>
-
-													<div className="col-12 col-sm-6 col-md-3 mtb-5">
-														<ul className="megamenu-submenu">
-															<li className="nav-item">
-																<Link
-																	href="/authentication"
-																	activeClassName="active">
-																	<a className="nav-link">
-																		Find Doctors & Hospitals
-																	</a>
-																</Link>
-															</li>
-															<li className="nav-item">
-																<Link
-																	href="/get-quote"
-																	activeClassName="active">
-																	<a className="nav-link">Request a Quote</a>
-																</Link>
-															</li>
-															<li className="nav-item">
-																<Link href="/contact" activeClassName="active">
-																	<a className="nav-link">Contact Us</a>
-																</Link>
-															</li>
-														</ul>
-													</div>
-												</div>
-											</div>
-										</li>
-									</ul>
-								</li>
-
-								{status === 'authenticated' && session && (
-									<li className="nav-item">
-										<span // href="/authentication"
-											onClick={(e) => logOut(e)}>
-											<a className="nav-link tw-cursor-pointer">Sign Out</a>
-										</span>
 									</li>
-								)}
+									<li className="nav-item megamenu">
+										<Link href="#">
+											<a className="dropdown-toggle nav-link">Learn</a>
+										</Link>
+										<ul className="dropdown-menu">
+											<li className="nav-item">
+												<div className="container">
+													<div className="row">
+														<div className="col-12 col-sm-6 col-md-3 mtb-5">
+															<a className="d-block p-2">
+																<Image
+																	src={learnImg}
+																	alt="learn megamenu"
+																	className="rounded-3 overflow-hidden"
+																/>
+															</a>
+														</div>
 
-								{/**
+														<div className="col-12 col-sm-6 col-md-3 mtb-5" />
+
+														<div className="col-12 col-sm-6 col-md-3 mtb-5">
+															<ul className="megamenu-submenu">
+																<li className="nav-item">
+																	<Link
+																		href="/features"
+																		activeClassName="active">
+																		<a className="nav-link">Features</a>
+																	</Link>
+																</li>
+																<li className="nav-item">
+																	<Link href="/team" activeClassName="active">
+																		<a className="nav-link">Team</a>
+																	</Link>
+																</li>
+																<li className="nav-item">
+																	<Link
+																		href="/pricing"
+																		activeClassName="active">
+																		<a className="nav-link">Plans</a>
+																	</Link>
+																</li>
+																<li className="nav-item">
+																	<Link
+																		href="/blogs/blog-grid"
+																		activeClassName="active">
+																		<a className="nav-link">Blog</a>
+																	</Link>
+																</li>
+															</ul>
+														</div>
+
+														<div className="col-12 col-sm-6 col-md-3 mtb-5">
+															<ul className="megamenu-submenu">
+																<li className="nav-item">
+																	<Link
+																		href="/blogs/blog-grid"
+																		activeClassName="active">
+																		<a className="nav-link">Knowledge Center</a>
+																	</Link>
+																</li>
+																<li className="nav-item">
+																	<Link
+																		href="/blogs/blog-grid"
+																		activeClassName="active">
+																		<a className="nav-link">
+																			Learn About Claims
+																		</a>
+																	</Link>
+																</li>
+																<li className="nav-item">
+																	<Link href="/faq" activeClassName="active">
+																		<a className="nav-link">FAQ</a>
+																	</Link>
+																</li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li className="nav-item megamenu">
+										<Link href="#">
+											<a className="dropdown-toggle nav-link">Support</a>
+										</Link>
+										<ul className="dropdown-menu">
+											<li className="nav-item">
+												<div className="container">
+													<div className="row">
+														<div className="col-12 col-sm-6 col-md-3 mtb-5">
+															<a className="d-block p-2">
+																<Image
+																	src={supportImg}
+																	alt="support megamenu"
+																	className="rounded-3 overflow-hidden"
+																/>
+															</a>
+														</div>
+
+														<div className="col-12 col-sm-6 col-md-3 mtb-5" />
+
+														<div className="col-12 col-sm-6 col-md-3 mtb-5">
+															<ul className="megamenu-submenu">
+																<li className="nav-item">
+																	<Link
+																		href="/authentication"
+																		activeClassName="active">
+																		<a className="nav-link">
+																			Manage your Policy
+																		</a>
+																	</Link>
+																</li>
+																<li className="nav-item">
+																	<Link
+																		href="/authentication"
+																		activeClassName="active">
+																		<a className="nav-link">
+																			Request Policy ID Card
+																		</a>
+																	</Link>
+																</li>
+															</ul>
+														</div>
+
+														<div className="col-12 col-sm-6 col-md-3 mtb-5">
+															<ul className="megamenu-submenu">
+																<li className="nav-item">
+																	<Link
+																		href="/authentication"
+																		activeClassName="active">
+																		<a className="nav-link">
+																			Find Doctors & Hospitals
+																		</a>
+																	</Link>
+																</li>
+																<li className="nav-item">
+																	<Link
+																		href="/get-quote"
+																		activeClassName="active">
+																		<a className="nav-link">Request a Quote</a>
+																	</Link>
+																</li>
+																<li className="nav-item">
+																	<Link
+																		href="/contact"
+																		activeClassName="active">
+																		<a className="nav-link">Contact Us</a>
+																	</Link>
+																</li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</li>
+
+									{status === 'authenticated' && session && (
+										<li className="nav-item">
+											<span // href="/authentication"
+												onClick={(e) => logOut(e)}>
+												<a className="nav-link tw-cursor-pointer">Sign Out</a>
+											</span>
+										</li>
+									)}
+
+									{/**
 								<li className="nav-item">
 									<Link href="/authentication" activeClassName="active">
 										<a className="nav-link">Sign In</a>
 									</Link>
 								</li>
 								 */}
-							</ul>
-						</div>
-
-						{status === 'authenticated' && session ? (
-							<div className="others-option">
-								<Link href="/dashboard" activeClassName="active">
-									<a className="btn-style-one crimson-color tw-cursor-pointer">
-										Dashboard
-									</a>
-								</Link>
+								</ul>
 							</div>
-						) : (
-							status === 'unauthenticated' &&
-							!session && (
+
+							{status === 'authenticated' && session ? (
 								<div className="others-option">
-									<span // href="/authentication"
-										onClick={() => signIn()}>
+									<Link href="/dashboard" activeClassName="active">
 										<a className="btn-style-one crimson-color tw-cursor-pointer">
-											Sign In
+											Dashboard
 										</a>
-									</span>
+									</Link>
 								</div>
-							)
-						)}
-					</nav>
+							) : (
+								status === 'unauthenticated' &&
+								!session && (
+									<div className="others-option">
+										<span // href="/authentication"
+											onClick={() => signIn()}>
+											<a className="btn-style-one crimson-color tw-cursor-pointer">
+												Sign In
+											</a>
+										</span>
+									</div>
+								)
+							)}
+						</nav>
+					</div>
 				</div>
 			</div>
-		</div>
+
+			<Backdrop
+				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+				open={loading}>
+				<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+					<CircularProgress color="inherit" />
+					<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
+						Signing Out
+					</p>
+				</div>
+			</Backdrop>
+		</>
 	);
 };
 

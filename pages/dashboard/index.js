@@ -58,8 +58,6 @@ const Dashboard = () => {
 		? userDetails?.data?.data?.data
 		: null;
 
-	const custTime = '18:00:00.000';
-
 	return (
 		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">
 			<DashboardNav />
@@ -67,16 +65,27 @@ const Dashboard = () => {
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 					<h2 className="tw-text-3xl tw-font-semibold">Dashboard</h2>
 
-					<div className="tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-3">
-						<Badge
-							color={'success'}
-							className={'tw-animate-pulse'}
-							overlap="circular"
-							badgeContent=" "
-							variant="dot"
-						/>
-						<p>Active</p>
-					</div>
+					{USER_DETAILS && (
+						<div className="tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-3">
+							<Badge
+								color={
+									USER_DETAILS?.user_policy_transaction?.status === 'verified'
+										? 'success'
+										: USER_DETAILS?.user_policy_transaction?.status ===
+										  'pending'
+										? 'warning'
+										: 'error'
+								}
+								className={'tw-animate-pulse'}
+								overlap="circular"
+								badgeContent=" "
+								variant="dot"
+							/>
+							<p className="tw-capitalize">
+								{USER_DETAILS?.user_policy_transaction?.status}
+							</p>
+						</div>
+					)}
 				</div>
 
 				{!userDetails.isLoading && USER_DETAILS && (
@@ -169,6 +178,53 @@ const Dashboard = () => {
 										{USER_DETAILS?.user_policy_transaction?.duration} days
 									</p>
 								</div>
+
+								{USER_DETAILS?.user_policy_transaction
+									?.extension_start_date && (
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+											Extension Starts
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{format(
+												new Date(
+													USER_DETAILS?.user_policy_transaction?.extension_start_date
+												),
+												'MMM dd, yyyy'
+											)}
+										</p>
+									</div>
+								)}
+
+								{USER_DETAILS?.user_policy_transaction?.extension_end_date && (
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+											Extension Ends
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{format(
+												new Date(
+													USER_DETAILS?.user_policy_transaction?.extension_end_date
+												),
+												'MMM dd, yyyy'
+											)}
+										</p>
+									</div>
+								)}
+								{USER_DETAILS?.user_policy_transaction?.extension_duration && (
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+											Extension Duration
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{
+												USER_DETAILS?.user_policy_transaction
+													?.extension_duration
+											}{' '}
+											days
+										</p>
+									</div>
+								)}
 							</div>
 							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 								<div className="tw-grid tw-grid-cols-2">

@@ -50,7 +50,7 @@ const Profile = () => {
 	});
 
 	const getUserProfile = async () => {
-		const response = await axiosPrivate.get('/account/profile');
+		const response = await axiosPrivate.get('/admin/profile');
 
 		return response;
 	};
