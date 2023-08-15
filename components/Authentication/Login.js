@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-//import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { Backdrop, CircularProgress } from '@mui/material';
@@ -35,7 +35,7 @@ const Login = () => {
 			password: '',
 		},
 	});
-	//const router = useRouter();
+	const router = useRouter();
 
 	const logIn = async (data) => {
 		setLoading(true);
@@ -47,7 +47,7 @@ const Login = () => {
 			if (ok) {
 				setLoading(false);
 
-				window.location.replace('/dashboard');
+				router.push('/dashboard');
 			} else {
 				console.log(error);
 				setLoading(false);
