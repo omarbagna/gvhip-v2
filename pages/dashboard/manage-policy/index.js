@@ -439,7 +439,11 @@ const ManagePolicy = () => {
 													moveRangeOnFirstSelection={false}
 													ranges={dateState}
 													rangeColors={['#8e6abf']}
-													minDate={dateState[0].startDate}
+													minDate={
+														new Date(
+															USER_DETAILS?.user_policy_transaction?.end_date
+														)
+													}
 													maxDate={addDays(dateState[0].startDate, 179)}
 													className="tw-rounded-md tw-shadow-md"
 												/>
@@ -451,7 +455,11 @@ const ManagePolicy = () => {
 													moveRangeOnFirstSelection={false}
 													ranges={dateState}
 													rangeColors={['#8e6abf']}
-													minDate={dateState[0].startDate}
+													minDate={
+														new Date(
+															USER_DETAILS?.user_policy_transaction?.end_date
+														)
+													}
 													maxDate={addDays(dateState[0].startDate, 179)}
 													className="tw-rounded-md tw-shadow-md"
 												/>
