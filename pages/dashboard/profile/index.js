@@ -83,7 +83,9 @@ const Profile = () => {
 		staleTime: 500000,
 	});
 
-	const USER_PROFILE = userProfile?.data?.data ? userProfile?.data?.data : null;
+	const USER_PROFILE = userProfile?.data?.data?.data
+		? userProfile?.data?.data?.data
+		: null;
 
 	const triggerPasswordChange = async (data) => {
 		const { data: response } = await axiosPrivate.put(
@@ -131,7 +133,7 @@ const Profile = () => {
 				<h2 className="tw-text-3xl tw-font-semibold">Applicant Profile</h2>
 
 				{!userProfile.isLoading && USER_PROFILE && (
-					<div className="tw-w-full lg:tw-w-2/3 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+					<div className="tw-w-full lg:tw-w-3/4 xl:tw-w-2/3 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 						<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 							<h3 className="tw-font-medium tw-text-xl">Profile</h3>
 							{/** 

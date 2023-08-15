@@ -312,11 +312,12 @@ const Form = () => {
 		});
 		*/
 
-		const onboardingData = JSON.stringify({
+		const onboardingData = {
 			name:
 				data?.applicant_type === 'company'
 					? data?.applicant[0]?.company_name
 					: data?.applicant[0]?.first_name,
+
 			first_name:
 				data?.applicant_type === 'company'
 					? data?.applicant[0]?.company_name
@@ -341,7 +342,7 @@ const Form = () => {
 			duration: duration,
 			price: paymentAmount,
 			discount: paymentDiscount,
-		});
+		};
 
 		console.log(onboardingData);
 		makePayment.mutate(onboardingData);

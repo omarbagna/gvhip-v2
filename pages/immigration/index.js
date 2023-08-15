@@ -58,8 +58,7 @@ const FindPolicy = () => {
 
 	const searchPolicy = async (data) => {
 		const { data: response } = await axiosPrivate.get(
-			'/admin/search-user',
-			data
+			`/admin/search-user?search_type=${data?.search_type}&search_term=${data?.search_term}`
 		);
 		return response;
 	};
@@ -83,12 +82,12 @@ const FindPolicy = () => {
 		},
 	});
 
-	const submitExtensionRequest = (data) => {
+	const submitSearchRequest = (data) => {
 		setPolicyHolder(null);
 		setNotFound(false);
-		const searchData = JSON.stringify(data);
+		const searchData = data;
 
-		console.log(data, searchData);
+		//console.log(data, searchData);
 		findPolicy.mutate(searchData);
 
 		//window.sessionStorage.setItem('basicData', basicData);
@@ -112,7 +111,8 @@ const FindPolicy = () => {
 				if (data?.status === 200) {
 					//window.location.replace(data.redirect_url);
 					alert('Success', 'Policy holder decline successful', 'success');
-
+					setPolicyHolder(null);
+					setNotFound(false);
 					setDeclinePolicyModal(false);
 					declineReset();
 				} else if (data?.status !== 200) {
@@ -144,10 +144,10 @@ const FindPolicy = () => {
 		//router.push(`/form/purchase-plan`);
 	};
 
-	const triggerVerifyPolicy = async (data) => {
+	const triggerVerifyPolicy = async () => {
 		const { data: response } = await axiosPrivate.post(
-			'/admin/verify-policy',
-			data
+			'/admin/verify-policy'
+			//data
 		);
 		return response;
 	};
@@ -156,8 +156,9 @@ const FindPolicy = () => {
 		onSuccess: (data) => {
 			console.log('Success response ', data);
 			if (data?.status === 200) {
-				//window.location.replace(data.redirect_url);
 				alert('Success', 'Policy holder verified successfully', 'success');
+				setPolicyHolder(null);
+				setNotFound(false);
 			} else if (data?.status !== 200) {
 				alert(
 					'Verification failed',
@@ -186,7 +187,7 @@ const FindPolicy = () => {
 						Find Policy
 					</h2>
 					<div className="tw-w-full xl:tw-w-2/3">
-						<form onSubmit={handleSubmit(submitExtensionRequest)}>
+						<form onSubmit={handleSubmit(submitSearchRequest)}>
 							<div className="tw-w-full tw-flex tw-justify-end tw-items-start tw-gap-3">
 								<div className="tw-w-1/4">
 									<Controller
@@ -256,23 +257,29 @@ const FindPolicy = () => {
 									<BsQrCode className="tw-text-7xl tw-shrink-0" />
 									<div className="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-1">
 										<h3 className="tw-font-semibold tw-text-xl tw-text-[#8e6abf]">
-											{policyHolder?.travelling_info?.first_name}{' '}
-											{policyHolder?.travelling_info?.last_name}
+											{policyHolder?.insured_person?.length > 0
+												? policyHolder?.insured_person[0]?.first_name
+												: policyHolder?.travelling_info?.first_name}{' '}
+											{policyHolder?.insured_person?.length > 0
+												? policyHolder?.insured_person[0]?.last_name
+												: policyHolder?.travelling_info?.last_name}
 										</h3>
 										<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
 											<div className="tw-w-fit tw-shrink-0 tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 												Passport number:
 											</div>
-											<p className="tw-capitalize tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
-												{policyHolder?.travelling_info?.passport_number}
+											<p className="tw-uppercase tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
+												{policyHolder?.insured_person?.length > 0
+													? policyHolder?.insured_person[0]?.passport_number
+													: policyHolder?.travelling_info?.passport_number}
 											</p>
 										</div>
 										<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
 											<div className="tw-w-fit tw-shrink-0 tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 												Policy number:
 											</div>
-											<p className="tw-capitalize tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
-												{policyHolder?.travelling_info?.policy_number}
+											<p className="tw-uppercase tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
+												{policyHolder?.user_policy_transaction?.policy_no}
 											</p>
 										</div>
 										{/*<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
@@ -294,7 +301,9 @@ const FindPolicy = () => {
 											First name
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.travelling_info?.first_name}
+											{policyHolder?.insured_person?.length > 0
+												? policyHolder?.insured_person[0]?.first_name
+												: policyHolder?.travelling_info?.first_name}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -302,7 +311,9 @@ const FindPolicy = () => {
 											Last name
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.travelling_info?.last_name}
+											{policyHolder?.insured_person?.length > 0
+												? policyHolder?.insured_person[0]?.last_name
+												: policyHolder?.travelling_info?.last_name}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -311,7 +322,11 @@ const FindPolicy = () => {
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 											{format(
-												new Date(policyHolder?.travelling_info?.dob),
+												new Date(
+													policyHolder?.insured_person?.length > 0
+														? policyHolder?.insured_person[0]?.dob
+														: policyHolder?.travelling_info?.dob
+												),
 												'dd/MM/yyyy'
 											)}
 										</p>
@@ -321,15 +336,19 @@ const FindPolicy = () => {
 											Gender
 										</div>
 										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.travelling_info?.gender}
+											{policyHolder?.insured_person?.length > 0
+												? policyHolder?.insured_person[0]?.gender
+												: policyHolder?.travelling_info?.gender}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 											Passport Number
 										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.travelling_info?.passport_number}
+										<p className="tw-uppercase tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{policyHolder?.insured_person?.length > 0
+												? policyHolder?.insured_person[0]?.passport_number
+												: policyHolder?.travelling_info?.passport_number}
 										</p>
 									</div>
 								</div>
@@ -342,7 +361,9 @@ const FindPolicy = () => {
 											Country of Origin
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.travelling_info?.country}
+											{policyHolder?.insured_person?.length > 0
+												? policyHolder?.insured_person[0]?.country
+												: policyHolder?.travelling_info?.country}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -401,8 +422,7 @@ const FindPolicy = () => {
 												style: 'currency',
 												currency: 'USD',
 											}).format(
-												policyHolder?.user_policy_transaction?.trip_policy
-													?.plan_price
+												policyHolder?.user_policy_transaction?.price
 											)}{' '}
 										</span>
 									</div>
@@ -609,6 +629,13 @@ const FindPolicy = () => {
 
 				{notFound && (
 					<h4 className="tw-text-xl tw-font-medium">User not Found</h4>
+				)}
+				{!notFound && !policyHolder && !findPolicy.isLoading && (
+					<span className="tw-bg-[#7862AF]/20 tw-w-fit tw-h-fit tw-p-3 tw-rounded-lg">
+						<p className="tw-w-fit tw-text-left tw-text-base">
+							Search and verify users by policy number or passport number
+						</p>
+					</span>
 				)}
 			</div>
 		</div>

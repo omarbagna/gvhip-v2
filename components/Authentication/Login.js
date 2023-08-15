@@ -22,7 +22,7 @@ const Login = () => {
 	const logIn = (data) => {
 		signIn('credentials', {
 			...data,
-			redirect: false,
+			//redirect: false,
 			callbackUrl: '/dashboard',
 		});
 	};

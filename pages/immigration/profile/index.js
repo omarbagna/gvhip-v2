@@ -83,7 +83,9 @@ const Profile = () => {
 		staleTime: 500000,
 	});
 
-	const USER_PROFILE = userProfile?.data?.data ? userProfile?.data?.data : null;
+	const USER_PROFILE = userProfile?.data?.data?.data
+		? userProfile?.data?.data?.data
+		: null;
 
 	const triggerPasswordChange = async (data) => {
 		const { data: response } = await axiosPrivate.put(

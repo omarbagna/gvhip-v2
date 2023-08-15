@@ -3,7 +3,7 @@
 import React from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
 import { Badge, Skeleton, Stack } from '@mui/material';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { HiOutlineLocationMarker, HiOutlineMail } from 'react-icons/hi';
 import { BsPhone } from 'react-icons/bs';
 import { useSession } from 'next-auth/react';
@@ -54,7 +54,11 @@ const Dashboard = () => {
 		staleTime: 500000,
 	});
 
-	const USER_DETAILS = userDetails?.data?.data ? userDetails?.data?.data : null;
+	const USER_DETAILS = userDetails?.data?.data?.data
+		? userDetails?.data?.data?.data
+		: null;
+
+	const custTime = '18:00:00.000';
 
 	return (
 		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">

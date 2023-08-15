@@ -16,30 +16,28 @@ export default NextAuth({
 				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials) {
-				//const { email, password } = credentials;
+				const { email, password } = credentials;
 
 				try {
-					const response = await axios.post('/login', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify(credentials),
-					});
+					const response = await axios.post(
+						'/login',
+						{
+							email: email,
+							password: password,
+						},
+						{
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+							},
+						}
+					);
 
-					console.log(response);
+					//console.log(response.data);
 
-					const data = response;
+					const data = response.data;
 
-					if (
-						//response.ok && data.user
-						data
-					) {
-						/*
-						return Promise.resolve({
-							id: data.user.id,
-							email: data.user.email,
-						});
-						*/
-
+					if (data.status === 200) {
 						return data;
 					} else {
 						return Promise.resolve(null);
@@ -80,6 +78,7 @@ export default NextAuth({
 			},
 		}),
 	],
+	secret: process.env.NEXTAUTH_SECRET,
 
 	callbacks: {
 		async jwt({ token, user }) {

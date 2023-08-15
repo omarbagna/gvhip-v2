@@ -8,6 +8,7 @@ import logo from '@/public/images/gsti_logo.jpeg';
 import supportImg from '@/public/images/supportImg.jpg';
 import learnImg from '@/public/images/learnImg.jpg';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { axiosPrivate } from 'pages/api/axios';
 
 const Navbar4 = () => {
 	const { data: session, status } = useSession();
@@ -26,6 +27,20 @@ const Navbar4 = () => {
 			}
 		});
 	});
+
+	const logOut = async (e) => {
+		e.preventDefault();
+
+		if (session?.user?.user?.role === 'guest') {
+			const res = await axiosPrivate.post('/account/logout');
+
+			if (res.status === 200) {
+				signOut({ callbackUrl: '/' });
+			}
+		} else {
+			signOut({ callbackUrl: '/' });
+		}
+	};
 
 	const classOne = menu
 		? 'collapse navbar-collapse mean-menu'
@@ -363,7 +378,7 @@ const Navbar4 = () => {
 								{status === 'authenticated' && session && (
 									<li className="nav-item">
 										<span // href="/authentication"
-											onClick={() => signOut({ callbackUrl: '/' })}>
+											onClick={(e) => logOut(e)}>
 											<a className="nav-link tw-cursor-pointer">Sign Out</a>
 										</span>
 									</li>

@@ -95,6 +95,7 @@ const ManagePolicy = () => {
 	};
 
 	const userDetails = useQuery('user', getUserDetails, {
+		/*
 		onSuccess: (userData) => {
 			if (userData?.status === 200) {
 				setDateState([
@@ -112,7 +113,6 @@ const ManagePolicy = () => {
 			}
 		},
 
-		/*
 		onError: (error) => {
 			toast.error(`${error?.response?.data?.STATUSMSG}`);
 			//logout();
@@ -122,7 +122,27 @@ const ManagePolicy = () => {
 		staleTime: 500000,
 	});
 
-	const USER_DETAILS = userDetails?.data?.data ? userDetails?.data?.data : null;
+	const USER_DETAILS = userDetails?.data?.data?.data
+		? userDetails?.data?.data?.data
+		: null;
+
+	useEffect(() => {
+		if (USER_DETAILS) {
+			setDateState([
+				{
+					startDate: addDays(
+						new Date(USER_DETAILS?.user_policy_transaction?.end_date),
+						1
+					),
+					endDate: addDays(
+						new Date(USER_DETAILS?.user_policy_transaction?.end_date),
+						30
+					),
+					key: 'selection',
+				},
+			]);
+		}
+	}, [USER_DETAILS]);
 
 	const submitExtendPolicy = async (data) => {
 		const { data: response } = await axiosPrivate.put(
@@ -154,19 +174,19 @@ const ManagePolicy = () => {
 	);
 
 	const submitExtensionRequest = (data) => {
-		const extensionData = JSON.stringify({
+		const extensionData = {
 			extension_start_date: format(dateState[0]?.startDate, 'yyyy-MM-dd'),
 			extension_end_date: format(dateState[0]?.endDate, 'yyyy-MM-dd'),
 			extension_duration: duration,
 			extension_price: paymentAmount,
-		});
+		};
 
 		console.log(data);
 		let rightExtensionStartDate = isEqual(
 			parseISO(format(new Date(dateState[0]?.startDate), 'yyyy-MM-dd')),
 			parseISO(
 				format(
-					new Date(USER_DETAILS?.user_policy_transaction?.end_date),
+					addDays(new Date(USER_DETAILS?.user_policy_transaction?.end_date), 1),
 					'yyyy-MM-dd'
 				)
 			)
@@ -175,7 +195,7 @@ const ManagePolicy = () => {
 		if (!rightExtensionStartDate) {
 			alert(
 				'Invalid Extension Start Date',
-				'Extension must start from current coverage end date',
+				'Extension must start from a day after current coverage end date',
 				'error'
 			);
 		} else {
@@ -340,7 +360,7 @@ const ManagePolicy = () => {
 						data-aos="zoom-in"
 						data-aos-duration="600"
 						onClick={(e) => e.stopPropagation()}
-						className="tw-font-medium tw-text-center tw-text-lg tw-w-2/3 lg:tw-w-1/2 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+						className="tw-font-medium tw-text-center tw-text-lg tw-w-2/3 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 						<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b-2">
 							<h2 className="tw-w-full tw-font-medium tw-text-lg tw-text-[#524380] tw-flex tw-justify-start tw-items-end tw-pb-2 tw-border-b-2">
 								Current Policy Details
@@ -416,7 +436,7 @@ const ManagePolicy = () => {
 												moveRangeOnFirstSelection={false}
 												ranges={dateState}
 												rangeColors={['#8e6abf']}
-												minDate={addDays(new Date(), 30)}
+												minDate={dateState[0].startDate}
 												maxDate={addDays(dateState[0].startDate, 179)}
 												className="tw-rounded-md tw-shadow-md"
 											/>
