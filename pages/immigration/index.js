@@ -107,9 +107,7 @@ const FindPolicy = () => {
 		(declineData) => triggerDeclinePolicy(declineData),
 		{
 			onSuccess: (data) => {
-				//console.log('Success response ', data);
 				if (data?.status === 'success') {
-					//window.location.replace(data.redirect_url);
 					alert('Success', 'Policy holder decline successful', 'success');
 					setPolicyHolder(null);
 					setNotFound(false);
