@@ -8,6 +8,7 @@ import logo from '@/public/images/gsti_logo.jpeg';
 import supportImg from '@/public/images/supportImg.jpg';
 import learnImg from '@/public/images/learnImg.jpg';
 import { signIn, useSession } from 'next-auth/react';
+import { Skeleton } from '@mui/material';
 
 const Navbar4 = () => {
 	const { data: session, status } = useSession();
@@ -391,17 +392,21 @@ const Navbar4 = () => {
 										</a>
 									</Link>
 								</div>
+							) : status === 'unauthenticated' && !session ? (
+								<div className="others-option">
+									<span // href="/authentication"
+										onClick={() => signIn()}>
+										<a className="btn-style-one crimson-color tw-cursor-pointer">
+											Sign In
+										</a>
+									</span>
+								</div>
 							) : (
-								status === 'unauthenticated' &&
-								!session && (
-									<div className="others-option">
-										<span // href="/authentication"
-											onClick={() => signIn()}>
-											<a className="btn-style-one crimson-color tw-cursor-pointer">
-												Sign In
-											</a>
-										</span>
-									</div>
+								status === 'loading' && (
+									<Skeleton
+										variant="text"
+										sx={{ fontSize: '2rem', width: '120px' }}
+									/>
 								)
 							)}
 						</nav>

@@ -23,9 +23,9 @@ const Login = () => {
 	});
 	//const router = useRouter();
 
-	const logIn = (data) => {
+	const logIn = async (data) => {
 		setLoading(true);
-		signIn('credentials', {
+		await signIn('credentials', {
 			...data,
 			//redirect: false,
 			callbackUrl: '/dashboard',
