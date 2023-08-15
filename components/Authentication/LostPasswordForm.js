@@ -56,9 +56,7 @@ const LostPasswordForm = () => {
 	);
 
 	const resetPasswordRequest = (data) => {
-		const passwordResetData = JSON.stringify(data);
-
-		resetPassword.mutate(passwordResetData);
+		resetPassword.mutate(data);
 	};
 
 	return (
