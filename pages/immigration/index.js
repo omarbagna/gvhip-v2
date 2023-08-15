@@ -96,7 +96,7 @@ const FindPolicy = () => {
 	};
 
 	const triggerDeclinePolicy = async (data) => {
-		const { data: response } = await axiosPrivate.post(
+		const { data: response } = await axiosPrivate.put(
 			'/admin/verify-user-trip',
 			data
 		);
@@ -107,7 +107,7 @@ const FindPolicy = () => {
 		(declineData) => triggerDeclinePolicy(declineData),
 		{
 			onSuccess: (data) => {
-				console.log('Success response ', data);
+				//console.log('Success response ', data);
 				if (data?.status === 'success') {
 					//window.location.replace(data.redirect_url);
 					alert('Success', 'Policy holder decline successful', 'success');
@@ -144,7 +144,7 @@ const FindPolicy = () => {
 	};
 
 	const triggerVerifyPolicy = async (data) => {
-		const { data: response } = await axiosPrivate.post(
+		const { data: response } = await axiosPrivate.put(
 			'/admin/verify-user-trip',
 			data
 		);
@@ -435,21 +435,67 @@ const FindPolicy = () => {
 								</div>
 							</div>
 
-							<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5">
-								<span
-									className="btn-style-back red-light-color tw-w-fit tw-h-fit tw-rounded-lg tw-px-4 tw-py-2 tw-flex tw-shadow-md tw-justify-center tw-items-center tw-text-base tw-cursor-pointer"
-									onClick={() => setDeclinePolicyModal((prev) => !prev)}>
-									Decline
+							{policyHolder?.user_policy_transaction?.status === 'pending' ? (
+								<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5">
+									<span
+										className="btn-style-back red-light-color tw-w-fit tw-h-fit tw-rounded-lg tw-px-4 tw-py-2 tw-flex tw-shadow-md tw-justify-center tw-items-center tw-text-base tw-cursor-pointer"
+										onClick={() => setDeclinePolicyModal((prev) => !prev)}>
+										Decline
+									</span>
+
+									<button
+										//size="lg"
+										className="btn-style-one dark-green-color"
+										//disabled={!isValid}
+										onClick={(e) => submitVerifyPolicy(e)}
+										type="button">
+										Verify
+									</button>
+								</div>
+							) : (
+								<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 tw-rounded-lg">
+									<div className="tw-grid tw-grid-cols-2 tw-gap-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+											Authorization status
+										</div>
+										<p
+											className={`tw-w-full tw-uppercase tw-flex tw-justify-end tw-text-sm ${
+												policyHolder?.user_policy_transaction?.status ===
+												'verified'
+													? 'tw-text-green-600'
+													: 'tw-text-red-600'
+											}  tw-font-bold`}>
+											{policyHolder?.user_policy_transaction?.status}
+										</p>
+									</div>
+									<div className="tw-grid tw-grid-cols-2 tw-gap-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+											Authorized by
+										</div>
+										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-sm tw-text-gray-800 tw-font-bold">
+											{
+												policyHolder?.user_policy_transaction?.status_updated_by
+													?.first_name
+											}{' '}
+											{
+												policyHolder?.user_policy_transaction?.status_updated_by
+													?.last_name
+											}
+										</p>
+									</div>
+									<div className="tw-grid tw-grid-cols-2 tw-gap-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+											Authorized at
+										</div>
+										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-sm tw-text-gray-800 tw-font-bold">
+											{
+												policyHolder?.user_policy_transaction
+													?.status_update_date
+											}
+										</p>
+									</div>
 								</span>
-								<button
-									//size="lg"
-									className="btn-style-one dark-green-color"
-									//disabled={!isValid}
-									onClick={(e) => submitVerifyPolicy(e)}
-									type="button">
-									Verify
-								</button>
-							</div>
+							)}
 						</div>
 					</div>
 				)}
@@ -636,6 +682,7 @@ const FindPolicy = () => {
 				{notFound && (
 					<h4 className="tw-text-xl tw-font-medium">User not Found</h4>
 				)}
+
 				{!notFound && !policyHolder && !findPolicy.isLoading && (
 					<span className="tw-bg-[#7862AF]/20 tw-w-fit tw-h-fit tw-p-3 tw-rounded-lg">
 						<p className="tw-w-fit tw-text-left tw-text-base">
