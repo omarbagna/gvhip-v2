@@ -1,6 +1,6 @@
 import axios from 'axios';
-const BASE_URL = 'http://gssp-backend-api.test/api/v1';
-//const BASE_URL = 'https://goldenpartnershipplatform.org/corp/api/';
+//const BASE_URL = 'http://gssp-backend-api.test/api/v1';
+const BASE_URL = 'https://gssp-backend-api.rxhealthbeta.com/api/v1';
 
 export default axios.create({
 	baseURL: BASE_URL,
