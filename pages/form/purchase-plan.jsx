@@ -459,9 +459,6 @@ const Form = () => {
 												{fields.map((inputField, index) => (
 													<MuiAccordion
 														id={`insured person ${index}`}
-														onClick={() =>
-															window.scrollTo({ top: 0, behavior: 'smooth' })
-														}
 														//animate={customAnimation}
 														expanded={open === index + 1}
 														//onChange={handleOpen(index + 1)}
@@ -473,7 +470,10 @@ const Form = () => {
 															expandIcon={
 																<MdOutlineExpandMore className="tw-text-3xl" />
 															}
-															onClick={() => handleOpen(index + 1)}>
+															onClick={() => {
+																handleOpen(index + 1);
+																window.scrollTo({ top: 0, behavior: 'smooth' });
+															}}>
 															<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-pr-4">
 																<div className="tw-flex tw-flex-col md:tw-flex-row tw-justify-start tw-items-start md:tw-items-center tw-gap-3 md:tw-gap-5">
 																	<h3 className="tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
