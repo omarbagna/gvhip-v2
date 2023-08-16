@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps }) {
 			<Head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-				<title>GSTI - Ghana Safe Stay Program</title>
+				<title>GSSP - Ghana Safe Stay Program</title>
 			</Head>
 
 			<QueryClientProvider client={queryClient}>

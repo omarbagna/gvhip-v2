@@ -16,7 +16,7 @@ const AboutUs2 = () => {
 				<div className="container">
 					<div className="page-title-content">
 						<span className="sub-title dark-green-color">About Us</span>
-						<h1 className="nunito-font">Welcome to GSTI</h1>
+						<h1 className="nunito-font">Welcome to GSSP</h1>
 					</div>
 				</div>
 			</div>
