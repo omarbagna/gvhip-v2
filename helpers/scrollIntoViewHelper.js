@@ -6,7 +6,7 @@ export const scrollIntoViewHelper = (errors) => {
 	if (el) {
 		el.scrollIntoView({
 			behavior: 'smooth',
-			block: 'center',
+			block: 'start',
 		});
 	}
 };

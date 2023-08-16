@@ -121,8 +121,9 @@ const Form = () => {
 		if (isValid) {
 			setFormStep((prev) => prev + 1);
 		} else {
+			//scrollIntoViewHelper(errors);
+
 			alertError();
-			scrollIntoViewHelper(errors);
 		}
 	};
 	const goToPrevious = () => {
@@ -447,6 +448,10 @@ const Form = () => {
 											<div className="tw-flex tw-flex-col tw-gap-3">
 												{fields.map((inputField, index) => (
 													<MuiAccordion
+														id={`insured person ${index}`}
+														onClick={() =>
+															window.scrollTo({ top: 0, behavior: 'smooth' })
+														}
 														//animate={customAnimation}
 														expanded={open === index + 1}
 														//onChange={handleOpen(index + 1)}
