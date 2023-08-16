@@ -24,7 +24,9 @@ const Authentication = () => {
 									alt="site logo"
 									className="rounded-2"
 								/>
-								<span className="sub-title">Back to Home</span>
+								<span className="sub-title tw-flex tw-justify-center tw-items-center">
+									Back to Home
+								</span>
 							</a>
 						</Link>
 						<Link href="/" passHref>
