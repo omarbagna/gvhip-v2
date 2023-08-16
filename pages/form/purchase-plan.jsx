@@ -7,7 +7,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import logo from '@/public/images/gsti_logo.jpeg';
 import DefaultInput from '@/components/Input/DefaultInput';
 import SelectInput from '@/components/Input/SelectInput';
-import { format, differenceInDays, parseISO } from 'date-fns';
+import { format, differenceInDays } from 'date-fns';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 const MySwal = withReactContent(Swal);
@@ -42,15 +42,15 @@ import { useMutation } from 'react-query';
 import { MdDelete, MdEdit, MdOutlineExpandMore } from 'react-icons/md';
 import { IoAdd } from 'react-icons/io5';
 import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
-import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
+//import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
 import { planTabsData } from 'data/plansData';
 import axios from 'pages/api/axios';
 import { useRouter } from 'next/router';
 
-const alertError = () => {
+const alertError = (title = null, text = null) => {
 	MySwal.fire({
-		title: 'Fill all Required Fields',
-		text: 'Some required fields have not been filled on the form, please fill them in and try again',
+		title: title,
+		text: text,
 		icon: 'error',
 		timer: 8000,
 		timerProgressBar: true,
@@ -95,7 +95,10 @@ const Form = () => {
 		setValue,
 		reset,
 		trigger,
-		formState: { isValid, errors },
+		formState: {
+			isValid,
+			//, errors
+		},
 		handleSubmit,
 	} = useForm({
 		mode: 'all',
@@ -123,7 +126,10 @@ const Form = () => {
 		} else {
 			//scrollIntoViewHelper(errors);
 
-			alertError();
+			alertError(
+				'Fill all Required Fields',
+				'Some required fields have not been filled on the form, please fill them in and try again'
+			);
 		}
 	};
 	const goToPrevious = () => {
@@ -277,11 +283,15 @@ const Form = () => {
 					window.sessionStorage.clear();
 					router.push(`/authentication`);
 					//window.location.replace(data.redirect_url);
-					console.log(data);
+					//console.log(data);
 				}
 			},
 			onError: (error) => {
 				console.log(error);
+				alertError(
+					'Email exists',
+					'The email provided already exists or is a duplicate. Please check and try again'
+				);
 			},
 		}
 	);
