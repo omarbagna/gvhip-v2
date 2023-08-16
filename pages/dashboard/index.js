@@ -127,7 +127,7 @@ const Dashboard = () => {
 							</div>
 						))}
 
-						<div className="tw-w-full tw-h-fit tw-row-start-1 tw-col-start-2 tw-row-span-2 lg:tw-row-span-1 xl:tw-col-start-3 xl:tw-row-start-1 xl:tw-row-span-2 tw-bg-white tw-text-[#8e6abf] tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+						<div className="tw-w-full tw-h-fit md:tw-row-start-1 md:tw-col-start-2 md:tw-row-span-2 lg:tw-row-span-1 xl:tw-col-start-3 xl:tw-row-start-1 xl:tw-row-span-2 tw-bg-white tw-text-[#8e6abf] tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 							<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 								<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
 									{
