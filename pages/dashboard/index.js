@@ -242,7 +242,7 @@ const Dashboard = () => {
 				)}
 
 				{userDetails.isLoading && (
-					<div className="tw-w-full tw-grid tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-5 tw-place-content-start tw-place-items-start">
+					<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-5 tw-place-content-start tw-place-items-start">
 						<div className="tw-w-full tw-h-fit tw-bg-white tw-shadow-sm xl:tw-col-span-2 tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 							<Stack spacing={1} sx={{ width: '100%' }}>
 								<Skeleton
