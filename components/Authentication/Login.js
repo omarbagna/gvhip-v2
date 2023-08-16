@@ -8,6 +8,7 @@ import { signIn } from 'next-auth/react';
 import { Backdrop, CircularProgress } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { NextResponse } from 'next/server';
 const MySwal = withReactContent(Swal);
 
 const alert = (title = null, text = null, icon = null) => {
@@ -39,22 +40,21 @@ const Login = () => {
 
 	const logIn = async (data) => {
 		setLoading(true);
-		await signIn('credentials', {
+		const status = await signIn('credentials', {
 			...data,
 			redirect: false,
 			callbackUrl: '/dashboard',
-		}).then(({ ok, error }) => {
-			if (ok) {
-				setLoading(false);
-
-				router.push('/dashboard');
-			} else {
-				console.log(error);
-				setLoading(false);
-
-				alert('Sign in failed', 'Invalid email or password', 'error');
-			}
 		});
+		//alert('Sign in failed', 'Invalid email or password', 'error');
+		console.log(status);
+		if (status.ok) {
+			setLoading(false);
+			router.push(status.url);
+		} else {
+			setLoading(false);
+			alert('Sign in failed', 'Invalid email or password', 'error');
+		}
+
 		setLoading(false);
 	};
 

@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from '../axios';
-//import axios from '../axios';
 
 export default NextAuth({
 	providers: [
@@ -88,9 +87,11 @@ export default NextAuth({
 			session.user = token;
 			return session;
 		},
+		/*
 		async redirect({ url, baseUrl }) {
-			return '/dashboard';
+			return `/dashboard`;
 		},
+		*/
 	},
 	pages: {
 		signIn: '/authentication',
