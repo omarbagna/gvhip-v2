@@ -206,12 +206,14 @@ const ManagePolicy = () => {
 	return (
 		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">
 			<DashboardNav />
-			<div className="tw-w-full tw-h-full tw-py-10 tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
+			<div className="tw-w-full tw-h-full tw-py-10 tw-px-6 md:tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
-					<h2 className="tw-text-3xl tw-font-semibold">Manage Policy</h2>
+					<h2 className="tw-text-2xl md:tw-text-3xl tw-font-semibold">
+						Manage Policy
+					</h2>
 				</div>
 
-				<div className="tw-w-full tw-grid tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-5 tw-place-content-start tw-place-items-start">
+				<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-5 tw-place-content-start tw-place-items-start">
 					<div className="tw-w-full tw-h-fit tw-bg-white tw-shadow-sm xl:tw-col-span-2 tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 						<div className="tw-w-full">
 							<Accordion questionsAnswers={planTabsData} />
@@ -219,7 +221,7 @@ const ManagePolicy = () => {
 					</div>
 
 					{!userDetails.isLoading && USER_DETAILS && (
-						<div className="tw-w-full tw-h-fit tw-row-start-1 tw-col-start-2 tw-row-span-2 lg:tw-row-span-1 xl:tw-col-start-3 xl:tw-row-start-1 xl:tw-row-span-2 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+						<div className="tw-w-full tw-h-fit tw-row-start-1 md:tw-col-start-2 tw-row-span-2 lg:tw-row-span-1 xl:tw-col-start-3 xl:tw-row-start-1 xl:tw-row-span-2 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 							<div className="tw-w-full tw-h-fit tw-bg-white tw-text-[#8e6abf] tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 								<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 									<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
@@ -405,7 +407,7 @@ const ManagePolicy = () => {
 						data-aos="zoom-in"
 						data-aos-duration="600"
 						onClick={(e) => e.stopPropagation()}
-						className="tw-font-medium tw-text-center tw-text-lg tw-w-2/3 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+						className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 md:tw-w-2/3 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 						<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b-2">
 							<h2 className="tw-w-full tw-font-medium tw-text-lg tw-text-[#524380] tw-flex tw-justify-start tw-items-end tw-pb-2 tw-border-b-2">
 								Current Policy Details

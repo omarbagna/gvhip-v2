@@ -130,7 +130,9 @@ const Profile = () => {
 		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">
 			<DashboardNav />
 			<div className="tw-w-full tw-h-full tw-py-10 tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
-				<h2 className="tw-text-3xl tw-font-semibold">Applicant Profile</h2>
+				<h2 className="tw-text-2xl md:tw-text-3xl tw-font-semibold">
+					Applicant Profile
+				</h2>
 
 				{!userProfile.isLoading && USER_PROFILE && (
 					<div className="tw-w-full lg:tw-w-2/3 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
@@ -226,7 +228,7 @@ const Profile = () => {
 							data-aos="zoom-in"
 							data-aos-duration="600"
 							onClick={(e) => e.stopPropagation()}
-							className="tw-font-medium tw-text-center tw-text-lg tw-w-2/3 lg:tw-w-1/2 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+							className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 md:tw-w-2/3 lg:tw-w-1/2 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 							<div className="tw-w-full">
 								<form onSubmit={handleSubmit(submitChangePasswordRequest)}>
 									<div className="tw-w-full tw-flex tw-flex-col tw-gap-4 tw-pb-3">

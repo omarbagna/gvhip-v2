@@ -86,7 +86,7 @@ const DashboardNav = () => {
 										{session?.user?.user?.last_name[0]}
 									</Avatar>
 								</Badge>
-								<h3 className="tw-font-semibold tw-text-base tw-capitalize tw-hidden lg:tw-block">
+								<h3 className="tw-font-semibold tw-text-base tw-capitalize">
 									{session?.user?.user?.first_name}{' '}
 									{session?.user?.user?.last_name}
 								</h3>

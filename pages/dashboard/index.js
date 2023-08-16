@@ -61,9 +61,11 @@ const Dashboard = () => {
 	return (
 		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">
 			<DashboardNav />
-			<div className="tw-w-full tw-h-full tw-py-10 tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
+			<div className="tw-w-full tw-h-full tw-py-10 tw-px-6 md:tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
-					<h2 className="tw-text-3xl tw-font-semibold">Dashboard</h2>
+					<h2 className="tw-text-2xl md:tw-text-3xl tw-font-semibold">
+						Dashboard
+					</h2>
 
 					{USER_DETAILS && (
 						<div className="tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-3">
@@ -89,7 +91,7 @@ const Dashboard = () => {
 				</div>
 
 				{!userDetails.isLoading && USER_DETAILS && (
-					<div className="tw-w-full tw-grid tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-5 tw-place-content-start tw-place-items-start">
+					<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-5 tw-place-content-start tw-place-items-start">
 						{USER_DETAILS?.insured_person?.map((person, index) => (
 							<div
 								key={index}

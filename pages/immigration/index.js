@@ -187,13 +187,13 @@ const FindPolicy = () => {
 			<DashboardNav />
 			<div className="tw-w-full tw-h-full tw-py-10 tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
 				<div className="tw-w-full tw-flex tw-flex-col xl:tw-flex-row tw-justify-start tw-items-start xl:tw-justify-between xl:tw-items-center tw-gap-5">
-					<h2 className="tw-text-3xl tw-font-semibold tw-shrink-0">
+					<h2 className="tw-text-2xl md:tw-text-3xl tw-font-semibold tw-shrink-0">
 						Find Policy
 					</h2>
 					<div className="tw-w-full xl:tw-w-2/3">
 						<form onSubmit={handleSubmit(submitSearchRequest)}>
-							<div className="tw-w-full tw-flex tw-justify-end tw-items-start tw-gap-3">
-								<div className="tw-w-1/4">
+							<div className="tw-w-full tw-flex tw-flex-col md:tw-flex-row tw-justify-end tw-items-start tw-gap-3">
+								<div className="tw-w-full md:tw-w-1/4">
 									<Controller
 										control={control}
 										name={'search_type'}
@@ -258,9 +258,9 @@ const FindPolicy = () => {
 						<div className="tw-w-full tw-h-fit lg:tw-col-span-2 xl:tw-col-span-1  tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 							<div className="tw-w-full tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 								<div className="tw-w-full tw-flex tw-justify-start tw-gap-4 tw-items-start">
-									<BsQrCode className="tw-text-7xl tw-shrink-0" />
+									<BsQrCode className="tw-text-5xl md:tw-text-7xl tw-shrink-0" />
 									<div className="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-1">
-										<h3 className="tw-font-semibold tw-text-xl tw-text-[#8e6abf]">
+										<h3 className="tw-font-semibold tw-text-lg md:tw-text-xl tw-text-[#8e6abf]">
 											{policyHolder?.insured_person?.length > 0
 												? policyHolder?.insured_person[0]?.first_name
 												: policyHolder?.travelling_info?.first_name}{' '}
