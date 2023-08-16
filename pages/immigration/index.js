@@ -73,12 +73,16 @@ const FindPolicy = () => {
 				setPolicyHolder(data?.user);
 				reset();
 			} else if (data?.status !== 'success') {
+				alert('User not found', null, 'error');
 				setNotFound(true);
 				setPolicyHolder(null);
 			}
 		},
 		onError: (error) => {
 			console.log(error);
+			alert('User not found', null, 'error');
+			setNotFound(true);
+			setPolicyHolder(null);
 		},
 	});
 

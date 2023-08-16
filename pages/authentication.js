@@ -24,10 +24,12 @@ const Authentication = () => {
 									alt="site logo"
 									className="rounded-2"
 								/>
-								<h1 className="nunito-font">Ghana Safe Stay Program</h1>
+								<span className="sub-title">Back to Home</span>
 							</a>
 						</Link>
-						<h1 className="tw-mt-4">Login</h1>
+						<Link href="/" passHref>
+							<h1 className="tw-mt-4">Ghana Safe Stay Program</h1>
+						</Link>
 					</div>
 				</div>
 			</div>
