@@ -680,12 +680,12 @@ const Form = () => {
 																					label="Gender"
 																					options={[
 																						{
-																							name: 'male',
-																							value: 'male',
+																							name: 'Male',
+																							value: 'Male',
 																						},
 																						{
-																							name: 'female',
-																							value: 'female',
+																							name: 'Female',
+																							value: 'Female',
 																						},
 																					]}
 																					required
