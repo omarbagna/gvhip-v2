@@ -297,6 +297,7 @@ const Form = () => {
 		setOpen(open === value ? 0 : value);
 	};
 
+	/*
 	const testPayData = JSON.stringify({
 		invoice_number: `IN${Math.random().toString(36).substring(2, 10)}`,
 		amount: '1',
@@ -331,6 +332,7 @@ const Form = () => {
 			},
 		}
 	);
+	*/
 
 	const paymentRequest = async (data) => {
 		const { data: response } = await axios.post('/register', data);
@@ -344,9 +346,12 @@ const Form = () => {
 				console.log('Success response ', data);
 				if (data?.status === 201) {
 					window.sessionStorage.clear();
-					makeTestPayment.mutate(testPayData);
+					window.location.replace(
+						'https://pay.hubtel.com/e3fdb73f8d9c448cb59ddcca37bc1e17'
+					);
+
+					//makeTestPayment.mutate(testPayData);
 					//router.push(`/authentication`);
-					//window.location.replace(data.redirect_url);
 					//console.log(data);
 				}
 			},
@@ -2121,7 +2126,7 @@ const Form = () => {
 
 				<Backdrop
 					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-					open={makePayment.isLoading || makeTestPayment.isLoading}>
+					open={makePayment.isLoading}>
 					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 						<CircularProgress color="inherit" />
 						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
