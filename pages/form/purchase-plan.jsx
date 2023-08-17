@@ -41,7 +41,7 @@ import {
 } from 'react-icons/bi';
 import { BsGlobeEuropeAfrica } from 'react-icons/bs';
 //import { RiSecurePaymentLine } from 'react-icons/ri';
-//import axios from 'axios';
+import axios from 'axios';
 import { useMutation } from 'react-query';
 //import Button from '../../components/Button/Button';
 import { MdDelete, MdEdit, MdOutlineExpandMore } from 'react-icons/md';
@@ -49,8 +49,7 @@ import { IoAdd } from 'react-icons/io5';
 import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
 //import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
 import { planTabsData } from 'data/plansData';
-import { axios as axiosMain } from 'axios';
-import axios from 'pages/api/axios';
+import axiosBase from 'pages/api/axios';
 //import { useRouter } from 'next/router';
 import { allergies, conditions } from 'data/conditionsAndAllergies';
 
@@ -307,7 +306,7 @@ const Form = () => {
 	});
 
 	const testPaymentRequest = async (data) => {
-		const { data: response } = await axiosMain.post(
+		const { data: response } = await axios.post(
 			'https://lab.rxhealthbeta.com/jimmy/live_api/hubtel-rx-pay.php',
 			data
 		);
@@ -315,31 +314,26 @@ const Form = () => {
 	};
 
 	const makeTestPayment = useMutation(
-		(paymentTestData) => testPaymentRequest(paymentTestData)
-		/*
+		(paymentTestData) => testPaymentRequest(paymentTestData),
+
 		{
 			onSuccess: (data) => {
 				console.log('Success response ', data);
-				if (data?.status === 201) {
-					window.sessionStorage.clear();
+				if (data?.status === 'Success') {
+					//window.sessionStorage.clear();
 					//router.push(`/authentication`);
-					//window.location.replace(data.redirect_url);
+					window.location.replace(data?.data?.checkoutUrl);
 					//console.log(data);
 				}
 			},
 			onError: (error) => {
 				console.log(error);
-				alertError(
-					'Email exists',
-					'The email provided already exists or is a duplicate. Please check and try again'
-				);
 			},
 		}
-		*/
 	);
 
 	const paymentRequest = async (data) => {
-		const { data: response } = await axios.post('/register', data);
+		const { data: response } = await axiosBase.post('/register', data);
 		return response;
 	};
 
@@ -427,6 +421,7 @@ const Form = () => {
 		};
 
 		//console.log(onboardingData);
+
 		makePayment.mutate(onboardingData);
 
 		//goToNext();
@@ -2125,7 +2120,7 @@ const Form = () => {
 
 				<Backdrop
 					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-					open={makePayment.isLoading}>
+					open={makePayment.isLoading || makeTestPayment.isLoading}>
 					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 						<CircularProgress color="inherit" />
 						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
