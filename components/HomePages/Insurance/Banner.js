@@ -17,23 +17,22 @@ const Banner = () => {
 								className="sub-title"
 								data-aos="fade-up"
 								data-aos-duration="1200">
-								#Travel Insurance
+								#Your gateway to a safe visit in Ghana
 							</span>
 							<h1
 								data-aos="fade-up"
 								data-aos-duration="1200"
 								data-aos-delay="100"
 								className="nunito-font">
-								Ghana Safe Stay Program
+								Welcome to the Ghana Safe Stay Programme
 							</h1>
 							<p
 								data-aos="fade-up"
 								data-aos-duration="1200"
 								data-aos-delay="200">
-								We understand the importance of being financially prepared when
-								travelling and we help you get the most out of your money while
-								still ensuring that you are adequately covered in case of any
-								unexpected medical emergency or illness while travelling.
+								Ghana welcomes you with open arms! The Ghana Safe Stay Programme
+								(GSSP) ensures that you have a seamless, safe, and medically
+								secure trip within our beautiful country
 							</p>
 							<div
 								className="btn-box"
@@ -58,27 +57,15 @@ const Banner = () => {
 					<div className="col-lg-6 col-md-12">
 						<div className="insurance-banner-image">
 							<Image
+								className="tw-rounded-lg tw-overflow-hidden"
 								src={bannerImg4}
 								data-aos="fade-up"
 								data-aos-duration="1200"
 								alt="banner-image"
 							/>
-
-							<div className="shape7">
-								<Image
-									src={shapeImg7}
-									data-speed="0.10"
-									data-revert="true"
-									alt="shape"
-								/>
-							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-
-			<div className="shape6">
-				<Image src={shapeImg6} alt="shape" />
 			</div>
 		</div>
 	);

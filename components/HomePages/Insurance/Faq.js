@@ -2,30 +2,26 @@ import React from 'react';
 import Accordion from '@/components/Accordion';
 import Image from 'next/image';
 
-import faqImg3 from '@/public/images/faq3.png';
+import faqImg3 from '@/public/images/faq2.png';
 
 const questionsAnswers = [
 	{
-		question: 'How many team members can I invite?',
+		question: 'What happens if I need to cancel my trip unexpectedly?',
 		answer:
-			'You can invite up to 2 additional users on the Free plan. There is no limit on team members for the Premium plan.',
+			'Our insurance does not covers non-refundable expenses like flights and accommodations in case of trip cancellations.',
 	},
 	{
-		question: 'What is the maximum file upload size?',
+		question: 'What if I face a medical emergency while traveling?',
 		answer:
-			'No more than 2GB. All files in your account must fit your allotted storage space.',
+			'Our coverage includes medical expenses, hospitalization, and medical evacuation if needed.',
 	},
 	{
-		question: 'How do I reset my password?',
-		answer: `Click “Forgot password” from the login page or “Change password” from your profile page. A reset link will be emailed to you.`,
+		question: 'What if my baggage is lost, stolen, or damaged during the trip?',
+		answer: `We do not provide coverage for replacement or reimbursement of personal belongings like clothes and electronics.`,
 	},
 	{
-		question: 'Can I cancel my subscription?',
-		answer: `Yes! Send us a message and we’ll process your request no questions asked.`,
-	},
-	{
-		question: 'How can I get the service?',
-		answer: `Yes! Send us a message and we’ll process your request no questions asked.`,
+		question: 'What if my flights are delayed significantly?',
+		answer: `Our insurance does not compensate for additional accommodation and meal expenses due to substantial travel delays.`,
 	},
 ];
 
@@ -38,7 +34,8 @@ const Faq = () => {
 						Frequently Asked Questions
 					</span>
 					<h2 className="nunito-font">
-						Dedicated to assist people&apos;s needs
+						From policy details to claims processing, find all your answers
+						here.
 					</h2>
 				</div>
 				<div className="row align-items-center">
@@ -51,7 +48,11 @@ const Faq = () => {
 					</div>
 					<div className="col-lg-6 col-md-12">
 						<div className="faq-image style-three" data-aos="fade-up">
-							<Image src={faqImg3} alt="faq-image" />
+							<Image
+								src={faqImg3}
+								alt="faq-image"
+								className="tw-rounded-lg tw-overflow-hidden"
+							/>
 						</div>
 					</div>
 				</div>

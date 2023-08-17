@@ -14,7 +14,11 @@ const Goal = () => {
 						data-aos="fade-up"
 						data-aos-duration="1200">
 						<div className="goal-image">
-							<Image src={goalImg} alt="goal-image" />
+							<Image
+								src={goalImg}
+								alt="goal-image"
+								className="tw-rounded-lg tw-overflow-hidden"
+							/>
 						</div>
 					</div>
 

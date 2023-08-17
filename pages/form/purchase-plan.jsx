@@ -26,6 +26,11 @@ import {
 	Radio,
 	RadioGroup,
 	Typography,
+	Select,
+	MenuItem,
+	ListItemText,
+	OutlinedInput,
+	InputLabel,
 } from '@mui/material';
 import Accordion from '@/components/Accordion';
 
@@ -44,8 +49,10 @@ import { IoAdd } from 'react-icons/io5';
 import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
 //import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
 import { planTabsData } from 'data/plansData';
+import { axios as axiosMain } from 'axios';
 import axios from 'pages/api/axios';
-import { useRouter } from 'next/router';
+//import { useRouter } from 'next/router';
+import { allergies, conditions } from 'data/conditionsAndAllergies';
 
 const alertError = (title = null, text = null) => {
 	MySwal.fire({
@@ -61,7 +68,7 @@ const alertError = (title = null, text = null) => {
 const MAX_STEPS = 2;
 
 const Form = () => {
-	const router = useRouter();
+	//const router = useRouter();
 
 	const [formStep, setFormStep] = useState(1);
 	const [applicantType, setApplicantType] = useState('other');
@@ -70,6 +77,28 @@ const Form = () => {
 	const [paymentDiscount, setPaymentDiscount] = useState(0);
 	const [open, setOpen] = useState(1);
 	const [showMore, setShowMore] = useState(false);
+	const [existingConditions, setExistingConditions] = useState([]);
+	const [existingAllergies, setExistingAllergies] = useState([]);
+
+	const handleChange = (event) => {
+		const {
+			target: { value },
+		} = event;
+		setExistingConditions(
+			// On autofill we get a stringified value.
+			typeof value === 'string' ? value.split(',') : value
+		);
+	};
+
+	const handleChangeAllergy = (event) => {
+		const {
+			target: { value },
+		} = event;
+		setExistingAllergies(
+			// On autofill we get a stringified value.
+			typeof value === 'string' ? value.split(',') : value
+		);
+	};
 
 	const handleShowDetails = () => {
 		setShowMore((prev) => !prev);
@@ -269,6 +298,46 @@ const Form = () => {
 		setOpen(open === value ? 0 : value);
 	};
 
+	const testPayData = JSON.stringify({
+		invoice_number: `IN${Math.random().toString(36).substring(2, 10)}`,
+		amount: '1',
+		description: 'INSURANCE PLAN PURCHASE',
+		redirect_url: 'https://gsti-test.netlify.app/authentication',
+		callback_url: 'https://gsti-test.netlify.app/authentication',
+	});
+
+	const testPaymentRequest = async (data) => {
+		const { data: response } = await axiosMain.post(
+			'https://lab.rxhealthbeta.com/jimmy/live_api/hubtel-rx-pay.php',
+			data
+		);
+		return response;
+	};
+
+	const makeTestPayment = useMutation(
+		(paymentTestData) => testPaymentRequest(paymentTestData)
+		/*
+		{
+			onSuccess: (data) => {
+				console.log('Success response ', data);
+				if (data?.status === 201) {
+					window.sessionStorage.clear();
+					//router.push(`/authentication`);
+					//window.location.replace(data.redirect_url);
+					//console.log(data);
+				}
+			},
+			onError: (error) => {
+				console.log(error);
+				alertError(
+					'Email exists',
+					'The email provided already exists or is a duplicate. Please check and try again'
+				);
+			},
+		}
+		*/
+	);
+
 	const paymentRequest = async (data) => {
 		const { data: response } = await axios.post('/register', data);
 		return response;
@@ -281,7 +350,8 @@ const Form = () => {
 				console.log('Success response ', data);
 				if (data?.status === 201) {
 					window.sessionStorage.clear();
-					router.push(`/authentication`);
+					makeTestPayment.mutate(testPayData);
+					//router.push(`/authentication`);
 					//window.location.replace(data.redirect_url);
 					//console.log(data);
 				}
@@ -1136,10 +1206,58 @@ const Form = () => {
 																			control={control}
 																			defaultValue={''}
 																			render={({
+																				field: { onChange, ref, ...field },
+																				//fieldState: { error, invalid },
+																			}) => (
+																				<FormControl sx={{ width: '100%' }}>
+																					<InputLabel id="existing-conditions-checkbox-label">
+																						Pre-existing Medical Conditions
+																					</InputLabel>
+																					<Select
+																						{...field}
+																						ref={ref}
+																						labelId="existing-conditions-checkbox-label"
+																						id="existing-conditions-checkbox"
+																						multiple
+																						value={existingConditions}
+																						onChange={(e) => {
+																							onChange(e.target.value);
+																							handleChange(e);
+																						}}
+																						input={
+																							<OutlinedInput label="Pre-existing Medical Conditions" />
+																						}
+																						renderValue={(selected) =>
+																							selected.join(', ')
+																						}
+																						//MenuProps={MenuProps}
+																					>
+																						{conditions.map((name) => (
+																							<MenuItem key={name} value={name}>
+																								<Checkbox
+																									checked={
+																										existingConditions.indexOf(
+																											name
+																										) > -1
+																									}
+																								/>
+																								<ListItemText primary={name} />
+																							</MenuItem>
+																						))}
+																					</Select>
+																				</FormControl>
+																			)}
+																		/>
+																		{/*
+																		<Controller
+																			name={`insured_person[${index}].existing_conditions`}
+																			control={control}
+																			defaultValue={''}
+																			render={({
 																				field: { ref, ...field },
 																				fieldState: { error, invalid },
 																			}) => (
-																				<DefaultInput
+																				<SelectInput
 																					{...field}
 																					ref={ref}
 																					error={invalid}
@@ -1147,28 +1265,66 @@ const Form = () => {
 																						invalid ? error.message : null
 																					}
 																					label="Pre-existing Medical Conditions"
-																					type="text-area"
+																					options={[
+																						{
+																							name: 'male',
+																							value: 'male',
+																						},
+																						{
+																							name: 'female',
+																							value: 'female',
+																						},
+																					]}
+																					required
 																				/>
 																			)}
 																		/>
+																		*/}
 																		<Controller
 																			name={`insured_person[${index}].allergies`}
 																			control={control}
 																			defaultValue={''}
 																			render={({
-																				field: { ref, ...field },
-																				fieldState: { error, invalid },
+																				field: { onChange, ref, ...field },
+																				//fieldState: { error, invalid },
 																			}) => (
-																				<DefaultInput
-																					{...field}
-																					ref={ref}
-																					error={invalid}
-																					helpertext={
-																						invalid ? error.message : null
-																					}
-																					label="Allergies"
-																					type="text-area"
-																				/>
+																				<FormControl sx={{ width: '100%' }}>
+																					<InputLabel id="allergies-checkbox-label">
+																						Allergies
+																					</InputLabel>
+																					<Select
+																						{...field}
+																						ref={ref}
+																						labelId="allergies-checkbox-label"
+																						id="allergies-checkbox"
+																						multiple
+																						value={existingAllergies}
+																						onChange={(e) => {
+																							onChange(e.target.value);
+																							handleChangeAllergy(e);
+																						}}
+																						input={
+																							<OutlinedInput label="Allergies" />
+																						}
+																						renderValue={(selected) =>
+																							selected.join(', ')
+																						}
+																						//MenuProps={MenuProps}
+																					>
+																						{allergies.map((name) => (
+																							<MenuItem key={name} value={name}>
+																								<Checkbox
+																									checked={
+																										existingAllergies.indexOf(
+																											name
+																										) > -1
+																									}
+																								/>
+																								<ListItemText primary={name} />
+																							</MenuItem>
+																						))}
+																					</Select>
+																				</FormControl>
 																			)}
 																		/>
 																	</div>
@@ -1992,7 +2148,7 @@ const Form = () => {
 
 						<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-pb-3 tw-border-b">
 							<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-[#8e6abf] tw-flex tw-justify-start tw-items-end">
-								Trip details
+								Traveller details
 							</h2>
 							<div className="tw-grid tw-grid-cols-2">
 								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">

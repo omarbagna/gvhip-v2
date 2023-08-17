@@ -29,10 +29,40 @@ const PricingContent = () => {
 								<p>{plan?.coverage}</p>
 								<div className="tw-w-full tw-flex tw-flex-col tw-items-start tw-mb-6">
 									<div>
-										<div className="price">
-											{plan?.price}
-											<span>/person</span>
-										</div>
+										{plan?.discount !== 0 ? (
+											<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-2">
+												<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-gap-5">
+													<span>{plan?.discount}% off</span>
+													<div className="tw-text-base tw-text-red-300">
+														<s>
+															{Intl.NumberFormat('en-US', {
+																style: 'currency',
+																currency: 'USD',
+															}).format(plan?.price)}
+														</s>
+														<span className="tw-text-gray-400">/person</span>
+													</div>
+												</div>
+												<div className="price">
+													{Intl.NumberFormat('en-US', {
+														style: 'currency',
+														currency: 'USD',
+													}).format(plan?.price - plan?.price / plan?.discount)}
+													<span>/person</span>
+												</div>
+											</div>
+										) : (
+											<>
+												<div className="tw-h-8" />
+												<div className="price">
+													{Intl.NumberFormat('en-US', {
+														style: 'currency',
+														currency: 'USD',
+													}).format(plan?.price)}
+													<span>/person</span>
+												</div>
+											</>
+										)}
 										<Link href="/contact">
 											<a className="btn-style-one light-green-color">
 												Purchase Plan <i className="bx bx-chevron-right"></i>

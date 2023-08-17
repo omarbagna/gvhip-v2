@@ -326,7 +326,7 @@ const FindPolicy = () => {
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											DOB
+											Date of Birth
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 											{format(
@@ -362,7 +362,7 @@ const FindPolicy = () => {
 								</div>
 								<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
 									<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
-										Trip details
+										Traveller details
 									</h2>
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
@@ -458,45 +458,57 @@ const FindPolicy = () => {
 						</div>
 
 						{policyHolder?.user_policy_transaction?.status !== 'pending' ? (
-							<span className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-3 tw-rounded-lg">
-								<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
-									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
-										Authorization status
+							<div className="tw-w-full tw-flex-col tw-justify-start tw-items-start tw-gap-3">
+								<span className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-3 tw-rounded-lg">
+									<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+											Authorization status
+										</div>
+										<p
+											className={`tw-w-full tw-uppercase tw-flex tw-justify-end tw-text-base ${
+												policyHolder?.user_policy_transaction?.status ===
+												'verified'
+													? 'tw-text-green-600'
+													: 'tw-text-red-600'
+											}  tw-font-bold`}>
+											{policyHolder?.user_policy_transaction?.status}
+										</p>
 									</div>
-									<p
-										className={`tw-w-full tw-uppercase tw-flex tw-justify-end tw-text-base ${
-											policyHolder?.user_policy_transaction?.status ===
-											'verified'
-												? 'tw-text-green-600'
-												: 'tw-text-red-600'
-										}  tw-font-bold`}>
-										{policyHolder?.user_policy_transaction?.status}
-									</p>
-								</div>
-								<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
-									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
-										Authorized by
+									<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+											Authorized by
+										</div>
+										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
+											{
+												policyHolder?.user_policy_transaction?.status_updated_by
+													?.first_name
+											}{' '}
+											{
+												policyHolder?.user_policy_transaction?.status_updated_by
+													?.last_name
+											}
+										</p>
 									</div>
-									<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
-										{
-											policyHolder?.user_policy_transaction?.status_updated_by
-												?.first_name
-										}{' '}
-										{
-											policyHolder?.user_policy_transaction?.status_updated_by
-												?.last_name
-										}
-									</p>
-								</div>
-								<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
-									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
-										Authorized at
+									<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+											Authorized at
+										</div>
+										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
+											{
+												policyHolder?.user_policy_transaction
+													?.status_update_date
+											}
+										</p>
 									</div>
-									<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
-										{policyHolder?.user_policy_transaction?.status_update_date}
-									</p>
-								</div>
-							</span>
+								</span>
+								{policyHolder?.user_policy_transaction?.reason && (
+									<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 tw-rounded-lg">
+										<p className="tw-w-fit tw-text-left tw-text-base">
+											{policyHolder?.user_policy_transaction?.reason}
+										</p>
+									</span>
+								)}
+							</div>
 						) : null}
 					</div>
 				)}

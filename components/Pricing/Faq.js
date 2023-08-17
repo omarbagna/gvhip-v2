@@ -3,22 +3,22 @@ import Accordion from '../Accordion';
 
 const questionsAnswers = [
 	{
-		question: 'How many team members can I invite?',
+		question: 'What happens if I need to cancel my trip unexpectedly?',
 		answer:
-			'You can invite up to 2 additional users on the Free plan. There is no limit on team members for the Premium plan.',
+			'Our insurance does not covers non-refundable expenses like flights and accommodations in case of trip cancellations.',
 	},
 	{
-		question: 'What is the maximum file upload size?',
+		question: 'What if I face a medical emergency while traveling?',
 		answer:
-			'No more than 2GB. All files in your account must fit your allotted storage space.',
+			'Our coverage includes medical expenses, hospitalization, and medical evacuation if needed.',
 	},
 	{
-		question: 'How do I reset my password?',
-		answer: `Click “Forgot password” from the login page or “Change password” from your profile page. A reset link will be emailed to you.`,
+		question: 'What if my baggage is lost, stolen, or damaged during the trip?',
+		answer: `We do not provide coverage for replacement or reimbursement of personal belongings like clothes and electronics.`,
 	},
 	{
-		question: 'Can I cancel my subscription?',
-		answer: `Yes! Send us a message and we’ll process your request no questions asked.`,
+		question: 'What if my flights are delayed significantly?',
+		answer: `Our insurance does not compensate for additional accommodation and meal expenses due to substantial travel delays.`,
 	},
 ];
 

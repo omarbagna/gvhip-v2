@@ -29,13 +29,8 @@ const HowToApply = () => {
 							data-aos-duration="1200">
 							<div className="single-how-to-apply-box">
 								<div className="number">1</div>
-								<h3 className="nunito-font">Answer A Few Questions</h3>
-								<p>
-									Incorporating a user-friendly process loop, our website
-									empowers clients to efficiently answer relevant questions,
-									ensuring personalized coverage that meets their unique travel
-									needs and preferences.
-								</p>
+								<h3 className="nunito-font">Create Your Account</h3>
+								<p>Sign up using your valid passport details.</p>
 							</div>
 						</div>
 						<div
@@ -45,12 +40,10 @@ const HowToApply = () => {
 							data-aos-delay="100">
 							<div className="single-how-to-apply-box">
 								<div className="number">2</div>
-								<h3 className="nunito-font">Receive Your Free Quotes</h3>
+								<h3 className="nunito-font">Select Your Coverage Duration</h3>
 								<p>
-									As part of our seamless process loop, clients enjoy the added
-									benefit of receiving free, customized quotes on our website,
-									allowing them to explore a range of coverage options and find
-									the perfect plan that suits their travel requirements.
+									Choose from our flexible plans tailored to the length of your
+									stay.
 								</p>
 							</div>
 						</div>
@@ -61,14 +54,17 @@ const HowToApply = () => {
 							data-aos-delay="200">
 							<div className="single-how-to-apply-box">
 								<div className="number">3</div>
-								<h3 className="nunito-font">Purchase Your Plan</h3>
+								<h3 className="nunito-font">
+									Pay & Receive Your Policy Certificate
+								</h3>
 								<p>
-									Finally, clients can confidently secure their travel insurance
-									plan with ease, making the purchase on our website a smooth
-									and worry-free experience.
+									Secure payment gateways ensure a smooth transaction. Receive
+									your policy certificate electronically issued for your
+									convenience.
 								</p>
 							</div>
 						</div>
+
 						<div
 							className="col-lg-12 col-md-12 col-sm-12"
 							data-aos="fade-up"
@@ -77,9 +73,23 @@ const HowToApply = () => {
 							<div className="lets-start-box">
 								<Link href="/form/get-quote">
 									<a className="btn-style-one dark-green-color">
-										Get a Quote <i className="bx bx-chevron-right"></i>
+										Begin Your Purchase Here{' '}
+										<i className="bx bx-chevron-right"></i>
 									</a>
 								</Link>
+							</div>
+						</div>
+						<div
+							className="col-lg-12 col-md-12 col-sm-12 tw-mt-10 tw-flex tw-justify-center tw-items-center"
+							data-aos="fade-up"
+							data-aos-duration="1200"
+							data-aos-delay="300">
+							<div className="tw-bg-red-500/40 tw-w-2/3 tw-h-fit tw-text-white tw-text-left tw-font-light tw-p-4 tw-rounded-lg">
+								<strong>A Gentle Reminder:</strong> The Ghana Safe Stay
+								Programme is a mandatory requirement for non-Ghanaian passport
+								holders visiting Ghana. This initiative ensures your health and
+								safety as you explore our nation, and also contributes to our
+								goal of offering world-class health services to all visitors.
 							</div>
 						</div>
 					</div>

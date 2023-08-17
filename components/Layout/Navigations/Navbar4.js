@@ -10,12 +10,13 @@ import learnImg from '@/public/images/learnImg.jpg';
 import { signIn, useSession } from 'next-auth/react';
 import { Skeleton } from '@mui/material';
 import ReactFlagsSelect from 'react-flags-select';
+import { getCookie, hasCookie, setCookie } from 'cookies-next';
 
 const Navbar4 = () => {
 	const { data: session, status } = useSession();
 
 	const [menu, setMenu] = React.useState(true);
-	const [language, setLanguage] = React.useState('US');
+	const [selected, setSelected] = React.useState('US');
 	const toggleNavbar = () => {
 		setMenu(!menu);
 	};
@@ -29,6 +30,46 @@ const Navbar4 = () => {
 			}
 		});
 	});
+
+	React.useEffect(() => {
+		var addScript = document.createElement('script');
+		addScript.setAttribute(
+			'src',
+			'//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+		);
+		document.body.appendChild(addScript);
+		window.googleTranslateElementInit = googleTranslateElementInit;
+
+		if (hasCookie('googtrans')) {
+			setSelected(getCookie('googtrans'));
+		} else {
+			setSelected('/auto/en');
+		}
+	}, []);
+
+	const googleTranslateElementInit = () => {
+		new window.google.translate.TranslateElement(
+			{
+				pageLanguage: 'auto',
+				autoDisplay: false,
+				includedLanguages: 'en,fr,de', // If you remove it, by default all google supported language will be included
+				layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+			},
+			'google_translate_element'
+		);
+	};
+
+	const langChange = (code) => {
+		console.log(code);
+		if (hasCookie('googtrans')) {
+			setCookie('googtrans', decodeURI(`/auto/${code}`));
+			setSelected(code);
+		} else {
+			setCookie('googtrans', `/auto/${code}`);
+			setSelected(`/auto/${code}`);
+		}
+		window.location.reload();
+	};
 
 	const classOne = menu
 		? 'collapse navbar-collapse mean-menu'
@@ -50,15 +91,20 @@ const Navbar4 = () => {
 							</Link>
 							<div className="lg:tw-hidden tw-mr-8 tw-w-fit">
 								<ReactFlagsSelect
-									countries={['US', 'FR', 'DE', 'IT']}
+									countries={[
+										'US',
+										'FR',
+										'DE',
+										//, 'IT'
+									]}
 									customLabels={{
 										US: 'EN-US',
 										FR: 'FR',
 										DE: 'DE',
-										IT: 'IT',
+										//IT: 'IT',
 									}}
-									selected={language}
-									onSelect={(code) => setLanguage(code)}
+									selected={selected.replace('/auto/', '').toUpperCase()}
+									onSelect={(code) => langChange(code.toLocaleLowerCase())}
 								/>
 							</div>
 
@@ -252,6 +298,7 @@ const Navbar4 = () => {
 
 														<div className="col-12 col-sm-6 col-md-3 mtb-5">
 															<ul className="megamenu-submenu">
+																{/**
 																<li className="nav-item">
 																	<Link
 																		href="/features"
@@ -259,6 +306,7 @@ const Navbar4 = () => {
 																		<a className="nav-link">Features</a>
 																	</Link>
 																</li>
+																 */}
 																<li className="nav-item">
 																	<Link href="/team" activeClassName="active">
 																		<a className="nav-link">Team</a>
@@ -401,7 +449,7 @@ const Navbar4 = () => {
 
 							{status === 'authenticated' && session ? (
 								<div className="others-option">
-									<Link href="/dashboard" activeClassName="active">
+									<Link href="/policy-holder" activeClassName="active">
 										<a className="btn-style-one crimson-color tw-cursor-pointer">
 											Dashboard
 										</a>
@@ -428,16 +476,22 @@ const Navbar4 = () => {
 							)}
 
 							<div className="tw-hidden lg:tw-block tw-ml-5 tw-w-fit">
+								<div id="google_translate_element" className="tw-hidden"></div>
 								<ReactFlagsSelect
-									countries={['US', 'FR', 'DE', 'IT']}
+									countries={[
+										'US',
+										'FR',
+										'DE',
+										//, 'IT'
+									]}
 									customLabels={{
 										US: 'EN-US',
 										FR: 'FR',
 										DE: 'DE',
-										IT: 'IT',
+										//IT: 'IT',
 									}}
-									selected={language}
-									onSelect={(code) => setLanguage(code)}
+									selected={selected.replace('/auto/', '').toUpperCase()}
+									onSelect={(code) => langChange(code.toLocaleLowerCase())}
 								/>
 							</div>
 						</nav>

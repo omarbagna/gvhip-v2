@@ -19,10 +19,8 @@ const Features = () => {
 							</div>
 							<h3 className="nunito-font">More Coverage</h3>
 							<p>
-								Discover peace of mind on your journeys with our travel
-								insurance enhanced coverage options, ensuring comprehensive
-								protection against unforeseen events and empowering you to
-								travel worry-free.
+								Comprehensive Medical Coverage tailored for our international
+								guests.
 							</p>
 						</div>
 					</div>
@@ -37,10 +35,8 @@ const Features = () => {
 							</div>
 							<h3 className="nunito-font">Hassle Free</h3>
 							<p>
-								Experience the joy of hassle-free insurance with our seamless
-								and efficient services, providing you with the convenience and
-								support you need to focus on making unforgettable memories on
-								your journey.
+								Efficient Claims Process to ensure you get the required support
+								promptly.
 							</p>
 						</div>
 					</div>
@@ -53,12 +49,9 @@ const Features = () => {
 							<div className="icon">
 								<i className="flaticon-fast-time"></i>
 							</div>
-							<h3 className="nunito-font">Faster Benefits</h3>
+							<h3 className="nunito-font">Best Price</h3>
 							<p>
-								Unlock a world of efficiency with our travel insurance, ensuring
-								swift and streamlined claims processing, so you can quickly
-								recover from unexpected setbacks and resume your adventures with
-								confidence.
+								Clear and Fair Pricing based on your age and duration of stay.
 							</p>
 						</div>
 					</div>

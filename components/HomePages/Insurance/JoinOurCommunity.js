@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import joinOutCommunityImg from '@/public/images/join-out-community.png';
+import joinOutCommunityImg from '@/public/images/joinCommunity.png';
 
 const JoinOurCommunity = () => {
 	return (
@@ -14,7 +14,11 @@ const JoinOurCommunity = () => {
 						data-aos="fade-up"
 						data-aos-duration="1200">
 						<div className="join-our-community-image">
-							<Image src={joinOutCommunityImg} alt="join-out-community" />
+							<Image
+								src={joinOutCommunityImg}
+								alt="join-out-community"
+								className="tw-rounded-lg tw-overflow-hidden"
+							/>
 						</div>
 					</div>
 					<div className="col-lg-6 col-md-12">

@@ -259,7 +259,7 @@ const ManagePolicy = () => {
 								</div>
 								<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
 									<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
-										Trip details
+										Traveller details
 									</h2>
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">

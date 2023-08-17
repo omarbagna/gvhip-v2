@@ -11,28 +11,31 @@ const Target = () => {
 				<div className="row align-items-center">
 					<div className="col-lg-6 col-md-12">
 						<div className="goal-content style-two">
-							<span className="sub-title">We Protect You</span>
+							<span className="sub-title">Why Us</span>
 							<h2 className="nunito-font">
-								Travel with ease and peace of mind with Travel Insurance
+								Why Ghana Safe Stay Programme (GSSP)?
 							</h2>
 							<ul className="overview-list">
 								<li data-aos="fade-up" data-aos-duration="1200">
 									<i className="flaticon-draw-check-mark"></i>
-									We protect your interest while on the move
+									Peace of Mind: Comprehensive medical coverage for non-Ghanaian
+									Passport Holders visiting our cherished land.
 								</li>
 								<li
 									data-aos="fade-up"
 									data-aos-duration="1200"
 									data-aos-delay="100">
 									<i className="flaticon-draw-check-mark"></i>
-									We have a long history of keeping our promises
+									Effortless Process: Purchase, manage, and renew your policy
+									with just a few clicks!
 								</li>
 								<li
 									data-aos="fade-up"
 									data-aos-duration="1200"
 									data-aos-delay="200">
 									<i className="flaticon-draw-check-mark"></i>
-									Travel insurance: for all that&apos;s ahead
+									Support at Every Step: Facing an issue? Our dedicated support
+									team is here to assist 24/7.
 								</li>
 							</ul>
 							<div
@@ -42,7 +45,7 @@ const Target = () => {
 								data-aos-delay="300">
 								<Link href="/form/get-quote">
 									<a className="btn-style-one dark-green-color">
-										Get a Quote <i className="bx bx-chevron-right"></i>
+										Get Started Now <i className="bx bx-chevron-right"></i>
 									</a>
 								</Link>
 							</div>
@@ -53,7 +56,11 @@ const Target = () => {
 						data-aos="fade-up"
 						data-aos-duration="1200">
 						<div className="goal-image style-two">
-							<Image src={manWithSon} alt="man-with-son-image" />
+							<Image
+								src={manWithSon}
+								alt="man-with-son-image"
+								className="tw-rounded-lg tw-overflow-hidden"
+							/>
 						</div>
 					</div>
 				</div>
