@@ -192,9 +192,9 @@ const Dashboard = () => {
 											<div className="tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-3">
 												<Badge
 													color={
-														person?.status === 'verified'
+														person?.trip_status === 'verified'
 															? 'success'
-															: person?.status === 'pending'
+															: person?.trip_status === 'pending'
 															? 'warning'
 															: 'error'
 													}
@@ -204,7 +204,7 @@ const Dashboard = () => {
 													variant="dot"
 												/>
 												<p className="tw-capitalize tw-text-sm">
-													{person?.status}
+													{person?.trip_status}
 												</p>
 											</div>
 										</div>
