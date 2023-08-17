@@ -22,6 +22,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import useAxiosAuth from 'hooks/useAxiosAuth';
+import { AiOutlineFilePdf } from 'react-icons/ai';
 //import { axiosPrivate } from 'pages/api/axios';
 const MySwal = withReactContent(Swal);
 
@@ -215,7 +216,17 @@ const ManagePolicy = () => {
 
 				<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-5 tw-place-content-start tw-place-items-start">
 					<div className="tw-w-full tw-h-fit tw-bg-white tw-shadow-sm xl:tw-col-span-2 tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
-						<div className="tw-w-full">
+						<div className="tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-3">
+							<a
+								href="#"
+								target="_blank"
+								rel="noreferrer"
+								className="tw-group tw-w-full tw-flex tw-justify-start tw-items-center tw-gap-1 tw-pb-3 tw-mt-8">
+								<AiOutlineFilePdf />
+								<p className="tw-font-bold !tw-text-sm tw-text-[#8e6abf] hover:tw-underline">
+									Plan Brochure
+								</p>
+							</a>
 							<Accordion questionsAnswers={planTabsData} />
 						</div>
 					</div>

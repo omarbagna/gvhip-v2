@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }) {
 			<QueryClientProvider client={queryClient}>
 				<Hydrate state={pageProps.dehydratedState}>
 					<SessionProvider session={pageProps.session}>
-						<NextNProgress color="#8e6abf" />
+						<NextNProgress color="#8e6abf" height={5} />
 						<Component {...pageProps} />
 					</SessionProvider>
 				</Hydrate>

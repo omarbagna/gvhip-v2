@@ -9,11 +9,13 @@ import supportImg from '@/public/images/supportImg.jpg';
 import learnImg from '@/public/images/learnImg.jpg';
 import { signIn, useSession } from 'next-auth/react';
 import { Skeleton } from '@mui/material';
+import ReactFlagsSelect from 'react-flags-select';
 
 const Navbar4 = () => {
 	const { data: session, status } = useSession();
 
 	const [menu, setMenu] = React.useState(true);
+	const [language, setLanguage] = React.useState('US');
 	const toggleNavbar = () => {
 		setMenu(!menu);
 	};
@@ -411,6 +413,20 @@ const Navbar4 = () => {
 									</div>
 								)
 							)}
+
+							<div className="tw-ml-5 tw-w-28">
+								<ReactFlagsSelect
+									countries={['US', 'FR', 'DE', 'IT']}
+									customLabels={{
+										US: 'EN-US',
+										FR: 'FR',
+										DE: 'DE',
+										IT: 'IT',
+									}}
+									selected={language}
+									onSelect={(code) => setLanguage(code)}
+								/>
+							</div>
 						</nav>
 					</div>
 				</div>
