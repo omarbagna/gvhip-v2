@@ -157,7 +157,7 @@ const Profile = () => {
 									<HiOutlineLocationMarker className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 									<p className="tw-text-sm">{USER_PROFILE?.last_name}</p>
 								</span>
-								<span className="tw-flex tw-flex-wrap md:tw-flex-nowrap tw-justify-start tw-items-center tw-gap-3 md:tw-gap-8">
+								<span className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-center tw-gap-3">
 									<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
 										<HiOutlineMail className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 										<p className="tw-text-sm tw-lowercase">

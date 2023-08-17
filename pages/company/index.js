@@ -126,7 +126,7 @@ const Dashboard = () => {
 											{person?.first_name} {person?.last_name}
 										</h4>
 
-										<span className="tw-flex tw-flex-wrap tw-justify-start tw-items-center tw-gap-3">
+										<span className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-center tw-gap-3">
 											<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
 												<HiOutlineLocationMarker className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 												<p className="tw-text-sm">{person?.country}</p>
@@ -138,7 +138,7 @@ const Dashboard = () => {
 												</p>
 											</span>
 										</span>
-										<span className="tw-flex tw-flex-wrap tw-justify-start tw-items-center tw-gap-3">
+										<span className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-center tw-gap-3">
 											<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
 												<HiOutlineMail className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 												<p className="tw-text-sm tw-lowercase">
