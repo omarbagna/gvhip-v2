@@ -459,7 +459,7 @@ const FindPolicy = () => {
 
 						{policyHolder?.user_policy_transaction?.status !== 'pending' ? (
 							<div className="tw-w-full tw-flex-col tw-justify-start tw-items-start tw-gap-3">
-								<span className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-3 tw-rounded-lg">
+								<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-3 tw-rounded-lg">
 									<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
 										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
 											Authorization status
@@ -500,13 +500,13 @@ const FindPolicy = () => {
 											}
 										</p>
 									</div>
-								</span>
+								</div>
 								{policyHolder?.user_policy_transaction?.reason && (
-									<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 tw-rounded-lg">
+									<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-4 tw-rounded-lg">
 										<p className="tw-w-fit tw-text-left tw-text-base">
 											{policyHolder?.user_policy_transaction?.reason}
 										</p>
-									</span>
+									</div>
 								)}
 							</div>
 						) : null}
