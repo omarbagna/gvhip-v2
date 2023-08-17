@@ -336,7 +336,7 @@ const Form = () => {
 					: data?.applicant[0]?.first_name,
 			last_name:
 				data?.applicant_type === 'company'
-					? null
+					? data?.applicant[0]?.company_address
 					: data?.applicant[0]?.last_name,
 			email:
 				data?.applicant_type === 'company'
