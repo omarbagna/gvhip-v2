@@ -374,8 +374,10 @@ const Dashboard = () => {
 											style: 'currency',
 											currency: 'USD',
 										}).format(
-											USER_DETAILS?.user_policy_transaction?.price *
-												USER_DETAILS?.insured_person?.length
+											USER_DETAILS?.insured_person?.length > 0
+												? USER_DETAILS?.user_policy_transaction?.price *
+														USER_DETAILS?.insured_person?.length
+												: USER_DETAILS?.user_policy_transaction?.price
 										)}{' '}
 									</span>
 								</div>

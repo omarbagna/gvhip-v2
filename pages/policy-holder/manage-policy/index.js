@@ -352,14 +352,17 @@ const ManagePolicy = () => {
 								</div>
 							</div>
 
-							<div className="tw-w-full tw-flex tw-justify-end tw-items-end">
-								<button
-									className="btn-style-one dark-green-color"
-									onClick={() => setManagePolicy(true)}
-									type="button">
-									Extend Policy <i className="bx bx-chevron-right"></i>
-								</button>
-							</div>
+							{USER_DETAILS?.user_policy_transaction?.extension_status !==
+								'extended' && (
+								<div className="tw-w-full tw-flex tw-justify-end tw-items-end">
+									<button
+										className="btn-style-one dark-green-color"
+										onClick={() => setManagePolicy(true)}
+										type="button">
+										Extend Policy <i className="bx bx-chevron-right"></i>
+									</button>
+								</div>
+							)}
 						</div>
 					)}
 

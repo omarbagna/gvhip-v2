@@ -442,11 +442,11 @@ const Form = () => {
 												: 'Review and Accept Terms'}
 										</h2>
 									</span>
-									{formStep === 1 && (
+									{/*formStep === 1 && (
 										<p className="tw-text-sm tw-text-gray-500">
 											You can add up to 5 people
 										</p>
-									)}
+									)*/}
 								</span>
 							</div>
 						</div>
@@ -1179,32 +1179,30 @@ const Form = () => {
 												))}
 											</div>
 
-											{watch('insured_person')?.length !== 5 ? (
-												<div className="tw-w-full tw-flex tw-justify-end tw-items-start">
-													<div>
-														<div
-															onClick={() =>
-																append({
-																	first_name: '',
-																	last_name: '',
-																	country: watch('country'),
-																	address: '',
-																	postal_zip: '',
-																	city: '',
-																	state: '',
-																})
-															}
-															className="tw-group tw-cursor-pointer tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-2">
-															<div className="tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-6 tw-w-6 tw-text-white tw-bg-[#8e6abf] group-hover:tw-shadow-lg group-hover:tw-shadow-[#8e6abf]/50">
-																<IoAdd className="tw-text-base" />
-															</div>
-															<p className="tw-font-bold tw-text-sm tw-text-[#8e6abf]">
-																Add traveller
-															</p>
+											<div className="tw-w-full tw-flex tw-justify-end tw-items-start">
+												<div>
+													<div
+														onClick={() =>
+															append({
+																first_name: '',
+																last_name: '',
+																country: watch('country'),
+																address: '',
+																postal_zip: '',
+																city: '',
+																state: '',
+															})
+														}
+														className="tw-group tw-cursor-pointer tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-2">
+														<div className="tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-6 tw-w-6 tw-text-white tw-bg-[#8e6abf] group-hover:tw-shadow-lg group-hover:tw-shadow-[#8e6abf]/50">
+															<IoAdd className="tw-text-base" />
 														</div>
+														<p className="tw-font-bold tw-text-sm tw-text-[#8e6abf]">
+															Add traveller
+														</p>
 													</div>
 												</div>
-											) : null}
+											</div>
 										</section>
 
 										<section className="tw-flex tw-flex-col tw-gap-10 tw-mt-20 tw-bg-white tw-border tw-border-b-black tw-rounded-lg tw-p-10">
