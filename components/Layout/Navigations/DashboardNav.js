@@ -87,8 +87,7 @@ const DashboardNav = () => {
 									</Avatar>
 								</Badge>
 								<h3 className="tw-font-semibold tw-text-base tw-capitalize">
-									{session?.user?.user?.first_name}{' '}
-									{session?.user?.user?.last_name}
+									{session?.user?.user?.first_name}
 								</h3>
 								<BsChevronDown />
 							</div>
