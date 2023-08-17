@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 //import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import useAxiosAuth from 'hooks/useAxiosAuth';
+import { MdOutlinePolicy } from 'react-icons/md';
 //import { axiosPrivate } from 'pages/api/axios';
 
 const Dashboard = () => {
@@ -67,7 +68,7 @@ const Dashboard = () => {
 						Dashboard
 					</h2>
 
-					{USER_DETAILS && (
+					{/*USER_DETAILS && (
 						<div className="tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-3">
 							<Badge
 								color={
@@ -87,7 +88,7 @@ const Dashboard = () => {
 								{USER_DETAILS?.user_policy_transaction?.status}
 							</p>
 						</div>
-					)}
+							)*/}
 				</div>
 
 				{!userDetails.isLoading && USER_DETAILS && (
@@ -100,15 +101,40 @@ const Dashboard = () => {
 									<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
 										Traveller {index + 1}
 									</h3>
+									<div className="tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-3">
+										<Badge
+											color={
+												person?.status === 'verified'
+													? 'success'
+													: person?.status === 'pending'
+													? 'warning'
+													: 'error'
+											}
+											className={'tw-animate-pulse'}
+											overlap="circular"
+											badgeContent=" "
+											variant="dot"
+										/>
+										<p className="tw-capitalize tw-text-sm">{person?.status}</p>
+									</div>
 								</div>
 								<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-gap-8">
 									<div className="tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-3">
 										<h4 className="tw-font-medium tw-text-lg">
 											{person?.first_name} {person?.last_name}
 										</h4>
-										<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
-											<HiOutlineLocationMarker className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
-											<p className="tw-text-sm">{person?.country}</p>
+
+										<span className="tw-flex tw-flex-wrap tw-justify-start tw-items-center tw-gap-3">
+											<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
+												<HiOutlineLocationMarker className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
+												<p className="tw-text-sm">{person?.country}</p>
+											</span>
+											<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
+												<MdOutlinePolicy className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
+												<p className="tw-text-sm tw-uppercase">
+													{person?.policy_no}
+												</p>
+											</span>
 										</span>
 										<span className="tw-flex tw-flex-wrap tw-justify-start tw-items-center tw-gap-3">
 											<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
@@ -235,6 +261,20 @@ const Dashboard = () => {
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										{USER_DETAILS?.insured_person?.length}
 									</p>
+								</div>
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
+										Price
+									</div>
+									<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+										{Intl.NumberFormat('en-US', {
+											style: 'currency',
+											currency: 'USD',
+										}).format(
+											USER_DETAILS?.user_policy_transaction?.price *
+												USER_DETAILS?.insured_person?.length
+										)}{' '}
+									</span>
 								</div>
 							</div>
 						</div>

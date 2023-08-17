@@ -105,7 +105,11 @@ const DashboardNav = () => {
 								<Link
 									href={
 										session?.user?.user?.role === 'guest'
-											? '/dashboard/profile'
+											? '/guest/profile'
+											: session?.user?.user?.role === 'company'
+											? '/company/profile'
+											: session?.user?.user?.role === 'policy_holder'
+											? '/policy-holder/profile'
 											: '/immigration/profile'
 									}>
 									<span className="tw-cursor-pointer tw-w-44 tw-text-sm tw-text-gray-700 tw-font-medium hover:tw-text-[#8e6abf] tw-p-2 tw-rounded-lg hover:tw-bg-[#8e6abf]/10">
@@ -140,10 +144,17 @@ const DashboardNav = () => {
 					</div>
 				) : (
 					<div className="tw-h-fit lg:tw-h-full tw-fixed lg:tw-z-40 tw-bottom-0 lg:tw-top-20 tw-left-0 tw-flex lg:tw-flex-col tw-justify-center lg:tw-justify-start tw-items-center lg:tw-items-start tw-w-full lg:tw-w-fit tw-bg-white tw-border-t-2 lg:tw-border-t-0 lg:tw-border-r-2">
-						{session?.user?.user?.role === 'guest' ? (
+						{session?.user?.user?.role !== 'immigration' ? (
 							<>
 								<Link
-									href="/dashboard"
+									href={
+										session?.user?.user?.role === 'guest'
+											? '/guest'
+											: session?.user?.user?.role === 'company'
+											? '/company'
+											: session?.user?.user?.role === 'policy_holder' &&
+											  '/policy-holder'
+									}
 									activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
 									<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
 										<BiHomeAlt className="tw-shrink-0 tw-text-2xl" /> Dashboard
@@ -151,7 +162,14 @@ const DashboardNav = () => {
 								</Link>
 
 								<Link
-									href="/dashboard/manage-policy"
+									href={
+										session?.user?.user?.role === 'guest'
+											? '/guest/manage-policy'
+											: session?.user?.user?.role === 'company'
+											? '/company/manage-policy'
+											: session?.user?.user?.role === 'policy_holder' &&
+											  '/policy-holder/manage-policy'
+									}
 									activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
 									<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
 										<MdOutlinePolicy className="tw-shrink-0 tw-text-2xl" />{' '}
@@ -159,7 +177,14 @@ const DashboardNav = () => {
 									</a>
 								</Link>
 								<Link
-									href="/dashboard/profile"
+									href={
+										session?.user?.user?.role === 'guest'
+											? '/guest/profile'
+											: session?.user?.user?.role === 'company'
+											? '/company/profile'
+											: session?.user?.user?.role === 'policy_holder' &&
+											  '/policy-holder/profile'
+									}
 									activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
 									<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
 										<BiUser className="tw-shrink-0 tw-text-2xl" /> Profile

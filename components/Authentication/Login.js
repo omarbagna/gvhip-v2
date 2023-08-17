@@ -43,7 +43,7 @@ const Login = () => {
 		const status = await signIn('credentials', {
 			...data,
 			redirect: false,
-			callbackUrl: '/dashboard',
+			callbackUrl: '/policy-holder',
 		});
 		//alert('Sign in failed', 'Invalid email or password', 'error');
 		console.log(status);

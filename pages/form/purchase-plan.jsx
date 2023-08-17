@@ -85,7 +85,7 @@ const Form = () => {
 				differenceInDays(
 					new Date(basicData.end_date),
 					new Date(basicData.start_date)
-				)
+				) + 1
 		  )
 		: null;
 
@@ -181,22 +181,22 @@ const Form = () => {
 	useEffect(() => {
 		if (basicData) {
 			if (duration <= 30) {
-				setPaymentAmount(45 * watch('insured_person').length);
+				setPaymentAmount(45 /* watch('insured_person').length*/);
 				setPaymentDiscount(0);
 			} else if (duration > 30 && duration <= 60) {
-				setPaymentAmount((90 - 90 / 10) * watch('insured_person').length);
+				setPaymentAmount(90 - 90 / 10 /* watch('insured_person').length*/);
 				setPaymentDiscount(10);
 			} else if (duration > 60 && duration <= 90) {
-				setPaymentAmount((135 - 135 / 15) * watch('insured_person').length);
+				setPaymentAmount(135 - 135 / 15 /* watch('insured_person').length*/);
 				setPaymentDiscount(15);
 			} else if (duration > 90 && duration <= 120) {
-				setPaymentAmount((180 - 180 / 20) * watch('insured_person').length);
+				setPaymentAmount(180 - 180 / 20 /* watch('insured_person').length*/);
 				setPaymentDiscount(20);
 			} else if (duration > 120 && duration <= 150) {
-				setPaymentAmount((225 - 225 / 25) * watch('insured_person').length);
+				setPaymentAmount(225 - 225 / 25 /* watch('insured_person').length*/);
 				setPaymentDiscount(25);
 			} else if (duration > 150 && duration <= 180) {
-				setPaymentAmount((270 - 270 / 30) * watch('insured_person').length);
+				setPaymentAmount(270 - 270 / 30 /* watch('insured_person').length*/);
 				setPaymentDiscount(30);
 			}
 		}
