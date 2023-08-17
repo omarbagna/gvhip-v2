@@ -48,6 +48,19 @@ const Navbar4 = () => {
 									<Image src={logo} alt="site logo" className="rounded-2" />
 								</a>
 							</Link>
+							<div className="lg:tw-hidden tw-mr-8 tw-w-fit">
+								<ReactFlagsSelect
+									countries={['US', 'FR', 'DE', 'IT']}
+									customLabels={{
+										US: 'EN-US',
+										FR: 'FR',
+										DE: 'DE',
+										IT: 'IT',
+									}}
+									selected={language}
+									onSelect={(code) => setLanguage(code)}
+								/>
+							</div>
 
 							<button
 								onClick={toggleNavbar}
@@ -414,7 +427,7 @@ const Navbar4 = () => {
 								)
 							)}
 
-							<div className="tw-ml-5 tw-w-28">
+							<div className="tw-hidden lg:tw-block tw-ml-5 tw-w-fit">
 								<ReactFlagsSelect
 									countries={['US', 'FR', 'DE', 'IT']}
 									customLabels={{
