@@ -132,11 +132,19 @@ const ManagePolicy = () => {
 			setDateState([
 				{
 					startDate: addDays(
-						new Date(USER_DETAILS?.user_policy_transaction?.end_date),
+						new Date(
+							USER_DETAILS?.user_policy_transaction?.extension_end_date
+								? USER_DETAILS?.user_policy_transaction?.extension_end_date
+								: USER_DETAILS?.user_policy_transaction?.end_date
+						),
 						1
 					),
 					endDate: addDays(
-						new Date(USER_DETAILS?.user_policy_transaction?.end_date),
+						new Date(
+							USER_DETAILS?.user_policy_transaction?.extension_end_date
+								? USER_DETAILS?.user_policy_transaction?.extension_end_date
+								: USER_DETAILS?.user_policy_transaction?.end_date
+						),
 						30
 					),
 					key: 'selection',
@@ -187,7 +195,14 @@ const ManagePolicy = () => {
 			parseISO(format(new Date(dateState[0]?.startDate), 'yyyy-MM-dd')),
 			parseISO(
 				format(
-					addDays(new Date(USER_DETAILS?.user_policy_transaction?.end_date), 1),
+					addDays(
+						new Date(
+							USER_DETAILS?.user_policy_transaction?.extension_end_date
+								? USER_DETAILS?.user_policy_transaction?.extension_end_date
+								: USER_DETAILS?.user_policy_transaction?.end_date
+						),
+						1
+					),
 					'yyyy-MM-dd'
 				)
 			)
