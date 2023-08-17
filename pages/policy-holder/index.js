@@ -218,12 +218,12 @@ const Dashboard = () => {
 											</div>
 										</div>
 										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-gap-8">
-											<div className="tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-3">
+											<div className="tw-w-full tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-3">
 												<h4 className="tw-font-medium tw-text-lg">
 													{person?.first_name} {person?.last_name}
 												</h4>
 
-												<span className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-center tw-gap-3">
+												<span className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-center tw-gap-3">
 													<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
 														<HiOutlineLocationMarker className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 														<p className="tw-text-sm">{person?.country}</p>
@@ -235,7 +235,7 @@ const Dashboard = () => {
 														</p>
 													</span>
 												</span>
-												<span className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-center tw-gap-3">
+												<span className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-center tw-gap-3">
 													<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
 														<HiOutlineMail className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 														<p className="tw-text-sm tw-lowercase">

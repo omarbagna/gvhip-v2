@@ -149,7 +149,7 @@ const Profile = () => {
 								{USER_PROFILE?.first_name?.[0]}
 							</Avatar>
 
-							<div className="tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-3">
+							<div className="tw-w-full tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-3">
 								<h4 className="tw-font-medium tw-text-lg">
 									{USER_PROFILE?.first_name}
 								</h4>
@@ -157,7 +157,7 @@ const Profile = () => {
 									<HiOutlineLocationMarker className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 									<p className="tw-text-sm">{USER_PROFILE?.last_name}</p>
 								</span>
-								<span className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-center tw-gap-3">
+								<span className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-center tw-gap-3">
 									<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
 										<HiOutlineMail className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 										<p className="tw-text-sm tw-lowercase">
