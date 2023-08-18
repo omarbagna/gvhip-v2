@@ -297,6 +297,7 @@ const Form = () => {
 		setOpen(open === value ? 0 : value);
 	};
 
+	/*
 	const testPayData = JSON.stringify({
 		invoice_number: `IN${Math.random().toString(36).substring(2, 10)}`,
 		amount: '1',
@@ -331,6 +332,7 @@ const Form = () => {
 			},
 		}
 	);
+	*/
 
 	const paymentRequest = async (data) => {
 		const { data: response } = await axios.post('/register', data);
@@ -344,13 +346,10 @@ const Form = () => {
 				console.log('Success response ', data);
 				if (data?.status === 201) {
 					window.sessionStorage.clear();
-					/*
-					window.location.replace(
-						'https://pay.hubtel.com/46376af2fdfb462ab4cf12fae0f0ab0c'
-					);
-					*/
 
-					makeTestPayment.mutate(testPayData);
+					window.location.replace(data?.checkoutUrl);
+
+					//makeTestPayment.mutate(testPayData);
 					//router.push(`/authentication`);
 					//console.log(data);
 				}
@@ -428,9 +427,9 @@ const Form = () => {
 		//console.log(onboardingData);
 
 		//makeTestPayment.mutate(onboardingData);
-		makeTestPayment.mutate(testPayData);
+		//makeTestPayment.mutate(testPayData);
 
-		//makePayment.mutate(onboardingData);
+		makePayment.mutate(onboardingData);
 
 		//goToNext();
 	};
@@ -2128,7 +2127,7 @@ const Form = () => {
 
 				<Backdrop
 					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-					open={makePayment.isLoading || makeTestPayment.isLoading}>
+					open={makePayment.isLoading}>
 					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 						<CircularProgress color="inherit" />
 						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">

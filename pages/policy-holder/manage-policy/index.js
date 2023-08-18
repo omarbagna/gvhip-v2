@@ -153,6 +153,7 @@ const ManagePolicy = () => {
 		}
 	}, [USER_DETAILS]);
 
+	/*
 	const testPayData = JSON.stringify({
 		invoice_number: `IN${Math.random().toString(36).substring(2, 10)}`,
 		amount: '1',
@@ -187,6 +188,7 @@ const ManagePolicy = () => {
 			},
 		}
 	);
+	*/
 
 	const submitExtendPolicy = async (data) => {
 		const { data: response } = await axiosPrivate.put(
@@ -205,7 +207,8 @@ const ManagePolicy = () => {
 					//window.location.replace(data.redirect_url);
 					//alert('Success', data?.message, 'success');
 					queryClient.invalidateQueries({ queryKey: ['user'] });
-					makeTestPayment.mutate(testPayData);
+					window.location.replace(data?.checkoutUrl);
+					//makeTestPayment.mutate(testPayData);
 					setManagePolicy(false);
 					reset();
 				} else if (data?.status !== 200) {
@@ -744,7 +747,7 @@ const ManagePolicy = () => {
 
 			<Backdrop
 				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-				open={extendPolicy.isLoading || makeTestPayment.isLoading}>
+				open={extendPolicy.isLoading}>
 				<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 					<CircularProgress color="inherit" />
 					<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
