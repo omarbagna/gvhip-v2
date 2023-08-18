@@ -719,9 +719,10 @@ const FindPolicy = () => {
 
 				{!notFound && !policyHolder && !findPolicy.isLoading && (
 					<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 md:tw-p-6 tw-rounded-lg">
-						<h6 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-semibold tw-text-lg md:tw-text-xl">
+						<h5 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-semibold tw-text-lg md:tw-text-2xl">
 							GSSP Verification Portal
-							<br />
+						</h5>
+						<h6 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-medium tw-text-lg md:tw-text-xl">
 							Ensuring Every Visitor&apos;s Safe Stay in Ghana!
 						</h6>
 						<p className="tw-w-full tw-text-left tw-text-sm md:tw-text-base">
@@ -730,27 +731,27 @@ const FindPolicy = () => {
 							let&apos;s ensure a smooth, welcoming experience for all entering
 							Ghana, while upholding the safety standards we&apos;re proud of.
 						</p>
-						<h6 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-semibold tw-text-lg md:tw-text-xl">
+						<h6 className="tw-mt-5 tw-w-full tw-text-left tw-text-[#171e41] tw-font-medium tw-text-lg md:tw-text-xl">
 							How to Verify a Policy
 						</h6>
 						<p className="tw-w-full tw-mt-1 tw-text-left tw-text-sm md:tw-text-base">
-							<strong className="tw-w-44 tw-text-[#171e41]">
+							<strong className="md:tw-w-60 tw-text-[#171e41]">
 								Enter Passport Number:
 							</strong>{' '}
 							Use the passport number provided by the visitor.
 							<br />
-							<strong className="tw-w-44 tw-text-[#171e41]">
+							<strong className="md:tw-w-60 tw-text-[#171e41]">
 								Verify Policy Details:
 							</strong>{' '}
 							The system will display the policy&apos;s validity, coverage, and
 							other essential details.
 							<br />
-							<strong className="tw-w-44 tw-text-[#171e41]">
+							<strong className="md:tw-w-60 tw-text-[#171e41]">
 								Confirm Verification:
 							</strong>{' '}
 							Mark the policy as verified if all details match and are valid.
 							<br />
-							<strong className="tw-w-44 tw-text-[#171e41]">
+							<strong className="md:tw-w-60 tw-text-[#171e41]">
 								A Warm Note:
 							</strong>{' '}
 							Let&apos;s remember, while the GSSP is mandatory, it&apos;s also
