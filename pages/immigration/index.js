@@ -730,30 +730,31 @@ const FindPolicy = () => {
 							safeguarding both our visitors and our homeland. Together,
 							let&apos;s ensure a smooth, welcoming experience for all entering
 							Ghana, while upholding the safety standards we&apos;re proud of.
+							<br />
+							<br />
 						</p>
 						<h6 className="tw-mt-5 tw-w-full tw-text-left tw-text-[#171e41] tw-font-medium tw-text-lg md:tw-text-xl">
 							How to Verify a Policy
 						</h6>
 						<p className="tw-w-full tw-mt-1 tw-text-left tw-text-sm md:tw-text-base">
-							<strong className="md:tw-w-60 tw-text-[#171e41]">
-								Enter Passport Number:
+							<strong className="tw-text-[#171e41]">
+								1. Enter Passport Number:
 							</strong>{' '}
 							Use the passport number provided by the visitor.
 							<br />
-							<strong className="md:tw-w-60 tw-text-[#171e41]">
-								Verify Policy Details:
+							<strong className="tw-text-[#171e41]">
+								2. Verify Policy Details:
 							</strong>{' '}
 							The system will display the policy&apos;s validity, coverage, and
 							other essential details.
 							<br />
-							<strong className="md:tw-w-60 tw-text-[#171e41]">
-								Confirm Verification:
+							<strong className="tw-text-[#171e41]">
+								3. Confirm Verification:
 							</strong>{' '}
 							Mark the policy as verified if all details match and are valid.
 							<br />
-							<strong className="md:tw-w-60 tw-text-[#171e41]">
-								A Warm Note:
-							</strong>{' '}
+							<br />
+							<strong className="tw-text-[#171e41]">A Warm Note:</strong>{' '}
 							Let&apos;s remember, while the GSSP is mandatory, it&apos;s also
 							our way of showing that Ghana cares. Kindly guide visitors with
 							lapsed or missing policies to our dedicated helpdesk.
