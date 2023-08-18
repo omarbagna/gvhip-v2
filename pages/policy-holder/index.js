@@ -192,6 +192,38 @@ const Dashboard = () => {
 									</p>
 								</div>
 							</div>
+							{USER_DETAILS?.user_policy_transaction?.status === 'declined' && (
+								<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-t">
+									<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
+										Policy Status
+									</h2>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+											Status
+										</div>
+										<p
+											className={`tw-w-full tw-flex tw-justify-end tw-text-sm ${
+												USER_DETAILS?.user_policy_transaction?.status ===
+												'verified'
+													? 'tw-text-green-600'
+													: USER_DETAILS?.user_policy_transaction?.status ===
+													  'pending'
+													? 'tw-text-yellow-600'
+													: 'tw-text-red-600'
+											} tw-font-bold`}>
+											{USER_DETAILS?.user_policy_transaction?.status}
+										</p>
+									</div>
+									<div className="tw-grid tw-grid-cols-2 tw-gap-5">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+											Reason
+										</div>
+										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{USER_DETAILS?.user_policy_transaction?.reason}
+										</p>
+									</div>
+								</div>
+							)}
 						</div>
 
 						{USER_DETAILS?.insured_person?.map((person, index) => {
