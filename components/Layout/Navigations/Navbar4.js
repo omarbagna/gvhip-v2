@@ -103,6 +103,7 @@ const Navbar4 = () => {
 										DE: 'DE',
 										//IT: 'IT',
 									}}
+									placeholder="Select language"
 									className="tw-mt-2"
 									selected={selected.replace('/auto/', '').toUpperCase()}
 									onSelect={(code) => langChange(code.toLocaleLowerCase())}
@@ -491,6 +492,7 @@ const Navbar4 = () => {
 										DE: 'DE',
 										//IT: 'IT',
 									}}
+									placeholder="Select language"
 									className="tw-mt-2"
 									selected={selected.replace('/auto/', '').toUpperCase()}
 									onSelect={(code) => langChange(code.toLocaleLowerCase())}
