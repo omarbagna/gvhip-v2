@@ -347,7 +347,7 @@ const Form = () => {
 				if (data?.status === 201) {
 					window.sessionStorage.clear();
 					window.location.replace(
-						'https://pay.hubtel.com/33d3fefbd8714a739e5c96c630bfc0d0'
+						'https://pay.hubtel.com/46376af2fdfb462ab4cf12fae0f0ab0c'
 					);
 
 					//makeTestPayment.mutate(testPayData);
