@@ -1,7 +1,7 @@
 import axios from 'axios';
 //const BASE_URL = 'http://gssp-backend-api.test/api/v1';
 const BASE_URL = 'https://gssp-backend-api.rxhealthbeta.com/api/v1';
-const HUBTEL_URL = 'https://lab.rxhealthbeta.com/jimmy/live_api';
+const HUBTEL_URL = 'https://goldenministersfellowship.org/route';
 
 export default axios.create({
 	baseURL: BASE_URL,

@@ -163,7 +163,7 @@ const ManagePolicy = () => {
 
 	const testPaymentRequest = async (data) => {
 		const { data: response } = await axiosHubtel.post(
-			'/hubtel-rx-pay.php',
+			'/rx-hubtel-pay.php',
 			data
 		);
 		return response;
@@ -205,7 +205,7 @@ const ManagePolicy = () => {
 					//window.location.replace(data.redirect_url);
 					//alert('Success', data?.message, 'success');
 					queryClient.invalidateQueries({ queryKey: ['user'] });
-					//makeTestPayment.mutate(testPayData);
+					makeTestPayment.mutate(testPayData);
 					setManagePolicy(false);
 					reset();
 				} else if (data?.status !== 200) {
