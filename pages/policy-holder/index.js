@@ -202,7 +202,7 @@ const Dashboard = () => {
 											Status
 										</div>
 										<p
-											className={`tw-w-full tw-flex tw-justify-end tw-text-sm ${
+											className={`tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-sm ${
 												USER_DETAILS?.user_policy_transaction?.status ===
 												'verified'
 													? 'tw-text-green-600'
