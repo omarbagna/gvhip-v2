@@ -500,14 +500,24 @@ const FindPolicy = () => {
 											}
 										</p>
 									</div>
+									{policyHolder?.user_policy_transaction?.reason && (
+										<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
+											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+												Reason
+											</div>
+											<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
+												{policyHolder?.user_policy_transaction?.reason}
+											</p>
+										</div>
+									)}
 								</div>
-								{policyHolder?.user_policy_transaction?.reason && (
+								{/*policyHolder?.user_policy_transaction?.reason && (
 									<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-4 tw-rounded-lg">
 										<p className="tw-w-fit tw-text-left tw-text-base">
 											{policyHolder?.user_policy_transaction?.reason}
 										</p>
 									</div>
-								)}
+								)*/}
 							</div>
 						) : null}
 					</div>
