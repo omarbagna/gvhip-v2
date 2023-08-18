@@ -38,10 +38,10 @@ const DashboardNav = () => {
 			const res = await axiosPrivate.post('/account/logout');
 
 			if (res.status === 200) {
-				await signOut({ callbackUrl: '/' });
+				await signOut({ callbackUrl: '/authentication' });
 			}
 		} else {
-			await signOut({ callbackUrl: '/' });
+			await signOut({ callbackUrl: '/authentication' });
 		}
 		setLoading(false);
 	};
