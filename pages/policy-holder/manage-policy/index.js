@@ -153,6 +153,41 @@ const ManagePolicy = () => {
 		}
 	}, [USER_DETAILS]);
 
+	const testPayData = JSON.stringify({
+		invoice_number: `IN${Math.random().toString(36).substring(2, 10)}`,
+		amount: '1',
+		description: 'INSURANCE PLAN PURCHASE',
+		redirect_url: 'https://gsti-test.netlify.app/policy-holder',
+		callback_url: 'https://gsti-test.netlify.app/policy-holder',
+	});
+
+	const testPaymentRequest = async (data) => {
+		const { data: response } = await axiosHubtel.post(
+			'/hubtel-rx-pay.php',
+			data
+		);
+		return response;
+	};
+
+	const makeTestPayment = useMutation(
+		(paymentTestData) => testPaymentRequest(paymentTestData),
+
+		{
+			onSuccess: (data) => {
+				console.log('Success response ', data);
+				if (data?.status === 'Success') {
+					//window.sessionStorage.clear();
+					//router.push(`/authentication`);
+					window.location.replace(data?.data?.checkoutUrl);
+					//console.log(data);
+				}
+			},
+			onError: (error) => {
+				console.log(error);
+			},
+		}
+	);
+
 	const submitExtendPolicy = async (data) => {
 		const { data: response } = await axiosPrivate.put(
 			'/account/extend-policy',
@@ -168,10 +203,11 @@ const ManagePolicy = () => {
 				console.log('Success response ', data);
 				if (data?.status === 200) {
 					//window.location.replace(data.redirect_url);
-					alert('Success', data?.message, 'success');
-					reset();
+					//alert('Success', data?.message, 'success');
 					queryClient.invalidateQueries({ queryKey: ['user'] });
+					//makeTestPayment.mutate(testPayData);
 					setManagePolicy(false);
+					reset();
 				} else if (data?.status !== 200) {
 					alert('Failed to extend policy', 'Please try again later', 'error');
 				}
@@ -360,7 +396,11 @@ const ManagePolicy = () => {
 												style: 'currency',
 												currency: 'USD',
 											}).format(
-												USER_DETAILS?.user_policy_transaction?.price
+												USER_DETAILS?.user_policy_transaction?.extension_price
+													? USER_DETAILS?.user_policy_transaction?.price +
+															USER_DETAILS?.user_policy_transaction
+																?.extension_price
+													: USER_DETAILS?.user_policy_transaction?.price
 											)}{' '}
 										</span>
 									</div>
@@ -704,11 +744,11 @@ const ManagePolicy = () => {
 
 			<Backdrop
 				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-				open={extendPolicy.isLoading}>
+				open={extendPolicy.isLoading || makeTestPayment.isLoading}>
 				<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 					<CircularProgress color="inherit" />
 					<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
-						Extending current policy, please wait...
+						Extending current policy, please wait to be redirected
 					</p>
 				</div>
 			</Backdrop>

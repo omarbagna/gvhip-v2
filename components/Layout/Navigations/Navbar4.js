@@ -83,26 +83,27 @@ const Navbar4 = () => {
 			<div id="navbar" className="navbar-area">
 				<div className="main-nav">
 					<div className="container-fluid">
-						<nav className="navbar navbar-expand-lg navbar-light bg-light">
+						<nav className="tw-relative navbar navbar-expand-lg navbar-light bg-light">
 							<Link href="/">
 								<a className="navbar-brand p-1">
 									<Image src={logo} alt="site logo" className="rounded-2" />
 								</a>
 							</Link>
-							<div className="lg:tw-hidden tw-mr-8 tw-w-fit">
+							<div className="tw-absolute tw-top-1/2 -tw-translate-y-1/2 tw-left-16 tw-h-fit lg:tw-hidden tw-mr-8 tw-w-fit">
 								<ReactFlagsSelect
 									countries={[
-										'US',
+										'GB',
 										'FR',
 										'DE',
 										//, 'IT'
 									]}
 									customLabels={{
-										US: 'EN-US',
+										GB: 'EN',
 										FR: 'FR',
 										DE: 'DE',
 										//IT: 'IT',
 									}}
+									className="tw-mt-2"
 									selected={selected.replace('/auto/', '').toUpperCase()}
 									onSelect={(code) => langChange(code.toLocaleLowerCase())}
 								/>
@@ -479,17 +480,18 @@ const Navbar4 = () => {
 								<div id="google_translate_element" className="tw-hidden"></div>
 								<ReactFlagsSelect
 									countries={[
-										'US',
+										'GB',
 										'FR',
 										'DE',
 										//, 'IT'
 									]}
 									customLabels={{
-										US: 'EN-US',
+										GB: 'EN',
 										FR: 'FR',
 										DE: 'DE',
 										//IT: 'IT',
 									}}
+									className="tw-mt-2"
 									selected={selected.replace('/auto/', '').toUpperCase()}
 									onSelect={(code) => langChange(code.toLocaleLowerCase())}
 								/>

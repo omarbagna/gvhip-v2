@@ -183,6 +183,14 @@ const Dashboard = () => {
 										{USER_DETAILS?.travelling_info?.passport_number}
 									</p>
 								</div>
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+										Telephone Number
+									</div>
+									<p className="tw-uppercase tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+										{USER_DETAILS?.travelling_info?.telephone}
+									</p>
+								</div>
 							</div>
 						</div>
 
@@ -219,6 +227,63 @@ const Dashboard = () => {
 										</div>
 										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-gap-8">
 											<div className="tw-w-full tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-3">
+												<div className="tw-grid tw-grid-cols-2">
+													<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+														First name
+													</div>
+													<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+														{person?.first_name}
+													</p>
+												</div>
+												<div className="tw-grid tw-grid-cols-2">
+													<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+														Last name
+													</div>
+													<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+														{person?.last_name}
+													</p>
+												</div>
+												<div className="tw-grid tw-grid-cols-2">
+													<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+														Passport Number
+													</div>
+													<p className="tw-uppercase tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+														{person?.passport_number}
+													</p>
+												</div>
+												<div className="tw-grid tw-grid-cols-2">
+													<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+														Policy Number
+													</div>
+													<p className="tw-uppercase tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+														{person?.policy_no}
+													</p>
+												</div>
+												<div className="tw-grid tw-grid-cols-2">
+													<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+														Date of Birth
+													</div>
+													<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+														{format(new Date(person?.dob), 'dd/MM/yyyy')}
+													</p>
+												</div>
+												<div className="tw-grid tw-grid-cols-2">
+													<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+														Gender
+													</div>
+													<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+														{person?.gender}
+													</p>
+												</div>
+												<div className="tw-grid tw-grid-cols-2">
+													<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+														Telephone Number
+													</div>
+													<p className="tw-uppercase tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+														{person?.telephone}
+													</p>
+												</div>
+												{/** 
 												<h4 className="tw-font-medium tw-text-lg">
 													{person?.first_name} {person?.last_name}
 												</h4>
@@ -247,6 +312,7 @@ const Dashboard = () => {
 														<p className="tw-text-sm">{person?.telephone}</p>
 													</span>
 												</span>
+												*/}
 											</div>
 										</div>
 									</div>
@@ -369,17 +435,29 @@ const Dashboard = () => {
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
 										Price
 									</div>
-									<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
-										{Intl.NumberFormat('en-US', {
-											style: 'currency',
-											currency: 'USD',
-										}).format(
-											USER_DETAILS?.insured_person?.length > 0
-												? USER_DETAILS?.user_policy_transaction?.price *
-														USER_DETAILS?.insured_person?.length
-												: USER_DETAILS?.user_policy_transaction?.price
-										)}{' '}
-									</span>
+									{USER_DETAILS?.user_policy_transaction?.extension_price ? (
+										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+											{Intl.NumberFormat('en-US', {
+												style: 'currency',
+												currency: 'USD',
+											}).format(
+												USER_DETAILS?.user_policy_transaction?.price +
+													USER_DETAILS?.user_policy_transaction?.extension_price
+											)}{' '}
+										</span>
+									) : (
+										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+											{Intl.NumberFormat('en-US', {
+												style: 'currency',
+												currency: 'USD',
+											}).format(
+												USER_DETAILS?.insured_person?.length > 0
+													? USER_DETAILS?.user_policy_transaction?.price *
+															USER_DETAILS?.insured_person?.length
+													: USER_DETAILS?.user_policy_transaction?.price
+											)}{' '}
+										</span>
+									)}
 								</div>
 							</div>
 						</div>
