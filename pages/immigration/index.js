@@ -38,7 +38,7 @@ const FindPolicy = () => {
 		reValidateMode: 'onChange',
 		defaultValues: {
 			search_term: '',
-			search_type: '',
+			search_type: 'policy_no',
 		},
 	});
 
@@ -438,32 +438,34 @@ const FindPolicy = () => {
 							</div>
 
 							{policyHolder?.user_policy_transaction?.status === 'pending' ? (
-								<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5">
-									<span
-										className="btn-style-back red-light-color tw-w-fit tw-h-fit tw-rounded-lg tw-px-4 tw-py-2 tw-flex tw-shadow-md tw-justify-center tw-items-center tw-text-base tw-cursor-pointer"
-										onClick={() => setDeclinePolicyModal((prev) => !prev)}>
-										Decline
-									</span>
+								<>
+									<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5">
+										<span
+											className="btn-style-back red-light-color tw-w-fit tw-h-fit tw-rounded-lg tw-px-4 tw-py-2 tw-flex tw-shadow-md tw-justify-center tw-items-center tw-text-base tw-cursor-pointer"
+											onClick={() => setDeclinePolicyModal((prev) => !prev)}>
+											Decline
+										</span>
 
-									<button
-										//size="lg"
-										className="btn-style-one dark-green-color"
-										//disabled={!isValid}
-										onClick={(e) => submitVerifyPolicy(e)}
-										type="button">
-										Verify
-									</button>
-								</div>
+										<button
+											//size="lg"
+											className="btn-style-one dark-green-color"
+											//disabled={!isValid}
+											onClick={(e) => submitVerifyPolicy(e)}
+											type="button">
+											Verify
+										</button>
+									</div>
+									<div className="tw-w-full tw-flex-col tw-justify-start tw-items-start tw-gap-3">
+										<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-3 tw-rounded-lg">
+											<p className="tw-w-fit tw-text-left tw-text-base">
+												<strong>NB:</strong> An email will be sent to the policy
+												holder with their updated status once verified or
+												declined.
+											</p>
+										</div>
+									</div>
+								</>
 							) : null}
-
-							<div className="tw-w-full tw-flex-col tw-justify-start tw-items-start tw-gap-3">
-								<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-3 tw-rounded-lg">
-									<p className="tw-w-fit tw-text-left tw-text-base">
-										<strong>NB:</strong> An email will be sent to the policy
-										holder with their updated status once verified or declined.
-									</p>
-								</div>
-							</div>
 						</div>
 
 						{policyHolder?.user_policy_transaction?.status !== 'pending' ? (
