@@ -428,7 +428,9 @@ const Form = () => {
 		//console.log(onboardingData);
 
 		//makeTestPayment.mutate(onboardingData);
-		makePayment.mutate(onboardingData);
+		makeTestPayment.mutate(testPayData);
+
+		//makePayment.mutate(onboardingData);
 
 		//goToNext();
 	};
