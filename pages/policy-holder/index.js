@@ -406,7 +406,7 @@ const Dashboard = () => {
 									</p>
 								</div>
 							</div>
-							<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-b">
+							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b">
 								{USER_DETAILS?.user_policy_transaction?.extension_start_date ? (
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
