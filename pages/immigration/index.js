@@ -719,7 +719,7 @@ const FindPolicy = () => {
 
 				{!notFound && !policyHolder && !findPolicy.isLoading && (
 					<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 md:tw-p-6 tw-rounded-lg">
-						<h5 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-semibold tw-text-lg md:tw-text-2xl">
+						<h5 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#7862AF] tw-font-semibold tw-text-lg md:tw-text-2xl">
 							GSSP Verification Portal
 						</h5>
 						<h6 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-medium tw-text-lg md:tw-text-xl">
