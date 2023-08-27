@@ -45,7 +45,7 @@ const Goal = () => {
 									data-aos-duration="1200"
 									data-aos-delay="200">
 									<i className="flaticon-draw-check-mark"></i>
-									We maintain consistently high ratings
+									We have a client-centred team of professionals
 								</li>
 							</ul>
 							<div

@@ -13,13 +13,13 @@ const Target = () => {
 						<div className="goal-content style-two">
 							<span className="sub-title">Why Us</span>
 							<h2 className="nunito-font">
-								Why Ghana Safe Stay Programme (GSSP)?
+								Why Ghana Visitors Health Insurance Platform (GVHIP)?
 							</h2>
 							<ul className="overview-list">
 								<li data-aos="fade-up" data-aos-duration="1200">
 									<i className="flaticon-draw-check-mark"></i>
-									Peace of Mind: Comprehensive medical coverage for non-Ghanaian
-									Passport Holders visiting our cherished land.
+									Peace of Mind: Comprehensive medical coverage for visitors to
+									Ghana.
 								</li>
 								<li
 									data-aos="fade-up"

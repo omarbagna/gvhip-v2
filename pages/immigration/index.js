@@ -376,7 +376,7 @@ const FindPolicy = () => {
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Coverage Starts
+											Effective Date
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 											{format(
@@ -389,7 +389,7 @@ const FindPolicy = () => {
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Coverage Ends
+											Expiry Date
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 											{format(
@@ -720,7 +720,7 @@ const FindPolicy = () => {
 				{!notFound && !policyHolder && !findPolicy.isLoading && (
 					<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 md:tw-p-6 tw-rounded-lg">
 						<h5 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#7862AF] tw-font-semibold tw-text-lg md:tw-text-2xl">
-							GSSP Verification Portal
+							GVHIP Verification Portal
 						</h5>
 						<h6 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-medium tw-text-lg md:tw-text-xl">
 							Ensuring Every Visitor&apos;s Safe Stay in Ghana!
@@ -755,7 +755,7 @@ const FindPolicy = () => {
 							<br />
 							<br />
 							<strong className="tw-text-[#171e41]">A Warm Note:</strong>{' '}
-							Let&apos;s remember, while the GSSP is mandatory, it&apos;s also
+							Let&apos;s remember, while the GVHIP is mandatory, it&apos;s also
 							our way of showing that Ghana cares. Kindly guide visitors with
 							lapsed or missing policies to our dedicated helpdesk.
 						</p>

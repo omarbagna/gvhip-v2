@@ -375,7 +375,7 @@ const Dashboard = () => {
 								</div>
 								<div className="tw-grid tw-grid-cols-2">
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-										Coverage Starts
+										Effective Date
 									</div>
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										{format(
@@ -388,7 +388,7 @@ const Dashboard = () => {
 								</div>
 								<div className="tw-grid tw-grid-cols-2">
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-										Coverage Ends
+										Expiry Date
 									</div>
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										{format(

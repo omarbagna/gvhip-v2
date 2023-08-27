@@ -23,9 +23,9 @@ export default function Index() {
 			{/**
 			<TestimonialThree />
 			<Services />
+			<JoinOurCommunity />
     		*/}
 			<Faq />
-			<JoinOurCommunity />
 			<FooterFour />
 		</>
 	);

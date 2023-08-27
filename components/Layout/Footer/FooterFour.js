@@ -113,7 +113,7 @@ const FooterFour = () => {
 					<div className="row align-items-center">
 						<div className="col-lg-4 col-md-5">
 							<p>
-								&copy; {currentYear} GSSP. All Rights Reserved
+								&copy; {currentYear} GVHIP. All Rights Reserved
 								{/**
                 <a
                   href="https://envytheme.com/"

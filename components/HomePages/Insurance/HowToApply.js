@@ -85,11 +85,10 @@ const HowToApply = () => {
 							data-aos-duration="1200"
 							data-aos-delay="300">
 							<div className="tw-bg-red-500/40 tw-w-2/3 tw-h-fit tw-text-white tw-text-left tw-font-light tw-p-4 tw-rounded-lg">
-								<strong>A Gentle Reminder:</strong> The Ghana Safe Stay
-								Programme is a mandatory requirement for non-Ghanaian passport
-								holders visiting Ghana. This initiative ensures your health and
-								safety as you explore our nation, and also contributes to our
-								goal of offering world-class health services to all visitors.
+								<strong>Notice:</strong> The Ghana Visitors Health Insurance
+								Platform (GVHIP) is a mandatory requirement for non-Ghanaian
+								passport holders visiting Ghana. This initiative safeguards your
+								health while you explore our country.
 							</div>
 						</div>
 					</div>

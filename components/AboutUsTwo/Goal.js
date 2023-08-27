@@ -40,14 +40,15 @@ const Goal = () => {
 									data-aos-duration="1200"
 									data-aos-delay="300">
 									<i className="flaticon-draw-check-mark"></i>
-									25 Years of experience
+									We have a client-centred team of professionals
 								</li>
 								<li
 									data-aos="fade-up"
 									data-aos-duration="1200"
 									data-aos-delay="400">
 									<i className="flaticon-draw-check-mark"></i>
-									We maintain consistently high ratings
+									Our commitment to continuous learning constantly improves
+									service quality
 								</li>
 							</ul>
 							<div

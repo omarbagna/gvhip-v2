@@ -190,7 +190,7 @@ Insurance Banner Area CSS
 
 .insurance-banner-content {
 	position: relative;
-	top: -50px;
+	top: 0px;
 }
 .insurance-banner-content .sub-title {
 	padding: 8px 20px;
@@ -203,7 +203,7 @@ Insurance Banner Area CSS
 	font-weight: 500;
 }
 .insurance-banner-content h1 {
-	font-size: 65px;
+	font-size: 60px;
 	margin-bottom: 20px;
 }
 .insurance-banner-content p {

@@ -16,9 +16,9 @@ const AboutUs2 = () => {
 				<div className="container">
 					<div className="page-title-content">
 						<span className="sub-title dark-green-color">About Us</span>
-						<h1 className="nunito-font">
-							Welcome to the Ghana Safe Stay Programme Portal
-						</h1>
+						{/*<h1 className="nunito-font">
+							Welcome to the Ghana Visitors Health Insurance Platform Portal
+						</h1>*/}
 					</div>
 				</div>
 			</div>
@@ -27,9 +27,9 @@ const AboutUs2 = () => {
 			<HowToApply />
 			{/**
 			<Testimonials />
+			<JoinOurCommunity />
 			 */}
 			<Faq />
-			<JoinOurCommunity />
 			<FooterFour />
 		</>
 	);

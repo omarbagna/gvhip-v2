@@ -111,9 +111,9 @@ const Quote = () => {
 		) + 1
 	);
 	const renderButton = () => {
-		if (formStep > 4) {
+		if (formStep > 3) {
 			return null;
-		} else if (formStep === 4) {
+		} else if (formStep === 3) {
 			return (
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 					<span
@@ -132,7 +132,7 @@ const Quote = () => {
 					</button>
 				</div>
 			);
-		} else if (formStep === 3) {
+		} else if (formStep === 2) {
 			return (
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5">
 					<span
@@ -153,7 +153,7 @@ const Quote = () => {
 					</button>
 				</div>
 			);
-		} else if (formStep === 2) {
+		} else if (formStep === 5) {
 			return (
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5">
 					<span
@@ -304,12 +304,12 @@ const Quote = () => {
 					</Link>
 
 					<h2 className="tw-hidden md:tw-flex tw-capitalize tw-font-title tw-font-bold tw-text-3xl lg:tw-text-4xl tw-text-[#171e41]  tw-justify-center tw-items-end tw-gap-1">
-						{formStep !== 4
+						{formStep !== 3
 							? 'Lets get some basic information'
 							: 'Best plan for you'}
 					</h2>
 
-					{formStep !== 4 && (
+					{formStep !== 3 && (
 						<p className="tw-text-sm tw-shrink-0 tw-my-auto tw-block md:tw-hidden">
 							Step {formStep}/{MAX_STEPS}
 						</p>
@@ -339,7 +339,7 @@ const Quote = () => {
 			</div>
 			<div
 				className={
-					formStep !== 4
+					formStep !== 3
 						? 'tw-w-full tw-h-full md:tw-w-5/6 lg:tw-w-4/6 tw-rounded-xl md:tw-shadow-lg md:tw-bg-white tw-mx-auto tw-my-20'
 						: 'tw-w-full tw-h-full'
 				}>
@@ -353,7 +353,7 @@ const Quote = () => {
 								<div className="tw-w-full tw-flex tw-flex-wrap-reverse tw-gap-3 tw-justify-between tw-items-center">
 									<span className="tw-w-fit tw-flex tw-justify-start tw-items-end tw-gap-1">
 										<h2 className="tw-font-title tw-font-bold tw-text-2xl lg:tw-text-3xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
-											What country are you travelling in from?
+											What country are you travelling from?
 										</h2>
 									</span>
 								</div>
@@ -384,7 +384,7 @@ const Quote = () => {
 							</section>
 						)}
 
-						{formStep === 2 && (
+						{formStep === 5 && (
 							<>
 								<section
 									data-aos="fade-up"
@@ -489,7 +489,7 @@ const Quote = () => {
 							</>
 						)}
 
-						{formStep === 3 && (
+						{formStep === 2 && (
 							<section
 								data-aos="fade-up"
 								data-aos-duration="1200"
@@ -594,7 +594,7 @@ const Quote = () => {
 							</section>
 						)}
 
-						{formStep === 4 && (
+						{formStep === 3 && (
 							<section
 								data-aos="fade-up"
 								data-aos-duration="1200"
@@ -630,7 +630,7 @@ const Quote = () => {
 													</div>
 													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
 														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-															Coverage Starts
+															Effective Date
 														</div>
 														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 tw-font-bold">
 															{format(
@@ -641,7 +641,7 @@ const Quote = () => {
 													</div>
 													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
 														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-															Coverage Ends
+															Expiry Date
 														</div>
 														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-2 tw-text-gray-600 tw-font-bold">
 															{format(
@@ -657,12 +657,13 @@ const Quote = () => {
 														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 tw-font-bold">
 															{duration} days
 															<span
-																onClick={() => setFormStep(3)}
+																onClick={() => setFormStep(2)}
 																className="tw-cursor-pointer  tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
 																<TbEdit className="tw-text-xl" />
 															</span>
 														</p>
 													</div>
+													{/**
 													<div className="tw-grid tw-grid-cols-2 tw-place-items-center">
 														<div
 															onClick={() => setFormStep(2)}
@@ -677,6 +678,7 @@ const Quote = () => {
 															</span>
 														</p>
 													</div>
+													 */}
 												</div>
 												<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 													<div className="tw-grid tw-grid-cols-2">
@@ -815,7 +817,7 @@ const Quote = () => {
 															checked={watch(`proceed_purchase`)}
 														/>
 													}
-													label={'I want to proceed to purchase'}
+													label={'Proceed to purchase'}
 												/>
 												<FormHelperText error>
 													{invalid ? error.message : null}

@@ -7,7 +7,19 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import logo from '@/public/images/gsti_logo.jpeg';
 import DefaultInput from '@/components/Input/DefaultInput';
 import SelectInput from '@/components/Input/SelectInput';
-import { format, differenceInDays } from 'date-fns';
+import {
+	format,
+	differenceInDays,
+	addDays,
+	parseISO,
+	formatISO,
+	parse,
+	toDate,
+} from 'date-fns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 const MySwal = withReactContent(Swal);
@@ -52,6 +64,10 @@ import { planTabsData } from 'data/plansData';
 import axios, { axiosHubtel } from 'pages/api/axios';
 //import { useRouter } from 'next/router';
 import { allergies, conditions } from 'data/conditionsAndAllergies';
+import dayjs from 'dayjs';
+import DependantArray from '@/components/Form/dependantArray';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/material.css';
 
 const alertError = (title = null, text = null) => {
 	MySwal.fire({
@@ -76,6 +92,9 @@ const Form = () => {
 	const [paymentDiscount, setPaymentDiscount] = useState(0);
 	const [open, setOpen] = useState(1);
 	const [showMore, setShowMore] = useState(false);
+	const [prices, setPrices] = useState([]);
+
+	/*
 	const [existingConditions, setExistingConditions] = useState([]);
 	const [existingAllergies, setExistingAllergies] = useState([]);
 
@@ -98,6 +117,7 @@ const Form = () => {
 			typeof value === 'string' ? value.split(',') : value
 		);
 	};
+	*/
 
 	const handleShowDetails = () => {
 		setShowMore((prev) => !prev);
@@ -117,6 +137,8 @@ const Form = () => {
 		  )
 		: null;
 
+	let subTotal = 0;
+
 	const {
 		watch,
 		control,
@@ -135,7 +157,11 @@ const Form = () => {
 			start_date: '',
 			end_date: '',
 			country: '',
-			insured_person: [{}],
+			insured_person: [
+				{
+					dependants: [],
+				},
+			],
 
 			applicant_type: 'other',
 		},
@@ -144,8 +170,64 @@ const Form = () => {
 	const { fields, append, remove } = useFieldArray({
 		control,
 		name: 'insured_person',
-		rules: { maxLength: 5 },
+		//rules: { maxLength: 5 },
 	});
+
+	const calculatePrices = () => {
+		let userPrices = [];
+		let travelDurationPerTraveller = null;
+		watch('insured_person').map((traveller, index) => {
+			travelDurationPerTraveller =
+				differenceInDays(
+					new Date(traveller.departure_date),
+					new Date(traveller.arrival_date)
+				) + 1;
+
+			return userPrices.push({
+				traveller_no: index + 1,
+				no_of_travellers: traveller.dependants?.length + 1,
+				duration: travelDurationPerTraveller,
+				discount:
+					travelDurationPerTraveller <= 30
+						? 0
+						: travelDurationPerTraveller > 30 &&
+						  travelDurationPerTraveller <= 60
+						? 10
+						: travelDurationPerTraveller > 60 &&
+						  travelDurationPerTraveller <= 90
+						? 15
+						: travelDurationPerTraveller > 90 &&
+						  travelDurationPerTraveller <= 120
+						? 20
+						: travelDurationPerTraveller > 120 &&
+						  travelDurationPerTraveller <= 150
+						? 25
+						: travelDurationPerTraveller > 150 &&
+						  travelDurationPerTraveller <= 180 &&
+						  30,
+				price:
+					travelDurationPerTraveller <= 30
+						? 45
+						: travelDurationPerTraveller > 30 &&
+						  travelDurationPerTraveller <= 60
+						? 90 - 90 / 10
+						: travelDurationPerTraveller > 60 &&
+						  travelDurationPerTraveller <= 90
+						? 135 - 135 / 15
+						: travelDurationPerTraveller > 90 &&
+						  travelDurationPerTraveller <= 120
+						? 180 - 180 / 20
+						: travelDurationPerTraveller > 120 &&
+						  travelDurationPerTraveller <= 150
+						? 225 - 225 / 25
+						: travelDurationPerTraveller > 150 &&
+						  travelDurationPerTraveller <= 180 &&
+						  270 - 270 / 30,
+			});
+		});
+
+		setPrices(userPrices);
+	};
 
 	const goToNext = () => {
 		trigger();
@@ -160,6 +242,7 @@ const Form = () => {
 			);
 		}
 	};
+
 	const goToPrevious = () => {
 		setFormStep((prev) => prev - 1);
 	};
@@ -230,6 +313,8 @@ const Form = () => {
 		}
 	}, [watch, duration, basicData]);
 
+	console.log(watch());
+
 	const renderButton = () => {
 		if (formStep > 2) {
 			return null;
@@ -261,7 +346,10 @@ const Form = () => {
 						//size="lg"
 						className="btn-style-one dark-green-color"
 						//disabled={!isValid}
-						onClick={goToNext}
+						onClick={() => {
+							goToNext();
+							calculatePrices();
+						}}
 						type="button">
 						Next <i className="bx bx-chevron-right"></i>
 					</button>
@@ -368,6 +456,17 @@ const Form = () => {
 		//console.log(data?.applicant[0]);
 		window.sessionStorage.setItem('basicData', JSON.stringify(data));
 
+		let insuredData = [];
+
+		data?.insured_person.map((person, index) => {
+			return insuredData.push({
+				...person,
+				price: prices[index]?.price,
+				discount: prices[index]?.discount,
+				duration: prices[index]?.duration,
+			});
+		});
+
 		/*
 		const formData = JSON.stringify({
 			method: 'REQUEST_PAYMENT',
@@ -393,6 +492,7 @@ const Form = () => {
 		*/
 
 		const onboardingData = {
+			/*
 			name:
 				data?.applicant_type === 'company'
 					? data?.applicant[0]?.company_name
@@ -416,12 +516,16 @@ const Form = () => {
 					: data?.applicant[0]?.telephone,
 			country: data?.country,
 			applicant_type: data?.applicant_type,
-			insured_person: data?.insured_person,
+			*/
+			insured_person: insuredData,
+			total_price: subTotal,
+			/*
 			start_date: data?.start_date,
 			end_date: data?.end_date,
 			duration: duration,
 			price: paymentAmount,
 			discount: paymentDiscount,
+			*/
 		};
 
 		//console.log(onboardingData);
@@ -429,7 +533,7 @@ const Form = () => {
 		//makeTestPayment.mutate(onboardingData);
 		//makeTestPayment.mutate(testPayData);
 
-		makePayment.mutate(onboardingData);
+		makePayment.mutate(JSON.stringify(onboardingData));
 
 		//goToNext();
 	};
@@ -547,12 +651,20 @@ const Form = () => {
 																window.scrollTo({ top: 0, behavior: 'smooth' });
 															}}>
 															<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-pr-4">
-																<div className="tw-flex tw-flex-col md:tw-flex-row tw-justify-start tw-items-start md:tw-items-center tw-gap-3 md:tw-gap-5">
+																<div className="tw-grid tw-grid-cols-2 md:tw-flex tw-justify-start tw-items-start md:tw-items-center tw-gap-3 md:tw-gap-5">
 																	<h3 className="tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
 																		Traveller {index + 1}
 																	</h3>
 
-																	<Typography sx={{ color: 'text.secondary' }}>
+																	<span className="tw-bg-[#7862AF]/20 tw-w-fit tw-h-fit tw-px-3 tw-py-1 tw-rounded-lg">
+																		<Typography sx={{ color: '#7862AF' }}>
+																			Primary
+																		</Typography>
+																	</span>
+
+																	<Typography
+																		className="tw-col-span-2"
+																		sx={{ color: 'text.secondary' }}>
 																		{watch(
 																			`insured_person[${index}].first_name`
 																		)}{' '}
@@ -640,24 +752,44 @@ const Form = () => {
 																			rules={{
 																				required:
 																					'Please specify date of birth',
+																				valueAsDate: true,
 																			}}
 																			render={({
-																				field: { ref, ...field },
+																				field: {
+																					value,
+																					onChange,
+																					ref,
+																					...field
+																				},
 																				fieldState: { error, invalid },
 																			}) => (
-																				<DefaultInput
-																					{...field}
-																					ref={ref}
-																					error={invalid}
-																					helpertext={
-																						invalid ? error.message : null
-																					}
-																					label="Date of Birth"
-																					focused
-																					max={format(new Date(), 'yyyy-MM-dd')}
-																					type="date"
-																					required
-																				/>
+																				<FormControl error={invalid}>
+																					<LocalizationProvider
+																						dateAdapter={AdapterDateFns}>
+																						<DatePicker
+																							{...field}
+																							ref={ref}
+																							maxDate={new Date()}
+																							value={new Date(value)}
+																							onChange={(value) => {
+																								if (value !== null) {
+																									onChange(
+																										dayjs(value).format(
+																											'YYYY-MM-DD'
+																										)
+																									);
+																								} else {
+																									onChange('');
+																								}
+																							}}
+																							label="Date of Birth"
+																							format="MMM dd, yyyy"
+																						/>
+																					</LocalizationProvider>
+																					<FormHelperText>
+																						{invalid ? error.message : null}
+																					</FormHelperText>
+																				</FormControl>
 																			)}
 																		/>
 
@@ -759,65 +891,109 @@ const Form = () => {
 																		<Controller
 																			name={`insured_person[${index}].arrival_date`}
 																			control={control}
-																			defaultValue={watch('start_date')}
-																			rules={{ required: 'Date is required.' }}
+																			defaultValue={
+																				new Date(watch('start_date'))
+																			}
+																			rules={{
+																				required: 'Date is required.',
+																			}}
 																			render={({
-																				field: { ref, ...field },
+																				field: {
+																					value,
+																					onChange,
+																					ref,
+																					...field
+																				},
 																				fieldState: { error, invalid },
 																			}) => (
-																				<DefaultInput
-																					{...field}
-																					ref={ref}
-																					error={invalid}
-																					helpertext={
-																						invalid ? error.message : null
-																					}
-																					label="Arrival date in Ghana"
-																					type="date"
-																					disabled
-																					//required
-																				/>
+																				<FormControl error={invalid}>
+																					<LocalizationProvider
+																						dateAdapter={AdapterDateFns}>
+																						<DatePicker
+																							{...field}
+																							ref={ref}
+																							minDate={new Date()}
+																							value={new Date(value)}
+																							onChange={(value) => {
+																								if (value !== null) {
+																									onChange(
+																										dayjs(value).format(
+																											'YYYY-MM-DD'
+																										)
+																									);
+																								} else {
+																									onChange('');
+																								}
+																							}}
+																							label="Arrival date in Ghana"
+																							format="MMM dd, yyyy"
+																						/>
+																					</LocalizationProvider>
+																					<FormHelperText>
+																						{invalid ? error.message : null}
+																					</FormHelperText>
+																				</FormControl>
 																			)}
 																		/>
 																		<Controller
 																			name={`insured_person[${index}].departure_date`}
 																			control={control}
-																			defaultValue={watch('end_date')}
+																			defaultValue={new Date(watch('end_date'))}
 																			rules={{ required: 'Date is required.' }}
 																			render={({
-																				field: { ref, ...field },
+																				field: {
+																					value,
+																					onChange,
+																					ref,
+																					...field
+																				},
 																				fieldState: { error, invalid },
 																			}) => (
-																				<DefaultInput
-																					{...field}
-																					ref={ref}
-																					error={invalid}
-																					helpertext={
-																						invalid ? error.message : null
-																					}
-																					label="Departure date from Ghana"
-																					type="date"
-																					min={watch(
-																						`insured_person[${index}].arrival_date`
-																					)}
-																					/*
-																max={format(
-																	add(
-																		new Date(
-																			watch(
-																				`insured_person[${index}].arrival_date`
-																			)
-																		),
-																		{
-																			days: 90,
-																		}
-																	),
-																	'yyyy-MM-dd'
-																)}
-																*/
-																					disabled
-																					//required
-																				/>
+																				<FormControl error={invalid}>
+																					<LocalizationProvider
+																						dateAdapter={AdapterDateFns}>
+																						<DatePicker
+																							{...field}
+																							ref={ref}
+																							minDate={
+																								watch(
+																									`insured_person[${index}].arrival_date`
+																								)
+																									? new Date(
+																											watch(
+																												`insured_person[${index}].arrival_date`
+																											)
+																									  )
+																									: new Date()
+																							}
+																							maxDate={addDays(
+																								new Date(
+																									watch(
+																										`insured_person[${index}].arrival_date`
+																									)
+																								),
+																								180
+																							)}
+																							value={new Date(value)}
+																							onChange={(value) => {
+																								if (value !== null) {
+																									onChange(
+																										dayjs(value).format(
+																											'YYYY-MM-DD'
+																										)
+																									);
+																								} else {
+																									onChange('');
+																								}
+																							}}
+																							label="Departure date from Ghana"
+																							format="MMM dd, yyyy"
+																						/>
+																					</LocalizationProvider>
+																					<FormHelperText>
+																						{invalid ? error.message : null}
+																					</FormHelperText>
+																				</FormControl>
 																			)}
 																		/>
 																	</div>
@@ -926,17 +1102,34 @@ const Form = () => {
 																				field: { ref, ...field },
 																				fieldState: { error, invalid },
 																			}) => (
-																				<DefaultInput
-																					{...field}
-																					ref={ref}
-																					error={invalid}
-																					helpertext={
-																						invalid ? error.message : null
-																					}
-																					label="Phone Number"
-																					type="tel"
-																					required
-																				/>
+																				<FormControl error={invalid} required>
+																					<PhoneInput
+																						{...field}
+																						ref={ref}
+																						specialLabel="Phone number"
+																						placeholder="Phone number"
+																						searchStyle={{
+																							width: '90%',
+																							height: '40px',
+																						}}
+																						error={invalid}
+																						searchPlaceholder="Find country"
+																						inputStyle={{
+																							width: '100%',
+																							height: '55px',
+																							borderColor: invalid
+																								? 'red'
+																								: '#616B7D',
+																						}}
+																						excludeCountries={['gh']}
+																						country={'us'}
+																						countryCodeEditable={false}
+																						enableSearch={true}
+																					/>
+																					<FormHelperText>
+																						{invalid ? error.message : null}
+																					</FormHelperText>
+																				</FormControl>
 																			)}
 																		/>
 																	</div>
@@ -1084,17 +1277,34 @@ const Form = () => {
 																					field: { ref, ...field },
 																					fieldState: { error, invalid },
 																				}) => (
-																					<DefaultInput
-																						{...field}
-																						ref={ref}
-																						error={invalid}
-																						helpertext={
-																							invalid ? error.message : null
-																						}
-																						label="Phone Number"
-																						type="tel"
-																						required
-																					/>
+																					<FormControl error={invalid} required>
+																						<PhoneInput
+																							{...field}
+																							ref={ref}
+																							specialLabel="Phone number"
+																							placeholder="Phone number"
+																							searchStyle={{
+																								width: '90%',
+																								height: '40px',
+																							}}
+																							error={invalid}
+																							searchPlaceholder="Find country"
+																							inputStyle={{
+																								width: '100%',
+																								height: '55px',
+																								borderColor: invalid
+																									? 'red'
+																									: '#616B7D',
+																							}}
+																							excludeCountries={['gh']}
+																							country={'us'}
+																							countryCodeEditable={false}
+																							enableSearch={true}
+																						/>
+																						<FormHelperText>
+																							{invalid ? error.message : null}
+																						</FormHelperText>
+																					</FormControl>
 																				)}
 																			/>
 																		</div>
@@ -1172,36 +1382,54 @@ const Form = () => {
 																				field: { ref, ...field },
 																				fieldState: { error, invalid },
 																			}) => (
-																				<DefaultInput
-																					{...field}
-																					ref={ref}
+																				<FormControl
 																					error={invalid}
-																					helpertext={
-																						invalid ? error.message : null
-																					}
-																					label="Phone Number"
-																					type="tel"
-																					required
-																				/>
+																					sx={{ width: '100%' }}
+																					required>
+																					<PhoneInput
+																						{...field}
+																						ref={ref}
+																						specialLabel="Phone number"
+																						placeholder="Phone number"
+																						error={invalid}
+																						//searchPlaceholder="Find country"
+																						inputStyle={{
+																							width: '100%',
+																							height: '55px',
+																							borderColor: invalid
+																								? 'red'
+																								: '#616B7D',
+																						}}
+																						onlyCountries={['gh']}
+																						country={'gh'}
+																						countryCodeEditable={false}
+																						enableSearch={false}
+																					/>
+																					<FormHelperText>
+																						{invalid ? error.message : null}
+																					</FormHelperText>
+																				</FormControl>
 																			)}
 																		/>
 																	</div>
 																</div>
 
-																{/** Health Information Area */}
+																{/** Dependant Information Area */}
 																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-10 tw-flex tw-flex-col tw-justify-start tw-items-start">
 																	<div className="tw-w-full tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start">
 																		<h4 className="tw-w-full tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF]">
-																			Health Information
+																			{/* Health Information */} Dependants
+																			Information
 																		</h4>
 																		<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 tw-rounded-lg">
 																			<p className="tw-w-full tw-text-left tw-text-xs md:tw-text-sm">
-																				Please let us know if you have any
-																				pre-exixting health conditions and/or
-																				allergies to help us better serve you.
+																				Travelling with your family? You can add
+																				on your spouse and children here
 																			</p>
 																		</span>
 																	</div>
+
+																	{/**
 																	<div className="tw-w-full tw-grid tw-grid-cols-1 tw-gap-5">
 																		<Controller
 																			name={`insured_person[${index}].existing_conditions`}
@@ -1250,38 +1478,7 @@ const Form = () => {
 																				</FormControl>
 																			)}
 																		/>
-																		{/*
-																		<Controller
-																			name={`insured_person[${index}].existing_conditions`}
-																			control={control}
-																			defaultValue={''}
-																			render={({
-																				field: { ref, ...field },
-																				fieldState: { error, invalid },
-																			}) => (
-																				<SelectInput
-																					{...field}
-																					ref={ref}
-																					error={invalid}
-																					helpertext={
-																						invalid ? error.message : null
-																					}
-																					label="Pre-existing Medical Conditions"
-																					options={[
-																						{
-																							name: 'male',
-																							value: 'male',
-																						},
-																						{
-																							name: 'female',
-																							value: 'female',
-																						},
-																					]}
-																					required
-																				/>
-																			)}
-																		/>
-																		*/}
+																		
 																		<Controller
 																			name={`insured_person[${index}].allergies`}
 																			control={control}
@@ -1330,6 +1527,12 @@ const Form = () => {
 																			)}
 																		/>
 																	</div>
+																	 */}
+
+																	<DependantArray
+																		nestIndex={index}
+																		{...{ control, watch, setValue }}
+																	/>
 																</div>
 															</div>
 														</AccordionDetails>
@@ -1337,18 +1540,15 @@ const Form = () => {
 												))}
 											</div>
 
-											<div className="tw-w-full tw-flex tw-justify-end tw-items-start">
+											<div className="tw-w-full tw-flex tw-justify-start tw-items-start">
 												<div>
 													<div
 														onClick={() =>
 															append({
 																first_name: '',
 																last_name: '',
-																country: watch('country'),
+																country: '',
 																address: '',
-																postal_zip: '',
-																city: '',
-																state: '',
 															})
 														}
 														className="tw-group tw-cursor-pointer tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-2">
@@ -1356,13 +1556,14 @@ const Form = () => {
 															<IoAdd className="tw-text-base" />
 														</div>
 														<p className="tw-font-bold tw-text-sm tw-text-[#8e6abf]">
-															Add traveller
+															Add another traveller
 														</p>
 													</div>
 												</div>
 											</div>
 										</section>
 
+										{/**
 										<section className="tw-flex tw-flex-col tw-gap-10 tw-mt-20 tw-bg-white tw-border tw-border-b-black tw-rounded-lg tw-p-10">
 											<span className="tw-flex tw-flex-wrap xl:tw-flex-nowrap tw-justify-between tw-items-center tw-gap-2 xl:tw-gap-20">
 												<span className="tw-w-fit tw-relative tw-flex tw-justify-start tw-items-end tw-gap-1">
@@ -1638,6 +1839,7 @@ const Form = () => {
 												</div>
 											)}
 										</section>
+										 */}
 									</>
 								)}
 
@@ -1674,7 +1876,7 @@ const Form = () => {
 														}`} */
 														>
 															<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-pr-4">
-																<div className="tw-flex tw-justify-start tw-items-center tw-gap-5">
+																<div className="tw-flex tw-flex-col md:tw-flex-row tw-justify-start tw-items-start md:tw-items-center tw-gap-3 md:tw-gap-5">
 																	<h3 className="tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF]">
 																		Traveller {index + 1}
 																	</h3>
@@ -1741,7 +1943,9 @@ const Form = () => {
 																			date of birth
 																		</p>
 																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
-																			{person['dob']}
+																			{dayjs(person['dob']).format(
+																				'MMM DD, YYYY'
+																			)}
 																		</p>
 																	</div>
 																	<div>
@@ -1757,7 +1961,7 @@ const Form = () => {
 																			telephone
 																		</p>
 																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
-																			{person['telephone']}
+																			+{person['telephone']}
 																		</p>
 																	</div>
 																	<div>
@@ -1791,7 +1995,9 @@ const Form = () => {
 																			arrival date
 																		</p>
 																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
-																			{person['arrival_date']}
+																			{dayjs(person['arrival_date']).format(
+																				'MMM DD, YYYY'
+																			)}
 																		</p>
 																	</div>
 																	<div>
@@ -1799,7 +2005,9 @@ const Form = () => {
 																			departure date
 																		</p>
 																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
-																			{person['departure_date']}
+																			{dayjs(person['departure_date']).format(
+																				'MMM DD, YYYY'
+																			)}
 																		</p>
 																	</div>
 																	<div>
@@ -1849,7 +2057,7 @@ const Form = () => {
 																			phone number
 																		</p>
 																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
-																			{person['emergency_contact_telephone']}
+																			+{person['emergency_contact_telephone']}
 																		</p>
 																	</div>
 																	<div>
@@ -1899,6 +2107,7 @@ const Form = () => {
 																			phone number
 																		</p>
 																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
+																			+
 																			{
 																				person[
 																					'emergency_contact_ghana_telephone'
@@ -1909,36 +2118,95 @@ const Form = () => {
 																</div>
 															</div>
 
-															{/** Health Information Area */}
+															{/** Dependant Information Area */}
 
-															<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-[#171e41] tw-pb-4">
-																<h4 className="tw-w-full tw-pb-2 tw-border-b-2 tw-border-[#171e41] tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
-																	Health Information
-																</h4>
-																<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-5 tw-rounded-md tw-p-3">
-																	<div>
-																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
-																			Pre-existing Medical Conditions
-																		</p>
-																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
-																			{person['existing_conditions']}
-																		</p>
-																	</div>
-																	<div>
-																		<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
-																			allergies
-																		</p>
-																		<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
-																			{person['allergies']}
-																		</p>
-																	</div>
+															{person.dependants?.length > 0 ? (
+																<div className="tw-w-full tw-h-fit tw-p-2 tw-gap-3 tw-flex tw-flex-col tw-justify-start tw-items-start tw-border-[#171e41] tw-pb-4">
+																	<h4 className="tw-w-full tw-pb-2 tw-border-b-2 tw-border-[#171e41] tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41]">
+																		Dependants Information
+																	</h4>
+																	{person.dependants?.map(
+																		(dependant, index) => (
+																			<div
+																				key={index}
+																				className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 2xl:tw-grid-cols-3 tw-gap-5 tw-rounded-md tw-p-3 tw-border-b">
+																				<div>
+																					<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																						First name
+																					</p>
+																					<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
+																						{dependant['first_name']}
+																					</p>
+																				</div>
+																				<div>
+																					<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																						Last name
+																					</p>
+																					<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
+																						{dependant['last_name']}
+																					</p>
+																				</div>
+																				<div>
+																					<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																						Email
+																					</p>
+																					<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
+																						{dependant['email']}
+																					</p>
+																				</div>
+																				<div>
+																					<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																						Phone number
+																					</p>
+																					<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
+																						+{dependant['telephone']}
+																					</p>
+																				</div>
+																				<div>
+																					<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																						Date of Birth
+																					</p>
+																					<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
+																						{dayjs(dependant['dob']).format(
+																							'MMM DD, YYYY'
+																						)}
+																					</p>
+																				</div>
+																				<div>
+																					<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																						Gender
+																					</p>
+																					<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
+																						{dependant['gender']}
+																					</p>
+																				</div>
+																				<div>
+																					<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																						Passport number
+																					</p>
+																					<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
+																						{dependant['passport_number']}
+																					</p>
+																				</div>
+																				<div>
+																					<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">
+																						Relationship type
+																					</p>
+																					<p className="tw-font-medium tw-text-base tw-text-[#171e41]">
+																						{dependant['relationship_type']}
+																					</p>
+																				</div>
+																			</div>
+																		)
+																	)}
 																</div>
-															</div>
+															) : null}
 														</AccordionDetails>
 													</MuiAccordion>
 												))}
 											</div>
 
+											{/**
 											<div className="tw-w-full tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-6 tw-bg-white tw-border tw-border-b-black tw-rounded-lg tw-p-10">
 												<span className="tw-w-fit tw-relative tw-flex tw-justify-center tw-items-end tw-gap-1">
 													<h4 className="tw-font-title tw-font-medium tw-text-2xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
@@ -2019,12 +2287,71 @@ const Form = () => {
 													</div>
 												)}
 											</div>
+											 */}
+										</div>
+
+										<div className="tw-w-full tw-flex tw-flex-col tw-items-start tw-justify-start tw-gap-5 tw-bg-white tw-border tw-border-b-black tw-rounded-lg tw-py-3 tw-px-8 tw-shadow-md">
+											<h4 className="tw-w-full tw-pb-2 tw-border-b-2 tw-border-[#7862AF] tw-text-tw-left tw-font-title tw-font-medium tw-text-2xl tw-text-[#7862AF]">
+												Summary
+											</h4>
+
+											{prices.map((traveller, index) => {
+												subTotal +=
+													traveller?.price * traveller?.no_of_travellers;
+												return (
+													<div
+														key={index}
+														className="tw-w-full tw-flex tw-items-center tw-justify-between tw-gap-5 ">
+														<div className="tw-flex tw-justify-start tw-items-center tw-gap-2">
+															<span className="tw-capitalize tw-w-24 tw-font-normal tw-text-sm tw-text-gray-700 tw-pr-2 tw-border-r-2 tw-border-[#7862AF]">
+																Traveller {traveller?.traveller_no}
+															</span>
+
+															<p className="tw-text-base">
+																{Intl.NumberFormat('en-US', {
+																	style: 'currency',
+																	currency: 'USD',
+																}).format(traveller?.price)}{' '}
+																x {traveller?.no_of_travellers}
+															</p>
+														</div>
+
+														<div className="tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-1">
+															<span className="tw-relative tw-flex tw-justify-center tw-items-end tw-gap-1">
+																<p className="tw-text-base">
+																	{Intl.NumberFormat('en-US', {
+																		style: 'currency',
+																		currency: 'USD',
+																	}).format(
+																		traveller?.price *
+																			traveller?.no_of_travellers
+																	)}
+																</p>
+															</span>
+														</div>
+													</div>
+												);
+											})}
+
+											<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5 tw-pt-2 tw-border-t-2 tw-border-[#171e41]">
+												<span className="tw-capitalize tw-font-normal tw-text-lg tw-text-[#171e41]">
+													Sub Total
+												</span>
+
+												<h2 className="tw-font-medium tw-text-xl tw-text-[#7862AF] tw-flex tw-justify-center tw-items-end tw-gap-1">
+													{Intl.NumberFormat('en-US', {
+														style: 'currency',
+														currency: 'USD',
+													}).format(subTotal)}
+												</h2>
+											</div>
 										</div>
 
 										<div className="block ">
 											<Controller
 												control={control}
 												name={'terms_and_conditions'}
+												defaultValue={false}
 												rules={{
 													required: 'Please accept terms and conditions',
 												}}
@@ -2050,68 +2377,6 @@ const Form = () => {
 												)}
 											/>
 										</div>
-
-										<div className="tw-w-full tw-flex tw-items-center tw-justify-between tw-gap-5 tw-bg-white tw-border tw-border-b-black tw-rounded-lg tw-py-3 tw-px-10 tw-shadow-md">
-											<div className="tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-1">
-												<p className="tw-capitalize tw-font-normal tw-text-sm tw-text-gray-700 tw-border-b-2 tw-border-[#7862AF]">
-													Standard Plan
-												</p>
-
-												<p className="tw-text-lg">
-													{duration &&
-														Intl.NumberFormat('en-US', {
-															style: 'currency',
-															currency: 'USD',
-														}).format(
-															duration <= 30
-																? 45
-																: duration > 30 && duration <= 60
-																? 90 - 90 / 10
-																: duration > 60 && duration <= 90
-																? 135 - 135 / 15
-																: duration > 90 && duration <= 120
-																? 180 - 180 / 20
-																: duration > 120 && duration <= 150
-																? 225 - 225 / 25
-																: duration > 150 &&
-																  duration <= 180 &&
-																  270 - 270 / 30
-														)}{' '}
-													x {watch('insured_person').length}
-												</p>
-											</div>
-
-											<div className="tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-1">
-												<p className="tw-capitalize tw-font-normal tw-text-sm tw-text-gray-700 tw-border-b-2 tw-border-[#7862AF]">
-													Total
-												</p>
-
-												<span className="tw-relative tw-flex tw-justify-center tw-items-end tw-gap-1">
-													<h2 className="tw-font-title tw-font-bold tw-text-xl tw-text-[#171e41] tw-flex tw-justify-center tw-items-end tw-gap-1">
-														{duration &&
-															Intl.NumberFormat('en-US', {
-																style: 'currency',
-																currency: 'USD',
-															}).format(
-																(duration <= 30
-																	? 45
-																	: duration > 30 && duration <= 60
-																	? 90 - 90 / 10
-																	: duration > 60 && duration <= 90
-																	? 135 - 135 / 15
-																	: duration > 90 && duration <= 120
-																	? 180 - 180 / 20
-																	: duration > 120 && duration <= 150
-																	? 225 - 225 / 25
-																	: duration > 150 &&
-																	  duration <= 180 &&
-																	  270 - 270 / 30) *
-																	watch('insured_person').length
-															)}
-													</h2>
-												</span>
-											</div>
-										</div>
 									</section>
 								)}
 
@@ -2121,6 +2386,18 @@ const Form = () => {
 									</div>
 								</div>
 							</form>
+						</div>
+
+						{showMore && (
+							<div className="tw-block">
+								<Accordion questionsAnswers={planTabsData} />
+							</div>
+						)}
+
+						<div
+							onClick={handleShowDetails}
+							className="tw-font-bold tw-text-sm tw-bg-white tw-py-3 tw-px-6 tw-rounded-xl tw-shadow-sm tw-cursor-pointer tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-2 tw-mt-6 tw-transition-all tw-duration-500 tw-ease-in-out hover:tw-text-white tw-text-[#8e6abf] hover:tw-bg-[#8e6abf] hover:tw-shadow-lg hover:tw-shadow-[#8e6abf]/50">
+							{!showMore ? 'Show Plan Details' : 'Hide Plan Details'}
 						</div>
 					</div>
 				</div>
@@ -2138,8 +2415,185 @@ const Form = () => {
 
 				<div className="tw-hidden lg:tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-0 tw-bg-white tw-w-[30rem] tw-h-[85vh] tw-overflow-y-auto tw-sticky tw-top-32 tw-right-0 tw-px-10 tw-py-8">
 					<p className="tw-font-title tw-font-bold tw-uppercase tw-text-sm tw-text-gray-500 tw-flex tw-justify-center tw-items-end tw-gap-1">
-						best plan
+						summary
 					</p>
+
+					{watch('insured_person').map((traveller, index) => {
+						let travelDuration =
+							differenceInDays(
+								new Date(traveller.departure_date),
+								new Date(traveller.arrival_date)
+							) + 1;
+
+						return (
+							<div
+								key={index}
+								//data-aos="fade-up"
+								//data-aos-duration="1200"
+								className="tw-w-full tw-h-fit tw-p-3 tw-mb-4 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-4 tw-rounded-lg tw-border-2 tw-border-t-4 tw-border-t-[#8e6abf]">
+								<h2 className="tw-w-full tw-capitalize tw-font-title tw-font-semibold tw-text-xl tw-text-[#8e6abf] tw-flex tw-justify-start tw-items-end tw-gap-1 tw-pb-3 tw-border-b">
+									traveller {index + 1}
+								</h2>
+
+								<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-pb-3 tw-border-b">
+									<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-[#8e6abf] tw-flex tw-justify-start tw-items-end">
+										Traveller details
+									</h2>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
+											Country of Origin
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
+											{traveller.country}
+										</p>
+									</div>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
+											Effective Date
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
+											{dayjs(traveller.arrival_date).format('MMM DD, YYYY')}
+										</p>
+									</div>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
+											Expiry Date
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
+											{dayjs(traveller.departure_date).format('MMM DD, YYYY')}
+										</p>
+									</div>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+											Duration
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
+											{travelDuration} days
+										</p>
+									</div>
+									{traveller.dependants?.length > 0 ? (
+										<div className="tw-grid tw-grid-cols-2">
+											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+												Dependants
+											</div>
+											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
+												{traveller.dependants?.length}
+											</p>
+										</div>
+									) : null}
+								</div>
+								<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
+											Price
+										</div>
+										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-base tw-text-[#8e6abf] tw-font-bold">
+											{travelDuration > 30 ? (
+												<s>
+													{travelDuration &&
+														Intl.NumberFormat('en-US', {
+															style: 'currency',
+															currency: 'USD',
+														}).format(
+															travelDuration <= 30
+																? 45
+																: travelDuration > 30 && travelDuration <= 60
+																? 90
+																: travelDuration > 60 && travelDuration <= 90
+																? 135
+																: travelDuration > 90 && travelDuration <= 120
+																? 180
+																: travelDuration > 120 && travelDuration <= 150
+																? 225
+																: travelDuration > 150 &&
+																  travelDuration <= 180 &&
+																  270
+														)}
+												</s>
+											) : (
+												<>
+													{travelDuration &&
+														Intl.NumberFormat('en-US', {
+															style: 'currency',
+															currency: 'USD',
+														}).format(
+															travelDuration <= 30
+																? 45
+																: travelDuration > 30 && travelDuration <= 60
+																? 90
+																: travelDuration > 60 && travelDuration <= 90
+																? 135
+																: travelDuration > 90 && travelDuration <= 120
+																? 180
+																: travelDuration > 120 && travelDuration <= 150
+																? 225
+																: travelDuration > 150 &&
+																  travelDuration <= 180 &&
+																  270
+														)}
+												</>
+											)}{' '}
+											<p className="tw-text-gray-600 tw-font-light tw-text-xs">
+												/person
+											</p>
+										</span>
+									</div>
+									{travelDuration && travelDuration > 30 ? (
+										<>
+											<div className="tw-grid tw-grid-cols-2">
+												<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
+													Discount
+												</div>
+												<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+													{travelDuration > 30 && travelDuration <= 60
+														? '10'
+														: travelDuration > 60 && travelDuration <= 90
+														? '15'
+														: travelDuration > 90 && travelDuration <= 120
+														? '20'
+														: travelDuration > 120 && travelDuration <= 150
+														? '25'
+														: travelDuration > 150 &&
+														  travelDuration <= 180 &&
+														  '30'}{' '}
+													%
+												</span>
+											</div>
+											<div className="tw-grid tw-grid-cols-2">
+												<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
+													Total Price
+												</div>
+												<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
+													{travelDuration &&
+														Intl.NumberFormat('en-US', {
+															style: 'currency',
+															currency: 'USD',
+														}).format(
+															travelDuration > 30 && travelDuration <= 60
+																? 90 - 90 / 10
+																: travelDuration > 60 && travelDuration <= 90
+																? 135 - 135 / 15
+																: travelDuration > 90 && travelDuration <= 120
+																? 180 - 180 / 20
+																: travelDuration > 120 && travelDuration <= 150
+																? 225 - 225 / 25
+																: travelDuration > 150 &&
+																  travelDuration <= 180 &&
+																  270 - 270 / 30
+														)}{' '}
+													<p className="tw-text-gray-600 tw-font-light tw-text-xs">
+														/person
+													</p>
+												</span>
+											</div>
+										</>
+									) : null}
+								</div>
+							</div>
+						);
+					})}
+
+					{/**
 					<div
 						data-aos="fade-up"
 						data-aos-duration="1200"
@@ -2162,20 +2616,22 @@ const Form = () => {
 							</div>
 							<div className="tw-grid tw-grid-cols-2">
 								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
-									Coverage Starts
+									Effective Date
 								</div>
 								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
-									{basicData &&
-										format(new Date(basicData?.start_date), 'MMM dd, yyyy')}
+									{dayjs(watch(`insured_person[${0}].arrival_date`)).format(
+										'MMM DD, YYYY'
+									)}
 								</p>
 							</div>
 							<div className="tw-grid tw-grid-cols-2">
 								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
-									Coverage Ends
+									Expiry Date
 								</div>
 								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
-									{basicData &&
-										format(new Date(basicData?.end_date), 'MMM dd, yyyy')}
+									{dayjs(watch(`insured_person[${0}].departure_date`)).format(
+										'MMM DD, YYYY'
+									)}
 								</p>
 							</div>
 							<div className="tw-grid tw-grid-cols-2">
@@ -2183,11 +2639,10 @@ const Form = () => {
 									Duration
 								</div>
 								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
-									{basicData &&
-										differenceInDays(
-											new Date(basicData.end_date),
-											new Date(basicData.start_date)
-										) + 1}{' '}
+									{differenceInDays(
+										new Date(watch(`insured_person[${0}].departure_date`)),
+										new Date(watch(`insured_person[${0}].arrival_date`))
+									) + 1}{' '}
 									days
 								</p>
 							</div>
@@ -2305,40 +2760,7 @@ const Form = () => {
 							</p>
 						</a>
 					</div>
-					{showMore && (
-						<div className="tw-block">
-							<Accordion questionsAnswers={planTabsData} />
-						</div>
-					)}
-
-					<div
-						onClick={handleShowDetails}
-						className="tw-group tw-cursor-pointer tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-2 tw-pt-2 tw-mt-6">
-						<div className="tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-4 tw-w-4 tw-text-white tw-bg-[#8e6abf] group-hover:tw-shadow-lg group-hover:tw-shadow-[#8e6abf]/50">
-							{!showMore ? (
-								<IoAdd className="tw-text-sm" />
-							) : (
-								<BiMinus className="tw-text-sm" />
-							)}
-						</div>
-						<p className="tw-font-bold tw-text-sm tw-text-[#8e6abf]">
-							{!showMore ? 'Show details' : 'Hide details'}
-						</p>
-					</div>
-					<div
-						data-aos="fade-up"
-						data-aos-duration="1200"
-						data-aos-delay="100"
-						className="tw-mt-10 tw-w-full tw-h-fit tw-p-3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-4 tw-rounded-lg tw-border-2 tw-border-t-4 tw-border-t-[#8e6abf]">
-						<AiFillSafetyCertificate className="tw-text-6xl tw-text-[#8e6abf]" />
-						<h2 className="tw-font-title tw-font-semibold tw-text-xl tw-text-[#8e6abf] tw-flex tw-justify-start tw-items-end tw-gap-1">
-							Price Guarantee
-						</h2>
-						<p className="tw-text-xs tw-text-center tw-gray-400">
-							Insurance rates are regulated by law. You cannot find the same
-							insurance plan for a lower price anywhere else.
-						</p>
-					</div>
+					 */}
 				</div>
 			</div>
 		</>

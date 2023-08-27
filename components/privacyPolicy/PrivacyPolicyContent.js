@@ -7,7 +7,7 @@ const PrivacyPolicyContent = () => {
 			<div className="privacy-policy-area ptb-100">
 				<div className="container">
 					<div className="privacy-policy-content">
-						<h4>Thank you for visiting GSSP</h4>
+						<h4>Thank you for visiting GVHIP</h4>
 						<p>
 							We are committed to protecting your privacy and ensuring the
 							security of your personal information. This Privacy Policy

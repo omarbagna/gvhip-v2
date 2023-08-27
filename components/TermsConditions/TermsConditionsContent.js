@@ -8,7 +8,7 @@ const TermsConditionsContent = () => {
 					<div className="terms-conditions-content">
 						<h4>Definitions</h4>
 						<p>
-							We, us, and our refer to <strong>GSSP</strong>, the provider of
+							We, us, and our refer to <strong>GVHIP</strong>, the provider of
 							travel insurance services. You and your refer to the customer
 							purchasing travel insurance from our website. Policy refers to the
 							insurance contract between you and us. Coverage refers to the
