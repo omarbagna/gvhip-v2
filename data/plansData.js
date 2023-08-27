@@ -8,21 +8,22 @@ export const plans = [
 		features: [
 			'Emergency Medical Expenses up to $30,000',
 			'Medical Evacuation up to $100,000',
+			'Public Health Emergency of International Concern covered up to medical expenses',
+			'Prescription Medicines covered up to medical expenses',
 			'Repatriation up to $25,000',
 		],
 		tabsData: [
-			{
+			/*{
 				id: 1,
 				name: 'Benefits',
 				content: [
 					'Emergency Medical Expenses up to $30,000',
 					'Medical Evacuation up to $100,000',
-					'Repatriation up to $25,000',
 					'Public Health Emergency of International Concern covered up to medical expenses',
 					'Prescription Medicines covered up to medical expenses',
 					'Repatriation up to $25,000',
 				],
-			},
+			},*/
 			{
 				id: 2,
 				name: 'Exclusions',
@@ -60,21 +61,22 @@ export const plans = [
 		features: [
 			'Emergency Medical Expenses up to $30,000',
 			'Medical Evacuation up to $100,000',
+			'Public Health Emergency of International Concern covered up to medical expenses',
+			'Prescription Medicines covered up to medical expenses',
 			'Repatriation up to $25,000',
 		],
 		tabsData: [
-			{
+			/*{
 				id: 1,
 				name: 'Benefits',
 				content: [
 					'Emergency Medical Expenses up to $30,000',
 					'Medical Evacuation up to $100,000',
-					'Repatriation up to $25,000',
 					'Public Health Emergency of International Concern covered up to medical expenses',
 					'Prescription Medicines covered up to medical expenses',
 					'Repatriation up to $25,000',
 				],
-			},
+			},*/
 			{
 				id: 2,
 				name: 'Exclusions',
@@ -112,21 +114,22 @@ export const plans = [
 		features: [
 			'Emergency Medical Expenses up to $30,000',
 			'Medical Evacuation up to $100,000',
+			'Public Health Emergency of International Concern covered up to medical expenses',
+			'Prescription Medicines covered up to medical expenses',
 			'Repatriation up to $25,000',
 		],
 		tabsData: [
-			{
+			/*{
 				id: 1,
 				name: 'Benefits',
 				content: [
 					'Emergency Medical Expenses up to $30,000',
 					'Medical Evacuation up to $100,000',
-					'Repatriation up to $25,000',
 					'Public Health Emergency of International Concern covered up to medical expenses',
 					'Prescription Medicines covered up to medical expenses',
 					'Repatriation up to $25,000',
 				],
-			},
+			},*/
 			{
 				id: 2,
 				name: 'Exclusions',
@@ -163,10 +166,11 @@ export const plans = [
 		price: 180,
 		discount: 20,
 		features: [
-			'Emergency Medical Expenses up to $30,000',
-			'Medical Evacuation up to $100,000',
-			'Repatriation up to $25,000',
-		],
+		'Emergency Medical Expenses up to $30,000',
+					'Medical Evacuation up to $100,000',
+					'Public Health Emergency of International Concern covered up to medical expenses',
+					'Prescription Medicines covered up to medical expenses',
+					'Repatriation up to $25,000',],
 		tabsData: [
 			{
 				id: 1,
@@ -174,7 +178,6 @@ export const plans = [
 				content: [
 					'Emergency Medical Expenses up to $30,000',
 					'Medical Evacuation up to $100,000',
-					'Repatriation up to $25,000',
 					'Public Health Emergency of International Concern covered up to medical expenses',
 					'Prescription Medicines covered up to medical expenses',
 					'Repatriation up to $25,000',
@@ -215,10 +218,11 @@ export const plans = [
 		price: 225,
 		discount: 25,
 		features: [
-			'Emergency Medical Expenses up to $30,000',
-			'Medical Evacuation up to $100,000',
-			'Repatriation up to $25,000',
-		],
+		'Emergency Medical Expenses up to $30,000',
+					'Medical Evacuation up to $100,000',
+					'Public Health Emergency of International Concern covered up to medical expenses',
+					'Prescription Medicines covered up to medical expenses',
+					'Repatriation up to $25,000',],
 		tabsData: [
 			{
 				id: 1,
@@ -226,7 +230,6 @@ export const plans = [
 				content: [
 					'Emergency Medical Expenses up to $30,000',
 					'Medical Evacuation up to $100,000',
-					'Repatriation up to $25,000',
 					'Public Health Emergency of International Concern covered up to medical expenses',
 					'Prescription Medicines covered up to medical expenses',
 					'Repatriation up to $25,000',
@@ -267,10 +270,11 @@ export const plans = [
 		price: 270,
 		discount: 30,
 		features: [
-			'Emergency Medical Expenses up to $30,000',
-			'Medical Evacuation up to $100,000',
-			'Repatriation up to $25,000',
-		],
+		'Emergency Medical Expenses up to $30,000',
+					'Medical Evacuation up to $100,000',
+					'Public Health Emergency of International Concern covered up to medical expenses',
+					'Prescription Medicines covered up to medical expenses',
+					'Repatriation up to $25,000',],
 		tabsData: [
 			{
 				id: 1,
