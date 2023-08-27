@@ -15,7 +15,7 @@ module.exports = {
 		loader: 'akamai',
 		path:
 			process.env.NODE_ENV === 'production'
-				? 'https://gsti-test.netlify.app'
+				? 'https://gvhip-v2.netlify.app'
 				: 'http://localhost:3000',
 	},
 	optimizeFonts: false,
