@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import goalImg from '@/public/images/goal.png';
+import goalImg from '@/public/images/goal.webp';
 
 const Goal = () => {
 	return (

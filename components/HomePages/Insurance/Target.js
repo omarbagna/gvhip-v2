@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import manWithSon from '@/public/images/man-with-son.png';
+import manWithSon from '@/public/images/man-with-son.webp';
 
 const Target = () => {
 	return (

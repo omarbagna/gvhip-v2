@@ -2,7 +2,7 @@ import React from 'react';
 import Accordion from '@/components/Accordion';
 import Image from 'next/image';
 
-import faqImg3 from '@/public/images/faq2.png';
+import faqImg3 from '@/public/images/faq2.webp';
 
 const questionsAnswers = [
 	{

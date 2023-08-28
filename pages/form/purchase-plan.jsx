@@ -68,11 +68,12 @@ import dayjs from 'dayjs';
 import DependantArray from '@/components/Form/dependantArray';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
+import { toast } from 'react-toastify';
 
 const alertError = (title = null, text = null) => {
 	MySwal.fire({
 		title: title,
-		text: text,
+		html: text,
 		icon: 'error',
 		timer: 8000,
 		timerProgressBar: true,
@@ -86,10 +87,10 @@ const Form = () => {
 	//const router = useRouter();
 
 	const [formStep, setFormStep] = useState(1);
-	const [applicantType, setApplicantType] = useState('other');
+	//const [applicantType, setApplicantType] = useState('other');
 	const [basicData, setBasicData] = useState(null);
-	const [paymentAmount, setPaymentAmount] = useState(0);
-	const [paymentDiscount, setPaymentDiscount] = useState(0);
+	//const [paymentAmount, setPaymentAmount] = useState(0);
+	//const [paymentDiscount, setPaymentDiscount] = useState(0);
 	const [open, setOpen] = useState(1);
 	const [showMore, setShowMore] = useState(false);
 	const [prices, setPrices] = useState([]);
@@ -128,6 +129,7 @@ const Form = () => {
 		if (data !== null) setBasicData(JSON.parse(data));
 	}, []);
 
+	/*
 	const duration = basicData
 		? Number(
 				differenceInDays(
@@ -136,6 +138,7 @@ const Form = () => {
 				) + 1
 		  )
 		: null;
+	*/
 
 	let subTotal = 0;
 
@@ -163,7 +166,7 @@ const Form = () => {
 				},
 			],
 
-			applicant_type: 'other',
+			//: 'other',
 		},
 	});
 
@@ -248,6 +251,20 @@ const Form = () => {
 	};
 
 	useEffect(() => {
+		if (basicData) {
+			reset({
+				start_date: basicData.start_date,
+				end_date: basicData.end_date,
+				country: basicData.country,
+				insured_person: basicData.insured_person,
+
+				//applicant_type: 'other',
+			});
+		}
+	}, [reset, basicData]);
+
+	/*
+	useEffect(() => {
 		if (applicantType === 'self') {
 			setValue(
 				`applicant[${0}].first_name`,
@@ -278,42 +295,28 @@ const Form = () => {
 
 	useEffect(() => {
 		if (basicData) {
-			reset({
-				start_date: basicData.start_date,
-				end_date: basicData.end_date,
-				country: basicData.country,
-				insured_person: basicData.insured_person,
-
-				applicant_type: 'other',
-			});
-		}
-	}, [reset, basicData]);
-
-	useEffect(() => {
-		if (basicData) {
 			if (duration <= 30) {
-				setPaymentAmount(45 /* watch('insured_person').length*/);
+				setPaymentAmount(45);
 				setPaymentDiscount(0);
 			} else if (duration > 30 && duration <= 60) {
-				setPaymentAmount(90 - 90 / 10 /* watch('insured_person').length*/);
+				setPaymentAmount(90 - 90 / 10);
 				setPaymentDiscount(10);
 			} else if (duration > 60 && duration <= 90) {
-				setPaymentAmount(135 - 135 / 15 /* watch('insured_person').length*/);
+				setPaymentAmount(135 - 135 / 15);
 				setPaymentDiscount(15);
 			} else if (duration > 90 && duration <= 120) {
-				setPaymentAmount(180 - 180 / 20 /* watch('insured_person').length*/);
+				setPaymentAmount(180 - 180 / 20);
 				setPaymentDiscount(20);
 			} else if (duration > 120 && duration <= 150) {
-				setPaymentAmount(225 - 225 / 25 /* watch('insured_person').length*/);
+				setPaymentAmount(225 - 225 / 25);
 				setPaymentDiscount(25);
 			} else if (duration > 150 && duration <= 180) {
-				setPaymentAmount(270 - 270 / 30 /* watch('insured_person').length*/);
+				setPaymentAmount(270 - 270 / 30);
 				setPaymentDiscount(30);
 			}
 		}
 	}, [watch, duration, basicData]);
-
-	console.log(watch());
+	*/
 
 	const renderButton = () => {
 		if (formStep > 2) {
@@ -322,15 +325,11 @@ const Form = () => {
 			return (
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5">
 					<span
-						//size="lg"
 						className="btn-style-back crimson-color tw-w-10 tw-h-10 tw-rounded-full tw-flex tw-rotate-180 tw-shadow-md tw-justify-center tw-items-center tw-text-3xl"
-						onClick={goToPrevious}
-						//color="red"
-					>
+						onClick={goToPrevious}>
 						<i className="bx bx-chevron-right"></i>
 					</span>
 					<button
-						//size="lg"
 						className="btn-style-one dark-green-color"
 						//disabled={!isValid}
 						//onClick={goToNext}
@@ -343,7 +342,6 @@ const Form = () => {
 			return (
 				<div className="tw-w-full tw-flex tw-justify-end tw-items-center">
 					<button
-						//size="lg"
 						className="btn-style-one dark-green-color"
 						//disabled={!isValid}
 						onClick={() => {
@@ -358,24 +356,18 @@ const Form = () => {
 		} else {
 			return (
 				<div className="tw-w-full tw-flex tw-justify-center tw-items-center tw-tw-gap-5 tw-tw-mt-8">
-					<Button
-						//size="lg"
-						//className="tw-w-full"
-						onClick={goToPrevious}
-						//color="red"
-						//variant="outlined"
-						outlined
-						type="button">
-						back
-					</Button>
-					<Button
-						//size="lg"
-						//className="tw-w-full tw-bg-gradient-to-br from-[#7862AF] to-[#171E41]"
+					<span
+						className="btn-style-back crimson-color tw-w-10 tw-h-10 tw-rounded-full tw-flex tw-rotate-180 tw-shadow-md tw-justify-center tw-items-center tw-text-3xl"
+						onClick={goToPrevious}>
+						<i className="bx bx-chevron-right"></i>
+					</span>
+					<button
+						className="btn-style-one dark-green-color"
 						//disabled={!isValid}
-						onClick={goToNext}
-						type="button">
-						Next
-					</Button>
+						//onClick={goToNext}
+						type="submit">
+						Next <i className="bx bx-chevron-right"></i>
+					</button>
 				</div>
 			);
 		}
@@ -431,8 +423,18 @@ const Form = () => {
 		(paymentData) => paymentRequest(paymentData),
 		{
 			onSuccess: (data) => {
-				console.log('Success response ', data);
+				//console.log('Success response ', data);
 				if (data?.status === 201) {
+					toast('Redirecting', {
+						position: 'top-right',
+						autoClose: 6000,
+						hideProgressBar: false,
+						closeOnClick: false,
+						pauseOnHover: false,
+						draggable: false,
+						progress: undefined,
+						theme: 'light',
+					});
 					window.sessionStorage.clear();
 
 					window.location.replace(data?.checkoutUrl);
@@ -443,17 +445,29 @@ const Form = () => {
 				}
 			},
 			onError: (error) => {
-				console.log(error);
+				if (error?.response?.data?.errors) {
+					Object.values(error?.response?.data?.errors).map((value) => {
+						return toast.error(value[0]);
+					});
+				}
+
+				/*
 				alertError(
-					'Email exists',
-					'The email provided already exists or is a duplicate. Please check and try again'
+					'Submission Error',
+					Object.values(error?.response?.data?.errors).map((value, index) => {
+						return (
+							<p key={index}>
+								`${index + 1}. ${value}`<br />
+							</p>
+						);
+					})
 				);
+				*/
 			},
 		}
 	);
 
 	const submitForm = (data) => {
-		//console.log(data?.applicant[0]);
 		window.sessionStorage.setItem('basicData', JSON.stringify(data));
 
 		let insuredData = [];
@@ -494,28 +508,28 @@ const Form = () => {
 		const onboardingData = {
 			/*
 			name:
-				data?.applicant_type === 'company'
+				data?.// === 'company'
 					? data?.applicant[0]?.company_name
 					: data?.applicant[0]?.first_name,
 
 			first_name:
-				data?.applicant_type === 'company'
+				data?.// === 'company'
 					? data?.applicant[0]?.company_name
 					: data?.applicant[0]?.first_name,
 			last_name:
-				data?.applicant_type === 'company'
+				data?.// === 'company'
 					? data?.applicant[0]?.company_address
 					: data?.applicant[0]?.last_name,
 			email:
-				data?.applicant_type === 'company'
+				data?.// === 'company'
 					? data?.applicant[0]?.company_email
 					: data?.applicant[0]?.email,
 			telephone:
-				data?.applicant_type === 'company'
+				data?.// === 'company'
 					? data?.applicant[0]?.company_telephone
 					: data?.applicant[0]?.telephone,
 			country: data?.country,
-			applicant_type: data?.applicant_type,
+			//: data?.//,
 			*/
 			insured_person: insuredData,
 			total_price: subTotal,
@@ -528,14 +542,7 @@ const Form = () => {
 			*/
 		};
 
-		//console.log(onboardingData);
-
-		//makeTestPayment.mutate(onboardingData);
-		//makeTestPayment.mutate(testPayData);
-
-		makePayment.mutate(JSON.stringify(onboardingData));
-
-		//goToNext();
+		makePayment.mutate(onboardingData);
 	};
 
 	return (
@@ -1575,7 +1582,7 @@ const Form = () => {
 												</span>
 												<div className="tw-w-fit">
 													<Controller
-														name="applicant_type"
+														name="//"
 														control={control}
 														render={({
 															field: { onChange, ref, ...field },
@@ -1587,28 +1594,28 @@ const Form = () => {
 																	onChange(value);
 																	setApplicantType(value.target.value);
 																}}
-																name="applicant_type">
+																name="//">
 																<RadioGroup
 																	row
-																	defaultValue={watch('applicant_type')}
+																	defaultValue={watch('//')}
 																	name="radio-buttons-group"
 																	className="tw-w-fit tw-mt-3 lg:tw-mt-0">
 																	<FormControlLabel
-																		name="applicant_type"
+																		name="//"
 																		id="self"
 																		value="self"
 																		control={<Radio color="secondary" />}
 																		label="Self"
 																	/>
 																	<FormControlLabel
-																		name="applicant_type"
+																		name="//"
 																		id="other"
 																		value="other"
 																		control={<Radio color="secondary" />}
 																		label="Other"
 																	/>
 																	<FormControlLabel
-																		name="applicant_type"
+																		name="//"
 																		id="company"
 																		value="company"
 																		control={<Radio color="secondary" />}
@@ -1621,14 +1628,14 @@ const Form = () => {
 												</div>
 											</span>
 
-											{watch('applicant_type') === 'self' ||
-											watch('applicant_type') === 'other' ? (
+											{watch('//') === 'self' ||
+											watch('//') === 'other' ? (
 												<div className="tw-relative tw-w-full tw-h-full tw-flex tw-flex-col tw-gap-10 tw-justify-center tw-items-center">
 													<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-5">
 														<Controller
 															name={`applicant[${0}].first_name`}
 															defaultValue={
-																watch('applicant_type') === 'self'
+																watch('//') === 'self'
 																	? watch(`insured_person[0].first_name`)
 																	: ''
 															}
@@ -1653,7 +1660,7 @@ const Form = () => {
 														<Controller
 															name={`applicant[${0}].last_name`}
 															defaultValue={
-																watch('applicant_type') === 'self'
+																watch('//') === 'self'
 																	? watch(`insured_person[0].last_name`)
 																	: ''
 															}
@@ -2215,7 +2222,7 @@ const Form = () => {
 														Applicant Details
 													</h4>
 												</span>
-												{watch('applicant_type') !== 'company' ? (
+												{watch('//') !== 'company' ? (
 													<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-3">
 														<div>
 															<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-500">

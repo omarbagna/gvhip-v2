@@ -17,6 +17,9 @@ import '/styles/header.css';
 import '/styles/footer.css';
 import '/styles/responsive.css';
 import NextNProgress from 'nextjs-progressbar';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import ScrollToTop from '@/components/Layout/ScrollToTop';
 
@@ -40,6 +43,18 @@ function MyApp({ Component, pageProps }) {
 					<SessionProvider session={pageProps.session}>
 						<NextNProgress color="#8e6abf" height={5} />
 						<Component {...pageProps} />
+						<ToastContainer
+							position="top-right"
+							autoClose={10000}
+							hideProgressBar={false}
+							newestOnTop={false}
+							closeOnClick
+							rtl={false}
+							pauseOnFocusLoss
+							draggable
+							pauseOnHover
+							theme="colored"
+						/>
 					</SessionProvider>
 				</Hydrate>
 

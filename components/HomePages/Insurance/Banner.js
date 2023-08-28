@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import bannerImg4 from '@/public/images/banner/banner4.png';
+import bannerImg4 from '@/public/images/banner/banner4.webp';
 import shapeImg7 from '@/public/images/shape/shape7.png';
 import shapeImg6 from '@/public/images/shape/shape6.png';
 

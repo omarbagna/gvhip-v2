@@ -33,7 +33,8 @@ const DependantArray = ({ nestIndex, control, watch }) => {
 										? watch(
 												`insured_person[${nestIndex}].dependants[${i}].relationship_type`
 										  )
-										: 'Relationship Type'}
+										: 'Dependant'}{' '}
+									Details
 								</h4>
 
 								<div
