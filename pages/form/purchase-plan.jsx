@@ -2411,8 +2411,8 @@ const Form = () => {
 					{watch('insured_person').map((traveller, index) => {
 						let travelDuration =
 							differenceInDays(
-								new Date(traveller.departure_date),
-								new Date(traveller.arrival_date)
+								new Date(watch(`insured_person[${index}].departure_date`)),
+								new Date(watch(`insured_person[${index}].arrival_date`))
 							) + 1;
 
 						return (
@@ -2442,7 +2442,9 @@ const Form = () => {
 											Effective Date
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
-											{dayjs(traveller.arrival_date).format('MMM DD, YYYY')}
+											{dayjs(
+												watch(`insured_person[${index}].arrival_date`)
+											).format('MMM DD, YYYY')}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -2450,7 +2452,9 @@ const Form = () => {
 											Expiry Date
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-[#8e6abf] tw-font-bold">
-											{dayjs(traveller.departure_date).format('MMM DD, YYYY')}
+											{dayjs(
+												watch(`insured_person[${index}].departure_date`)
+											).format('MMM DD, YYYY')}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
