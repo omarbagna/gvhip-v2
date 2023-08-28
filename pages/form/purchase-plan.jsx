@@ -475,6 +475,7 @@ const Form = () => {
 		data?.insured_person.map((person, index) => {
 			return insuredData.push({
 				...person,
+				name: `${person?.first_name} ${person?.last_name}`,
 				price: prices[index]?.price,
 				discount: prices[index]?.discount,
 				duration: prices[index]?.duration,
