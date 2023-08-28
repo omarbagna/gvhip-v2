@@ -7,19 +7,11 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import logo from '@/public/images/gsti_logo.jpeg';
 import DefaultInput from '@/components/Input/DefaultInput';
 import SelectInput from '@/components/Input/SelectInput';
-import {
-	format,
-	differenceInDays,
-	addDays,
-	parseISO,
-	formatISO,
-	parse,
-	toDate,
-} from 'date-fns';
+import { differenceInDays, addDays } from 'date-fns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+//import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 const MySwal = withReactContent(Swal);
@@ -29,28 +21,16 @@ import {
 	AccordionDetails,
 	AccordionSummary,
 	Backdrop,
-	Button,
 	Checkbox,
 	CircularProgress,
 	FormControl,
 	FormControlLabel,
 	FormHelperText,
-	Radio,
-	RadioGroup,
 	Typography,
-	Select,
-	MenuItem,
-	ListItemText,
-	OutlinedInput,
-	InputLabel,
 } from '@mui/material';
 import Accordion from '@/components/Accordion';
 
-import {
-	BiMinus,
-	//BiCreditCardFront,
-	BiTime,
-} from 'react-icons/bi';
+import { BiTime } from 'react-icons/bi';
 import { BsGlobeEuropeAfrica } from 'react-icons/bs';
 //import { RiSecurePaymentLine } from 'react-icons/ri';
 //import axios from 'axios';
@@ -58,12 +38,12 @@ import { useMutation } from 'react-query';
 //import Button from '../../components/Button/Button';
 import { MdDelete, MdEdit, MdOutlineExpandMore } from 'react-icons/md';
 import { IoAdd } from 'react-icons/io5';
-import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
+//import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
 //import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
 import { planTabsData } from 'data/plansData';
-import axios, { axiosHubtel } from 'pages/api/axios';
+import axios from 'pages/api/axios';
 //import { useRouter } from 'next/router';
-import { allergies, conditions } from 'data/conditionsAndAllergies';
+//import { allergies, conditions } from 'data/conditionsAndAllergies';
 import dayjs from 'dayjs';
 import DependantArray from '@/components/Form/dependantArray';
 import PhoneInput from 'react-phone-input-2';
