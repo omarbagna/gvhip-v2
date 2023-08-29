@@ -44,6 +44,7 @@ const FindPolicy = () => {
 	const [policyHolder, setPolicyHolder] = useState(null);
 	const [notFound, setNotFound] = useState(false);
 	const [showScanner, setShowScanner] = useState(false);
+	const [triggerScanSearch, setTriggerScanSearch] = useState(false);
 
 	const { reset, control, handleSubmit, setValue } = useForm({
 		mode: 'all',
@@ -136,15 +137,20 @@ const FindPolicy = () => {
 				// ^ this will stop the scanner (video feed) and clear the scan area.
 				if (decodedText) {
 					setValue(`search_term`, decodedText);
-					document.getElementById('search-policy-button').click();
 				}
 				// ...
+				setTriggerScanSearch(true);
 				setShowScanner(false);
 			}
 
 			html5QrcodeScanner.render(onScanSuccess);
 		}
-	}, [showScanner, setValue]);
+
+		if (triggerScanSearch) {
+			document.getElementById('search-policy-button').click();
+			setTriggerScanSearch(false);
+		}
+	}, [showScanner, setValue, triggerScanSearch]);
 
 	const triggerDeclinePolicy = async (data) => {
 		const { data: response } = await axiosPrivate.put(
