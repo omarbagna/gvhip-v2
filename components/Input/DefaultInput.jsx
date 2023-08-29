@@ -17,6 +17,7 @@ const DefaultInput = (props) => {
 						{...props}
 						//ref={ref}
 						//value={value}
+
 						name={name}
 						error={error}
 						onChange={onChange}
@@ -33,6 +34,81 @@ const DefaultInput = (props) => {
 						</Typography>
 					)*/}
 				</div> /*: type === 'date' ? (
+				<LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
+					<DatePicker
+						{...props}
+						name={name}
+						type={type}
+						format="dd MMM yyyy"
+						//value={format(new Date(value), 'dd/MM/yyyy')}
+						onChange={onChange}
+						helperText={helpertext}
+						variant="outlined"
+						size="large"
+						fullWidth
+					/>
+				</LocalizationProvider>
+			)*/ /*: type === 'date' ? (
+				<LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
+					<DatePicker
+						{...props}
+						name={name}
+						type={type}
+						format="dd MMM yyyy"
+						//value={format(new Date(value), 'dd/MM/yyyy')}
+						onChange={onChange}
+						helperText={helpertext}
+						variant="outlined"
+						size="large"
+						fullWidth
+					/>
+				</LocalizationProvider>
+			)*/ /*: type === 'date' ? (
+				<LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
+					<DatePicker
+						{...props}
+						name={name}
+						type={type}
+						format="dd MMM yyyy"
+						//value={format(new Date(value), 'dd/MM/yyyy')}
+						onChange={onChange}
+						helperText={helpertext}
+						variant="outlined"
+						size="large"
+						fullWidth
+					/>
+				</LocalizationProvider>
+			)*/ /*: type === 'date' ? (
+				<LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
+					<DatePicker
+						{...props}
+						name={name}
+						type={type}
+						format="dd MMM yyyy"
+						//value={format(new Date(value), 'dd/MM/yyyy')}
+						onChange={onChange}
+						helperText={helpertext}
+						variant="outlined"
+						size="large"
+						fullWidth
+					/>
+				</LocalizationProvider>
+			)*/ /*: type === 'date' ? (
+				<LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
+					<DatePicker
+						{...props}
+						name={name}
+						type={type}
+						format="dd MMM yyyy"
+						//value={format(new Date(value), 'dd/MM/yyyy')}
+						onChange={onChange}
+						helperText={helpertext}
+						variant="outlined"
+						size="large"
+						fullWidth
+					/>
+				</LocalizationProvider>
+			)*/ /*: type === 'date' ? (
 				<LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
 					<DatePicker
 						{...props}

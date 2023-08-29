@@ -9,10 +9,19 @@ import DefaultInput from '@/components/Input/DefaultInput';
 import { BsQrCode } from 'react-icons/bs';
 import { useMutation } from 'react-query';
 //import { axiosPrivate } from 'pages/api/axios';
-import { Backdrop, CircularProgress, Skeleton, Stack } from '@mui/material';
+import {
+	Backdrop,
+	CircularProgress,
+	IconButton,
+	InputAdornment,
+	Skeleton,
+	Stack,
+	Tooltip,
+} from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useAxiosAuth from 'hooks/useAxiosAuth';
+import { BiQrScan } from 'react-icons/bi';
 const MySwal = withReactContent(Swal);
 
 const alert = (title = null, text = null, icon = null) => {
@@ -243,6 +252,20 @@ const FindPolicy = () => {
 											label="Passport Number/ Policy Number"
 											type="text"
 											required
+											InputProps={{
+												endAdornment: (
+													<InputAdornment position="end">
+														<Tooltip title="Scan QR Code">
+															<IconButton
+																aria-label="toggle scan code"
+																onClick={() => console.log('scan')}
+																edge="end">
+																<BiQrScan />
+															</IconButton>
+														</Tooltip>
+													</InputAdornment>
+												),
+											}}
 										/>
 									)}
 								/>
