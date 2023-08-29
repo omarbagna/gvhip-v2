@@ -20,6 +20,7 @@
 		"date-fns": "^2.30.0",
 		"dayjs": "^1.11.9",
 		"fslightbox-react": "^1.6.2-2",
+		"html5-qrcode": "^2.3.8",
 		"next": "^12.1.6",
 		"next-auth": "^4.15.1",
 		"nextjs-progressbar": "^0.0.16",

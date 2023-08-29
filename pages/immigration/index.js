@@ -22,6 +22,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useAxiosAuth from 'hooks/useAxiosAuth';
 import { BiQrScan } from 'react-icons/bi';
+import { Html5QrcodeScanner } from 'html5-qrcode';
 const MySwal = withReactContent(Swal);
 
 const alert = (title = null, text = null, icon = null) => {
@@ -41,8 +42,13 @@ const FindPolicy = () => {
 	const [declinePolicyModal, setDeclinePolicyModal] = useState(false);
 	const [policyHolder, setPolicyHolder] = useState(null);
 	const [notFound, setNotFound] = useState(false);
+	const [showScanner, setShowScanner] = useState(false);
 
-	const { reset, control, handleSubmit } = useForm({
+	const handleShowScanner = () => {
+		setShowScanner((prev) => !prev);
+	};
+
+	const { reset, control, handleSubmit, setValue } = useForm({
 		mode: 'all',
 		reValidateMode: 'onChange',
 		defaultValues: {
@@ -50,6 +56,27 @@ const FindPolicy = () => {
 			search_type: 'policy_no',
 		},
 	});
+
+	useEffect(() => {
+		if (showScanner) {
+			var html5QrcodeScanner = new Html5QrcodeScanner('reader', {
+				fps: 10,
+				qrbox: 300,
+			});
+
+			function onScanSuccess(decodedText, decodedResult) {
+				// Handle on success condition with the decoded text or result.
+				//console.log(`Scan result: ${decodedText}`, decodedResult);
+				setValue(`search_term`, decodedText);
+				// ...
+				html5QrcodeScanner.clear();
+				setShowScanner(false);
+				// ^ this will stop the scanner (video feed) and clear the scan area.
+			}
+
+			html5QrcodeScanner.render(onScanSuccess);
+		}
+	}, [showScanner, setValue]);
 
 	const {
 		watch: watchDecline,
@@ -258,7 +285,7 @@ const FindPolicy = () => {
 														<Tooltip title="Scan QR Code">
 															<IconButton
 																aria-label="toggle scan code"
-																onClick={() => console.log('scan')}
+																onClick={() => handleShowScanner()}
 																edge="end">
 																<BiQrScan />
 															</IconButton>
@@ -796,6 +823,26 @@ const FindPolicy = () => {
 					</span>
 				)}
 			</div>
+
+			{showScanner && (
+				<div
+					className="tw-w-screen tw-h-screen tw-fixed tw-top-0 tw-left-0 tw-z-50 tw-flex tw-justify-center tw-items-end tw-bg-black/40"
+					onClick={() => setShowScanner(false)}>
+					<div
+						data-aos="slide-up"
+						data-aos-duration="800"
+						onClick={(e) => e.stopPropagation()}
+						className="tw-w-5/6 tw-h-4/5 tw-rounded-t-2xl tw-p-8 tw-bg-white tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-10">
+						<h2 className="tw-font-medium tw-text-2xl md:tw-text-4xl tw-text-[#171e41] tw-flex tw-justify-start tw-items-start tw-gap-1">
+							Scan QR Code
+						</h2>
+
+						<div
+							className="tw-rounded-xl tw-w-2/3 tw-h-fit tw-overflow-hidden"
+							id="reader"></div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };

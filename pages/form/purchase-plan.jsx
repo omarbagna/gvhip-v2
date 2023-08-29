@@ -27,10 +27,13 @@ import {
 	FormControlLabel,
 	FormHelperText,
 	Typography,
+	InputAdornment,
+	Tooltip,
+	IconButton,
 } from '@mui/material';
 import Accordion from '@/components/Accordion';
 
-import { BiTime } from 'react-icons/bi';
+import { BiQrScan, BiTime } from 'react-icons/bi';
 import { BsGlobeEuropeAfrica } from 'react-icons/bs';
 //import { RiSecurePaymentLine } from 'react-icons/ri';
 //import axios from 'axios';
@@ -49,6 +52,7 @@ import DependantArray from '@/components/Form/dependantArray';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import { toast } from 'react-toastify';
+import { Html5QrcodeScanner } from 'html5-qrcode';
 
 const alertError = (title = null, text = null) => {
 	MySwal.fire({
