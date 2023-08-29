@@ -308,12 +308,12 @@ const Navbar4 = () => {
 																		<a className="nav-link">Features</a>
 																	</Link>
 																</li>
-																 */}
 																<li className="nav-item">
 																	<Link href="/team" activeClassName="active">
 																		<a className="nav-link">Team</a>
 																	</Link>
 																</li>
+																 */}
 																<li className="nav-item">
 																	<Link
 																		href="/pricing"
@@ -385,7 +385,7 @@ const Navbar4 = () => {
 															<ul className="megamenu-submenu">
 																<li className="nav-item">
 																	<Link
-																		href="/dashboard/manage-policy"
+																		href="/policy-holder/manage-policy"
 																		activeClassName="active">
 																		<a className="nav-link">
 																			Manage your Policy

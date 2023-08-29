@@ -1,26 +1,6 @@
 import React from 'react';
 import Accordion from '../Accordion';
-
-const questionsAnswers = [
-	{
-		question: 'What happens if I need to cancel my trip unexpectedly?',
-		answer:
-			'Our insurance does not covers non-refundable expenses like flights and accommodations in case of trip cancellations.',
-	},
-	{
-		question: 'What if I face a medical emergency while traveling?',
-		answer:
-			'Our coverage includes medical expenses, hospitalization, and medical evacuation if needed.',
-	},
-	{
-		question: 'What if my baggage is lost, stolen, or damaged during the trip?',
-		answer: `We do not provide coverage for replacement or reimbursement of personal belongings like clothes and electronics.`,
-	},
-	{
-		question: 'What if my flights are delayed significantly?',
-		answer: `Our insurance does not compensate for additional accommodation and meal expenses due to substantial travel delays.`,
-	},
-];
+import { questionsAnswers } from 'data/faqData';
 
 const Faq = ({ data = null }) => {
 	return (

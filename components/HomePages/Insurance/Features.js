@@ -17,10 +17,10 @@ const Features = () => {
 							<div className="icon">
 								<i className="flaticon-beach-umbrella"></i>
 							</div>
-							<h3 className="nunito-font">More Coverage</h3>
+							<h3 className="nunito-font">Wide Coverage</h3>
 							<p>
-								Comprehensive Medical Coverage tailored for our international
-								guests.
+								Our extensive network of healthcare providers spans across the
+								entire country.
 							</p>
 						</div>
 					</div>
@@ -35,7 +35,7 @@ const Features = () => {
 							</div>
 							<h3 className="nunito-font">Hassle Free</h3>
 							<p>
-								Efficient Claims Process to ensure you get the required support
+								Efficient claims processing ensures clients get required support
 								promptly.
 							</p>
 						</div>
@@ -50,9 +50,7 @@ const Features = () => {
 								<i className="flaticon-fast-time"></i>
 							</div>
 							<h3 className="nunito-font">Best Price</h3>
-							<p>
-								Clear and Fair Pricing based on your age and duration of stay.
-							</p>
+							<p>Clear and fair pricing based on industry best practice.</p>
 						</div>
 					</div>
 				</div>

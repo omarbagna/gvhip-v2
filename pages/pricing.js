@@ -1,9 +1,9 @@
 import React from 'react';
 import Navbar from '@/components/Layout/Navigations/Navbar4';
 import PricingContent from '@/components/Pricing/PricingContent';
-import Features from '@/components/Pricing/Features';
-import Faq from '@/components/Pricing/Faq';
-import TestimonialOne from '@/components/Testimonials/TestimonialOne';
+import Features from '@/components/HomePages/Insurance/Features';
+//import Faq from '@/components/Pricing/Faq';
+//import TestimonialOne from '@/components/Testimonials/TestimonialOne';
 import GetStarted from '@/components/Common/GetStarted';
 import FooterFour from '@/components/Layout/Footer/FooterFour';
 
@@ -21,9 +21,11 @@ const Pricing = () => {
 			</div>
 			<PricingContent />
 			<Features />
-			<TestimonialOne />
 			<GetStarted />
+			{/**
+			<TestimonialOne />
 			<Faq />
+			 */}
 			<FooterFour />
 		</>
 	);
