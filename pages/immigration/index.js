@@ -23,6 +23,7 @@ import withReactContent from 'sweetalert2-react-content';
 import useAxiosAuth from 'hooks/useAxiosAuth';
 import { BiQrScan } from 'react-icons/bi';
 import { Html5QrcodeScanner } from 'html5-qrcode';
+import { IoClose } from 'react-icons/io5';
 const MySwal = withReactContent(Swal);
 
 const alert = (title = null, text = null, icon = null) => {
@@ -44,10 +45,6 @@ const FindPolicy = () => {
 	const [notFound, setNotFound] = useState(false);
 	const [showScanner, setShowScanner] = useState(false);
 
-	const handleShowScanner = () => {
-		setShowScanner((prev) => !prev);
-	};
-
 	const { reset, control, handleSubmit, setValue } = useForm({
 		mode: 'all',
 		reValidateMode: 'onChange',
@@ -68,15 +65,27 @@ const FindPolicy = () => {
 				// Handle on success condition with the decoded text or result.
 				//console.log(`Scan result: ${decodedText}`, decodedResult);
 				html5QrcodeScanner.clear();
-				setValue(`search_term`, decodedText);
+				// ^ this will stop the scanner (video feed) and clear the scan area.
+				if (decodedText) {
+					setValue(`search_term`, decodedText);
+				}
 				// ...
 				setShowScanner(false);
-				// ^ this will stop the scanner (video feed) and clear the scan area.
 			}
 
 			html5QrcodeScanner.render(onScanSuccess);
 		}
 	}, [showScanner, setValue]);
+
+	const handleShowScanner = () => {
+		setShowScanner((prev) => !prev);
+	};
+	const handleCloseScanner = () => {
+		document.getElementById('html5-qrcode-button-camera-stop').click();
+		setTimeout(() => {
+			setShowScanner(false);
+		}, 1000);
+	};
 
 	const {
 		watch: watchDecline,
@@ -827,15 +836,23 @@ const FindPolicy = () => {
 			{showScanner && (
 				<div
 					className="tw-w-screen tw-h-screen tw-fixed tw-top-0 tw-left-0 tw-z-[99] tw-flex tw-justify-center tw-items-end tw-bg-black/40"
-					onClick={() => setShowScanner(false)}>
+					onClick={() => handleCloseScanner()}>
 					<div
 						data-aos="slide-up"
 						data-aos-duration="800"
 						onClick={(e) => e.stopPropagation()}
-						className="tw-w-5/6 tw-h-4/5 tw-rounded-t-2xl tw-p-4 md:tw-p-8 tw-bg-white tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-10">
-						<h2 className="tw-font-medium tw-text-2xl md:tw-text-4xl tw-text-[#171e41] tw-flex tw-justify-start tw-items-start tw-gap-1">
-							Scan QR Code
-						</h2>
+						className="tw-w-5/6 tw-h-[90vh] lg:tw-h-4/5 tw-rounded-t-2xl tw-p-4 md:tw-p-8 tw-bg-white tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-10">
+						<div className="tw-flex tw-w-full tw-justify-between tw-items-center">
+							<h2 className="tw-font-medium tw-text-2xl md:tw-text-4xl tw-text-[#171e41] tw-flex tw-justify-start tw-items-start tw-gap-1">
+								Scan QR Code
+							</h2>
+
+							<IconButton
+								aria-label="close scanner"
+								onClick={() => handleCloseScanner()}>
+								<IoClose className="tw-text-xl tw-text-[#8e6abf]" />
+							</IconButton>
+						</div>
 
 						<div
 							className="tw-rounded-xl tw-w-full md:tw-w-2/3 tw-h-fit tw-overflow-hidden"

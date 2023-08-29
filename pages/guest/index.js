@@ -134,7 +134,7 @@ const Dashboard = () => {
 											<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
 												<MdOutlinePolicy className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 												<p className="tw-text-sm tw-uppercase">
-													{person?.policy_no}
+													{person?.policy_number}
 												</p>
 											</span>
 										</span>
