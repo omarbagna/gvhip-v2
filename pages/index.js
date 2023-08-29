@@ -8,7 +8,7 @@ import Target from '@/components/HomePages/Insurance/Target';
 //import TestimonialThree from '@/components/Testimonials/TestimonialThree';
 //import Services from '@/components/HomePages/Insurance/Services';
 import Faq from '@/components/HomePages/Insurance/Faq';
-import JoinOurCommunity from '@/components/HomePages/Insurance/JoinOurCommunity';
+//import JoinOurCommunity from '@/components/HomePages/Insurance/JoinOurCommunity';
 import FooterFour from '@/components/Layout/Footer/FooterFour';
 
 export default function Index() {
