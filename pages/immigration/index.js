@@ -54,29 +54,6 @@ const FindPolicy = () => {
 		},
 	});
 
-	useEffect(() => {
-		if (showScanner) {
-			var html5QrcodeScanner = new Html5QrcodeScanner('reader', {
-				fps: 10,
-				qrbox: 300,
-			});
-
-			function onScanSuccess(decodedText, decodedResult) {
-				// Handle on success condition with the decoded text or result.
-				//console.log(`Scan result: ${decodedText}`, decodedResult);
-				html5QrcodeScanner.clear();
-				// ^ this will stop the scanner (video feed) and clear the scan area.
-				if (decodedText) {
-					setValue(`search_term`, decodedText);
-				}
-				// ...
-				setShowScanner(false);
-			}
-
-			html5QrcodeScanner.render(onScanSuccess);
-		}
-	}, [showScanner, setValue]);
-
 	const handleShowScanner = () => {
 		setShowScanner((prev) => !prev);
 	};
@@ -132,6 +109,7 @@ const FindPolicy = () => {
 	});
 
 	const submitSearchRequest = (data) => {
+		console.log(data);
 		setPolicyHolder(null);
 		setNotFound(false);
 		const searchData = data;
@@ -143,6 +121,30 @@ const FindPolicy = () => {
 
 		//router.push(`/form/purchase-plan`);
 	};
+
+	useEffect(() => {
+		if (showScanner) {
+			var html5QrcodeScanner = new Html5QrcodeScanner('reader', {
+				fps: 10,
+				qrbox: 300,
+			});
+
+			function onScanSuccess(decodedText, decodedResult) {
+				// Handle on success condition with the decoded text or result.
+				//console.log(`Scan result: ${decodedText}`, decodedResult);
+				html5QrcodeScanner.clear();
+				// ^ this will stop the scanner (video feed) and clear the scan area.
+				if (decodedText) {
+					setValue(`search_term`, decodedText);
+					document.getElementById('search-policy-button').click();
+				}
+				// ...
+				setShowScanner(false);
+			}
+
+			html5QrcodeScanner.render(onScanSuccess);
+		}
+	}, [showScanner, setValue]);
 
 	const triggerDeclinePolicy = async (data) => {
 		const { data: response } = await axiosPrivate.put(
@@ -282,6 +284,7 @@ const FindPolicy = () => {
 									}) => (
 										<DefaultInput
 											{...field}
+											id="search_term"
 											ref={ref}
 											error={invalid}
 											helpertext={invalid ? error.message : null}
@@ -307,6 +310,7 @@ const FindPolicy = () => {
 								/>
 
 								<button
+									id="search-policy-button"
 									className="btn-style-one dark-green-color"
 									type="submit">
 									Search
