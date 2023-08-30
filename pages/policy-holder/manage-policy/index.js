@@ -722,7 +722,13 @@ const ManagePolicy = () => {
 													rangeColors={['#8e6abf']}
 													minDate={
 														new Date(
-															USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.end_date
+															USER_DETAILS?.travelling_info
+																?.user_policy_transaction[0]?.extension_end_date
+																? USER_DETAILS?.travelling_info
+																		?.user_policy_transaction[0]
+																		?.extension_end_date
+																: USER_DETAILS?.travelling_info
+																		?.user_policy_transaction[0]?.end_date
 														)
 													}
 													maxDate={addDays(dateState[0].startDate, 179)}
@@ -738,7 +744,13 @@ const ManagePolicy = () => {
 													rangeColors={['#8e6abf']}
 													minDate={
 														new Date(
-															USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.end_date
+															USER_DETAILS?.travelling_info
+																?.user_policy_transaction[0]?.extension_end_date
+																? USER_DETAILS?.travelling_info
+																		?.user_policy_transaction[0]
+																		?.extension_end_date
+																: USER_DETAILS?.travelling_info
+																		?.user_policy_transaction[0]?.end_date
 														)
 													}
 													maxDate={addDays(dateState[0].startDate, 179)}
