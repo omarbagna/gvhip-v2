@@ -408,7 +408,7 @@ const Form = () => {
 		{
 			onSuccess: (data) => {
 				//console.log('Success response ', data);
-				if (data?.status === 201) {
+				if (data?.status === 200) {
 					toast('Redirecting', {
 						position: 'top-right',
 						autoClose: 6000,
