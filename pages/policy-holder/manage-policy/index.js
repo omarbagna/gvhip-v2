@@ -391,7 +391,7 @@ const ManagePolicy = () => {
 									</div>
 									{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 										?.extension_start_date ? (
-										<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-grid tw-grid-cols-2 tw-pt-3 tw-border-t">
 											<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 												Extension Starts
 											</div>
@@ -555,7 +555,7 @@ const ManagePolicy = () => {
 						data-aos="zoom-in"
 						data-aos-duration="600"
 						onClick={(e) => e.stopPropagation()}
-						className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 md:tw-w-2/3 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+						className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 tw-h-5/6 tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5 tw-overflow-y-auto">
 						<div className="tw-w-full tw-hidden md:tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b-2">
 							<h2 className="tw-w-full tw-font-medium tw-text-lg tw-text-[#524380] tw-flex tw-justify-start tw-items-end tw-pb-2 tw-border-b-2">
 								Current Policy Details
@@ -599,9 +599,23 @@ const ManagePolicy = () => {
 									days
 								</p>
 							</div>
+							<div className="tw-grid tw-grid-cols-2">
+								<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+									Price
+								</div>
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
+									{Intl.NumberFormat('en-US', {
+										style: 'currency',
+										currency: 'USD',
+									}).format(
+										USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+											?.price
+									)}
+								</p>
+							</div>
 							{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 								?.extension_start_date ? (
-								<div className="tw-grid tw-grid-cols-2">
+								<div className="tw-grid tw-grid-cols-2 tw-pt-3 tw-border-t">
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 										Extension Starts
 									</div>
@@ -647,20 +661,23 @@ const ManagePolicy = () => {
 									</p>
 								</div>
 							) : null}
-							<div className="tw-grid tw-grid-cols-2">
-								<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
-									Price
+							{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+								?.extension_price ? (
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+										Extension Price
+									</div>
+									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+										{Intl.NumberFormat('en-US', {
+											style: 'currency',
+											currency: 'USD',
+										}).format(
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+												?.extension_price
+										)}
+									</p>
 								</div>
-								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
-									{Intl.NumberFormat('en-US', {
-										style: 'currency',
-										currency: 'USD',
-									}).format(
-										USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-											?.price
-									)}
-								</p>
-							</div>
+							) : null}
 						</div>
 						<div className="tw-w-full">
 							<form onSubmit={handleSubmit(submitExtensionRequest)}>
@@ -671,7 +688,7 @@ const ManagePolicy = () => {
 										</h2>
 
 										<div className="tw-flex tw-justify-end tw-items-center tw-gap-2">
-											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+											<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-text-sm tw-text-gray-600">
 												Current Duration:
 											</div>
 											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
