@@ -129,7 +129,7 @@ const Profile = () => {
 	return (
 		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">
 			<DashboardNav />
-			<div className="tw-w-full tw-h-full tw-py-10 tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
+			<div className="tw-w-full tw-h-full tw-py-10 tw-px-6 md:tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
 				<h2 className="tw-text-2xl md:tw-text-3xl tw-font-semibold">
 					Applicant Profile
 				</h2>
