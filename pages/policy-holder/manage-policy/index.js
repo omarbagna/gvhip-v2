@@ -555,7 +555,7 @@ const ManagePolicy = () => {
 						data-aos="zoom-in"
 						data-aos-duration="600"
 						onClick={(e) => e.stopPropagation()}
-						className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 tw-h-5/6 tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5 tw-overflow-y-auto">
+						className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 tw-h-[95vh] tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-5 tw-overflow-y-auto">
 						<div className="tw-w-full tw-hidden md:tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b-2">
 							<h2 className="tw-w-full tw-font-medium tw-text-lg tw-text-[#524380] tw-flex tw-justify-start tw-items-end tw-pb-2 tw-border-b-2">
 								Current Policy Details
