@@ -16,7 +16,7 @@ export default withAuth(
 			(req.nextUrl.pathname.startsWith('/company') ||
 				req.nextUrl.pathname.startsWith('/guest') ||
 				req.nextUrl.pathname.startsWith('/policy-holder')) &&
-			req.nextauth.token?.user?.role === 'immigration'
+			req.nextauth.token?.user?.role === 'immigration_officer'
 		) {
 			return NextResponse.redirect(new URL('/immigration', req.url));
 		}

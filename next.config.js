@@ -12,11 +12,22 @@ module.exports = {
 		ignoreDuringBuilds: true,
 	},
 	images: {
+		domains: ['chart.googleapis.com', 'gvhip-v2.netlify.app', 'localhost:3000'],
+		/*
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: '**',
+				port: '',
+				pathname: '**',
+			},
+		],
 		loader: 'akamai',
 		path:
 			process.env.NODE_ENV === 'production'
 				? 'https://gvhip-v2.netlify.app'
 				: 'http://localhost:3000',
+				*/
 	},
 	optimizeFonts: false,
 };

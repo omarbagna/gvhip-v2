@@ -143,7 +143,7 @@ const DashboardNav = () => {
 					</div>
 				) : (
 					<div className="tw-h-fit lg:tw-h-full tw-fixed lg:tw-z-40 tw-bottom-0 lg:tw-top-20 tw-left-0 tw-flex lg:tw-flex-col tw-justify-center lg:tw-justify-start tw-items-center lg:tw-items-start tw-w-full lg:tw-w-fit tw-bg-white tw-border-t-2 lg:tw-border-t-0 lg:tw-border-r-2">
-						{session?.user?.user?.role !== 'immigration' ? (
+						{session?.user?.user?.role !== 'immigration_officer' ? (
 							<>
 								<Link
 									href={
@@ -192,7 +192,7 @@ const DashboardNav = () => {
 								</Link>
 							</>
 						) : (
-							session?.user?.user?.role === 'immigration' && (
+							session?.user?.user?.role === 'immigration_officer' && (
 								<>
 									<Link
 										href="/immigration"

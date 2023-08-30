@@ -169,10 +169,12 @@ const Profile = () => {
 											{USER_PROFILE?.email}
 										</p>
 									</span>
+									{/*
 									<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
 										<BsPhone className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
 										<p className="tw-text-sm">{USER_PROFILE?.telephone}</p>
 									</span>
+									 */}
 								</span>
 							</div>
 						</div>

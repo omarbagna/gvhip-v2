@@ -11,6 +11,8 @@ import { useSession } from 'next-auth/react';
 import { useQuery } from 'react-query';
 import useAxiosAuth from 'hooks/useAxiosAuth';
 import { MdOutlinePolicy } from 'react-icons/md';
+import dayjs from 'dayjs';
+import Image from 'next/image';
 //import { axiosPrivate } from 'pages/api/axios';
 
 const Dashboard = () => {
@@ -34,10 +36,10 @@ const Dashboard = () => {
 				setDateState([
 					{
 						startDate: new Date(
-							userData?.data?.travelling_info?.user_policy_transaction?.end_date
+							userData?.data?.travelling_info?.user_policy_transaction[0]?.end_date
 						),
 						endDate: addDays(
-							new Date(userData?.data?.travelling_info?.user_policy_transaction?.end_date),
+							new Date(userData?.data?.travelling_info?.user_policy_transaction[0]?.end_date),
 							30
 						),
 						key: 'selection',
@@ -72,10 +74,10 @@ const Dashboard = () => {
 						<div className="tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-3">
 							<Badge
 								color={
-									USER_DETAILS?.travelling_info?.user_policy_transaction
+									USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 										?.status === 'verified'
 										? 'success'
-										: USER_DETAILS?.travelling_info?.user_policy_transaction
+										: USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 												?.status === 'pending'
 										? 'warning'
 										: 'error'
@@ -86,7 +88,10 @@ const Dashboard = () => {
 								variant="dot"
 							/>
 							<p className="tw-capitalize">
-								{USER_DETAILS?.travelling_info?.user_policy_transaction?.status}
+								{
+									USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.status
+								}
 							</p>
 						</div>
 					)}
@@ -95,8 +100,19 @@ const Dashboard = () => {
 				{!userDetails.isLoading && USER_DETAILS && (
 					<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-5 tw-place-content-start tw-place-items-start">
 						<div className="tw-w-full tw-h-fit tw-bg-white tw-shadow-sm xl:tw-col-span-2 tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
-							<div className="tw-w-full tw-flex tw-justify-start tw-gap-4 tw-items-start">
-								<BsQrCode className="tw-text-5xl md:tw-text-7xl tw-shrink-0" />
+							<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
+								<h3 className="tw-font-semibold tw-text-lg md:tw-text-xl tw-text-[#8e6abf]">
+									Primary
+								</h3>
+							</div>
+							<div className="tw-w-full tw-flex tw-justify-start tw-gap-4 tw-border-y tw-py-3 tw-items-start">
+								{/*<BsQrCode className="tw-text-5xl md:tw-text-7xl tw-shrink-0" />*/}
+								<Image
+									src={USER_DETAILS?.travelling_info?.policy_qr_code}
+									alt="qr code"
+									height={150}
+									width={150}
+								/>
 								<div className="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-1">
 									<h3 className="tw-font-semibold tw-text-lg md:tw-text-xl tw-text-[#8e6abf]">
 										{USER_DETAILS?.travelling_info?.first_name}{' '}
@@ -124,23 +140,23 @@ const Dashboard = () => {
 										</div>
 										<p
 											className={`tw-capitalize tw-w-full tw-flex tw-justify-start tw-text-sm ${
-												USER_DETAILS?.travelling_info?.user_policy_transaction
-													?.status === 'verified'
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.status === 'verified'
 													? 'tw-text-green-600'
 													: USER_DETAILS?.travelling_info
-															?.user_policy_transaction?.status === 'pending'
+															?.user_policy_transaction[0]?.status === 'pending'
 													? 'tw-text-yellow-600'
 													: 'tw-text-red-600'
 											} tw-font-bold`}>
 											{
-												USER_DETAILS?.travelling_info?.user_policy_transaction
-													?.status
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.status
 											}
 										</p>
 									</div>
 								</div>
 							</div>
-							<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-t">
+							<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2">
 								<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
 									Bio Data
 								</h2>
@@ -165,9 +181,8 @@ const Dashboard = () => {
 										Date of Birth
 									</div>
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{format(
-											new Date(USER_DETAILS?.travelling_info?.dob),
-											'dd/MM/yyyy'
+										{dayjs(USER_DETAILS?.travelling_info?.dob).format(
+											'MMM DD, YYYY'
 										)}
 									</p>
 								</div>
@@ -192,11 +207,11 @@ const Dashboard = () => {
 										Telephone Number
 									</div>
 									<p className="tw-uppercase tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{USER_DETAILS?.travelling_info?.telephone}
+										+{USER_DETAILS?.travelling_info?.telephone}
 									</p>
 								</div>
 							</div>
-							{USER_DETAILS?.travelling_info?.user_policy_transaction
+							{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 								?.status === 'declined' && (
 								<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-t">
 									<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
@@ -208,17 +223,17 @@ const Dashboard = () => {
 										</div>
 										<p
 											className={`tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-sm ${
-												USER_DETAILS?.travelling_info?.user_policy_transaction
-													?.status === 'verified'
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.status === 'verified'
 													? 'tw-text-green-600'
 													: USER_DETAILS?.travelling_info
-															?.user_policy_transaction?.status === 'pending'
+															?.user_policy_transaction[0]?.status === 'pending'
 													? 'tw-text-yellow-600'
 													: 'tw-text-red-600'
 											} tw-font-bold`}>
 											{
-												USER_DETAILS?.travelling_info?.user_policy_transaction
-													?.status
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.status
 											}
 										</p>
 									</div>
@@ -228,8 +243,8 @@ const Dashboard = () => {
 										</div>
 										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 											{
-												USER_DETAILS?.travelling_info?.user_policy_transaction
-													?.reason
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.reason
 											}
 										</p>
 									</div>
@@ -238,39 +253,67 @@ const Dashboard = () => {
 						</div>
 
 						{USER_DETAILS?.dependants?.map((person, index) => {
-							if (index === 0) {
-								return null;
-							} else {
+							{
 								return (
 									<div
 										key={index}
 										className="tw-w-full tw-h-fit tw-bg-white tw-shadow-sm xl:tw-col-span-2 tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 										<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
-											<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
-												Traveller {index + 1}
+											<h3 className="tw-font-semibold tw-text-lg md:tw-text-xl tw-text-[#8e6abf]">
+												Dependant ({person?.relationship_type})
 											</h3>
-											<div className="tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-3">
-												<Badge
-													color={
-														person?.trip_status === 'verified'
-															? 'success'
-															: person?.trip_status === 'pending'
-															? 'warning'
-															: 'error'
-													}
-													className={'tw-animate-pulse'}
-													overlap="circular"
-													badgeContent=" "
-													variant="dot"
-												/>
-												<p className="tw-capitalize tw-text-sm">
-													{person?.trip_status}
-												</p>
+										</div>
+										<div className="tw-w-full tw-flex tw-justify-start tw-gap-4 tw-items-start tw-py-4 tw-border-y-2">
+											{/*<BsQrCode className="tw-text-5xl md:tw-text-7xl tw-shrink-0" />*/}
+											<Image
+												src={person?.policy_qr_code}
+												alt="qr code"
+												height={150}
+												width={150}
+											/>
+											<div className="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-1">
+												<h4 className="tw-font-semibold tw-text-lg tw-text-[#8e6abf]">
+													{person?.first_name} {person?.last_name}
+												</h4>
+												<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
+													<div className="tw-w-fit tw-shrink-0 tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+														Passport number:
+													</div>
+													<p className="tw-uppercase tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
+														{person?.passport_number}
+													</p>
+												</div>
+												<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
+													<div className="tw-w-fit tw-shrink-0 tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+														Policy number:
+													</div>
+													<p className="tw-uppercase tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
+														{person?.policy_number}
+													</p>
+												</div>
+												<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
+													<div className="tw-w-fit tw-shrink-0 tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+														Policy Status:
+													</div>
+													<p
+														className={`tw-capitalize tw-w-full tw-flex tw-justify-start tw-text-sm ${
+															person?.trip_status === 'verified'
+																? 'tw-text-green-600'
+																: person?.trip_status === 'pending'
+																? 'tw-text-yellow-600'
+																: 'tw-text-red-600'
+														} tw-font-bold`}>
+														{person?.trip_status}
+													</p>
+												</div>
 											</div>
 										</div>
 										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-gap-8">
 											<div className="tw-w-full tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-3">
-												<div className="tw-grid tw-grid-cols-2">
+												<h4 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
+													Bio Data
+												</h4>
+												<div className="tw-w-full tw-grid tw-grid-cols-2">
 													<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 														First name
 													</div>
@@ -278,7 +321,7 @@ const Dashboard = () => {
 														{person?.first_name}
 													</p>
 												</div>
-												<div className="tw-grid tw-grid-cols-2">
+												<div className="tw-w-full tw-grid tw-grid-cols-2">
 													<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 														Last name
 													</div>
@@ -286,7 +329,7 @@ const Dashboard = () => {
 														{person?.last_name}
 													</p>
 												</div>
-												<div className="tw-grid tw-grid-cols-2">
+												<div className="tw-w-full tw-grid tw-grid-cols-2">
 													<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 														Passport Number
 													</div>
@@ -294,7 +337,7 @@ const Dashboard = () => {
 														{person?.passport_number}
 													</p>
 												</div>
-												<div className="tw-grid tw-grid-cols-2">
+												<div className="tw-w-full tw-grid tw-grid-cols-2">
 													<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 														Policy Number
 													</div>
@@ -302,15 +345,15 @@ const Dashboard = () => {
 														{person?.policy_number}
 													</p>
 												</div>
-												<div className="tw-grid tw-grid-cols-2">
+												<div className="tw-w-full tw-grid tw-grid-cols-2">
 													<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 														Date of Birth
 													</div>
 													<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-														{format(new Date(person?.dob), 'dd/MM/yyyy')}
+														{dayjs(person?.dob).format('MMM DD, YYYY')}
 													</p>
 												</div>
-												<div className="tw-grid tw-grid-cols-2">
+												<div className="tw-w-full tw-grid tw-grid-cols-2">
 													<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 														Gender
 													</div>
@@ -318,12 +361,12 @@ const Dashboard = () => {
 														{person?.gender}
 													</p>
 												</div>
-												<div className="tw-grid tw-grid-cols-2">
+												<div className="tw-w-full tw-grid tw-grid-cols-2">
 													<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 														Telephone Number
 													</div>
 													<p className="tw-uppercase tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-														{person?.telephone}
+														+{person?.telephone}
 													</p>
 												</div>
 												{/** 
@@ -367,8 +410,8 @@ const Dashboard = () => {
 							<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 								<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
 									{
-										USER_DETAILS?.travelling_info?.user_policy_transaction
-											?.trip_policy?.plan_name
+										USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+											?.travel_plan?.plan_name
 									}
 								</h3>
 							</div>
@@ -389,12 +432,10 @@ const Dashboard = () => {
 										Effective Date
 									</div>
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{format(
-											new Date(
-												USER_DETAILS?.travelling_info?.user_policy_transaction?.start_date
-											),
-											'MMM dd, yyyy'
-										)}
+										{dayjs(
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+												?.start_date
+										).format('MMM DD, YYYY')}
 									</p>
 								</div>
 								<div className="tw-grid tw-grid-cols-2">
@@ -402,12 +443,10 @@ const Dashboard = () => {
 										Expiry Date
 									</div>
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{format(
-											new Date(
-												USER_DETAILS?.travelling_info?.user_policy_transaction?.end_date
-											),
-											'MMM dd, yyyy'
-										)}
+										{dayjs(
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+												?.end_date
+										).format('MMM DD, YYYY')}
 									</p>
 								</div>
 								<div className="tw-grid tw-grid-cols-2">
@@ -416,7 +455,7 @@ const Dashboard = () => {
 									</div>
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										{
-											USER_DETAILS?.travelling_info?.user_policy_transaction
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 												?.duration
 										}{' '}
 										days
@@ -424,40 +463,36 @@ const Dashboard = () => {
 								</div>
 							</div>
 							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b">
-								{USER_DETAILS?.travelling_info?.user_policy_transaction
+								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 									?.extension_start_date ? (
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 											Extension Starts
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{format(
-												new Date(
-													USER_DETAILS?.travelling_info?.user_policy_transaction?.extension_start_date
-												),
-												'MMM dd, yyyy'
-											)}
+											{dayjs(
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.extension_start_date
+											).format('MMM DD, YYYY')}
 										</p>
 									</div>
 								) : null}
 
-								{USER_DETAILS?.travelling_info?.user_policy_transaction
+								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 									?.extension_end_date ? (
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 											Extension Ends
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{format(
-												new Date(
-													USER_DETAILS?.travelling_info?.user_policy_transaction?.extension_end_date
-												),
-												'MMM dd, yyyy'
-											)}
+											{dayjs(
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.extension_end_date
+											).format('MMM DD, YYYY')}
 										</p>
 									</div>
 								) : null}
-								{USER_DETAILS?.travelling_info?.user_policy_transaction
+								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 									?.extension_duration ? (
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
@@ -465,8 +500,8 @@ const Dashboard = () => {
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 											{
-												USER_DETAILS?.travelling_info?.user_policy_transaction
-													?.extension_duration
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.extension_duration
 											}{' '}
 											days
 										</p>
@@ -480,7 +515,7 @@ const Dashboard = () => {
 											No of Travellers
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{USER_DETAILS?.dependants?.length}
+											{USER_DETAILS?.dependants?.length + 1}
 										</p>
 									</div>
 								)}
@@ -488,17 +523,17 @@ const Dashboard = () => {
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
 										Price
 									</div>
-									{USER_DETAILS?.travelling_info?.user_policy_transaction
+									{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 										?.extension_price ? (
 										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
 											{Intl.NumberFormat('en-US', {
 												style: 'currency',
 												currency: 'USD',
 											}).format(
-												USER_DETAILS?.travelling_info?.user_policy_transaction
-													?.price +
-													USER_DETAILS?.travelling_info?.user_policy_transaction
-														?.extension_price
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.price +
+													USER_DETAILS?.travelling_info
+														?.user_policy_transaction[0]?.extension_price
 											)}{' '}
 										</span>
 									) : (
@@ -509,10 +544,10 @@ const Dashboard = () => {
 											}).format(
 												USER_DETAILS?.dependants?.length > 0
 													? USER_DETAILS?.travelling_info
-															?.user_policy_transaction?.price *
+															?.user_policy_transaction[0]?.price *
 															USER_DETAILS?.dependants?.length
 													: USER_DETAILS?.travelling_info
-															?.user_policy_transaction?.price
+															?.user_policy_transaction[0]?.price
 											)}{' '}
 										</span>
 									)}

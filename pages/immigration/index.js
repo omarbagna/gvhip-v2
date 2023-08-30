@@ -24,6 +24,8 @@ import useAxiosAuth from 'hooks/useAxiosAuth';
 import { BiQrScan } from 'react-icons/bi';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { IoClose } from 'react-icons/io5';
+import dayjs from 'dayjs';
+import Image from 'next/image';
 const MySwal = withReactContent(Swal);
 
 const alert = (title = null, text = null, icon = null) => {
@@ -51,7 +53,7 @@ const FindPolicy = () => {
 		reValidateMode: 'onChange',
 		defaultValues: {
 			search_term: '',
-			search_type: 'policy_no',
+			search_type: 'policy_number',
 		},
 	});
 
@@ -187,7 +189,7 @@ const FindPolicy = () => {
 	const submitDeclinePolicy = (data) => {
 		const declineData = {
 			status: 'declined',
-			policy_no: policyHolder?.user_policy_transaction?.policy_no,
+			policy_number: policyHolder?.travelling_info?.policy_number,
 			reason: data.reason === 'other' ? data.desc : data.reason,
 		};
 
@@ -233,7 +235,7 @@ const FindPolicy = () => {
 
 		const verifyData = {
 			status: 'verified',
-			policy_no: policyHolder?.user_policy_transaction?.policy_no,
+			policy_number: policyHolder?.travelling_info?.policy_number,
 		};
 
 		verifyPolicy.mutate(verifyData);
@@ -269,7 +271,7 @@ const FindPolicy = () => {
 												label="Search by"
 												options={[
 													{ name: 'passport number', value: 'passport_number' },
-													{ name: 'policy number', value: 'policy_no' },
+													{ name: 'policy number', value: 'policy_number' },
 												]}
 												required
 											/>
@@ -331,8 +333,13 @@ const FindPolicy = () => {
 						<div className="tw-w-full tw-h-fit lg:tw-col-span-2 xl:tw-col-span-1  tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 							<div className="tw-w-full tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
 								<div className="tw-w-full tw-flex tw-justify-start tw-gap-4 tw-items-start">
-									<BsQrCode className="tw-text-5xl md:tw-text-7xl tw-shrink-0" />
-									<div className="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-1">
+									<Image
+										src={policyHolder?.travelling_info?.policy_qr_code}
+										alt="qr code"
+										height={120}
+										width={120}
+									/>
+									<div className="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-1 tw-pt-3">
 										<h3 className="tw-font-semibold tw-text-lg md:tw-text-xl tw-text-[#8e6abf]">
 											{policyHolder?.insured_person?.length > 0
 												? policyHolder?.insured_person[0]?.first_name
@@ -356,7 +363,7 @@ const FindPolicy = () => {
 												Policy number:
 											</div>
 											<p className="tw-uppercase tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
-												{policyHolder?.user_policy_transaction?.policy_no}
+												{policyHolder?.travelling_info?.policy_number}
 											</p>
 										</div>
 										{/*<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
@@ -398,14 +405,11 @@ const FindPolicy = () => {
 											Date of Birth
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{format(
-												new Date(
-													policyHolder?.insured_person?.length > 0
-														? policyHolder?.insured_person[0]?.dob
-														: policyHolder?.travelling_info?.dob
-												),
-												'dd/MM/yyyy'
-											)}
+											{dayjs(
+												policyHolder?.insured_person?.length > 0
+													? policyHolder?.insured_person[0]?.dob
+													: policyHolder?.travelling_info?.dob
+											).format('MMM DD, YYYY')}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -448,12 +452,10 @@ const FindPolicy = () => {
 											Effective Date
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{format(
-												new Date(
-													policyHolder?.user_policy_transaction?.start_date
-												),
-												'MMM dd, yyyy'
-											)}
+											{dayjs(
+												policyHolder?.travelling_info
+													?.user_policy_transaction[0]?.start_date
+											).format('MMM DD, YYYY')}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -461,12 +463,10 @@ const FindPolicy = () => {
 											Expiry Date
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{format(
-												new Date(
-													policyHolder?.user_policy_transaction?.end_date
-												),
-												'MMM dd, yyyy'
-											)}
+											{dayjs(
+												policyHolder?.travelling_info
+													?.user_policy_transaction[0]?.end_date
+											).format('MMM DD, YYYY')}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -474,7 +474,11 @@ const FindPolicy = () => {
 											Duration
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.user_policy_transaction?.duration} days
+											{
+												policyHolder?.travelling_info
+													?.user_policy_transaction[0]?.duration
+											}{' '}
+											days
 										</p>
 									</div>
 								</div>
@@ -485,8 +489,8 @@ const FindPolicy = () => {
 										</div>
 										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-sm tw-text-[#8e6abf] tw-font-bold">
 											{
-												policyHolder?.user_policy_transaction?.trip_policy
-													?.plan_name
+												policyHolder?.travelling_info
+													?.user_policy_transaction[0]?.travel_plan?.plan_name
 											}
 										</span>
 									</div>
@@ -499,14 +503,16 @@ const FindPolicy = () => {
 												style: 'currency',
 												currency: 'USD',
 											}).format(
-												policyHolder?.user_policy_transaction?.price
+												policyHolder?.travelling_info
+													?.user_policy_transaction[0]?.price
 											)}{' '}
 										</span>
 									</div>
 								</div>
 							</div>
 
-							{policyHolder?.user_policy_transaction?.status === 'pending' ? (
+							{policyHolder?.travelling_info?.user_policy_transaction[0]
+								?.status === 'pending' ? (
 								<>
 									<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5">
 										<span
@@ -537,7 +543,8 @@ const FindPolicy = () => {
 							) : null}
 						</div>
 
-						{policyHolder?.user_policy_transaction?.status !== 'pending' ? (
+						{policyHolder?.travelling_info?.user_policy_transaction[0]
+							?.status !== 'pending' ? (
 							<div className="tw-w-full tw-flex-col tw-justify-start tw-items-start tw-gap-3">
 								<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-3 tw-rounded-lg">
 									<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
@@ -546,12 +553,15 @@ const FindPolicy = () => {
 										</div>
 										<p
 											className={`tw-w-full tw-uppercase tw-flex tw-justify-end tw-text-base ${
-												policyHolder?.user_policy_transaction?.status ===
-												'verified'
+												policyHolder?.travelling_info
+													?.user_policy_transaction[0]?.status === 'verified'
 													? 'tw-text-green-600'
 													: 'tw-text-red-600'
 											}  tw-font-bold`}>
-											{policyHolder?.user_policy_transaction?.status}
+											{
+												policyHolder?.travelling_info
+													?.user_policy_transaction[0]?.status
+											}
 										</p>
 									</div>
 									<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
@@ -560,12 +570,8 @@ const FindPolicy = () => {
 										</div>
 										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
 											{
-												policyHolder?.user_policy_transaction?.status_updated_by
-													?.first_name
-											}{' '}
-											{
-												policyHolder?.user_policy_transaction?.status_updated_by
-													?.last_name
+												policyHolder?.travelling_info
+													?.user_policy_transaction[0]?.status_updated_by
 											}
 										</p>
 									</div>
@@ -575,26 +581,30 @@ const FindPolicy = () => {
 										</div>
 										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
 											{
-												policyHolder?.user_policy_transaction
-													?.status_update_date
+												policyHolder?.travelling_info
+													?.user_policy_transaction[0]?.status_update_date
 											}
 										</p>
 									</div>
-									{policyHolder?.user_policy_transaction?.reason && (
+									{policyHolder?.travelling_info?.user_policy_transaction[0]
+										?.reason && (
 										<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
 											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
 												Reason
 											</div>
 											<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
-												{policyHolder?.user_policy_transaction?.reason}
+												{
+													policyHolder?.travelling_info
+														?.user_policy_transaction[0]?.reason
+												}
 											</p>
 										</div>
 									)}
 								</div>
-								{/*policyHolder?.user_policy_transaction?.reason && (
+								{/*policyHolder?.travelling_info?.user_policy_transaction[0]?.reason && (
 									<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-4 tw-rounded-lg">
 										<p className="tw-w-fit tw-text-left tw-text-base">
-											{policyHolder?.user_policy_transaction?.reason}
+											{policyHolder?.travelling_info?.user_policy_transaction[0]?.reason}
 										</p>
 									</div>
 								)*/}

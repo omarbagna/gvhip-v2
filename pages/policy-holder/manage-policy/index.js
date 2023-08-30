@@ -23,6 +23,7 @@ import withReactContent from 'sweetalert2-react-content';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import useAxiosAuth from 'hooks/useAxiosAuth';
 import { AiOutlineFilePdf } from 'react-icons/ai';
+import dayjs from 'dayjs';
 //import { axiosPrivate } from 'pages/api/axios';
 const MySwal = withReactContent(Swal);
 
@@ -102,10 +103,10 @@ const ManagePolicy = () => {
 				setDateState([
 					{
 						startDate: new Date(
-							userData?.data?.user_policy_transaction?.end_date
+							userData?.data?.travelling_info?.user_policy_transaction[0]?.end_date
 						),
 						endDate: addDays(
-							new Date(userData?.data?.user_policy_transaction?.end_date),
+							new Date(userData?.data?.travelling_info?.user_policy_transaction[0]?.end_date),
 							30
 						),
 						key: 'selection',
@@ -133,17 +134,23 @@ const ManagePolicy = () => {
 				{
 					startDate: addDays(
 						new Date(
-							USER_DETAILS?.user_policy_transaction?.extension_end_date
-								? USER_DETAILS?.user_policy_transaction?.extension_end_date
-								: USER_DETAILS?.user_policy_transaction?.end_date
+							USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+								?.extension_end_date
+								? USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.extension_end_date
+								: USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.end_date
 						),
 						1
 					),
 					endDate: addDays(
 						new Date(
-							USER_DETAILS?.user_policy_transaction?.extension_end_date
-								? USER_DETAILS?.user_policy_transaction?.extension_end_date
-								: USER_DETAILS?.user_policy_transaction?.end_date
+							USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+								?.extension_end_date
+								? USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.extension_end_date
+								: USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.end_date
 						),
 						30
 					),
@@ -236,9 +243,12 @@ const ManagePolicy = () => {
 				format(
 					addDays(
 						new Date(
-							USER_DETAILS?.user_policy_transaction?.extension_end_date
-								? USER_DETAILS?.user_policy_transaction?.extension_end_date
-								: USER_DETAILS?.user_policy_transaction?.end_date
+							USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+								?.extension_end_date
+								? USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.extension_end_date
+								: USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.end_date
 						),
 						1
 					),
@@ -247,10 +257,33 @@ const ManagePolicy = () => {
 			)
 		);
 
+		let totalDuration =
+			Number(
+				differenceInDays(
+					new Date(dateState[0].endDate),
+					new Date(dateState[0].startDate)
+				) + 1
+			) +
+			Number(
+				USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.duration
+			) +
+			(USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+				?.extension_duration
+				? Number(
+						USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+							?.extension_duration
+				  )
+				: 0);
 		if (!rightExtensionStartDate) {
 			alert(
 				'Invalid Extension Start Date',
 				'Extension must start from a day after current coverage end date',
+				'error'
+			);
+		} else if (totalDuration >= 180) {
+			alert(
+				'Duration not Allowed',
+				'You can not extend your policy coverage to more than 180 days',
 				'error'
 			);
 		} else {
@@ -291,8 +324,8 @@ const ManagePolicy = () => {
 								<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
 									<h3 className="tw-font-medium tw-text-xl tw-text-[#8e6abf]">
 										{
-											USER_DETAILS?.user_policy_transaction?.trip_policy
-												?.plan_name
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+												?.travel_plan?.plan_name
 										}
 									</h3>
 								</div>
@@ -305,7 +338,7 @@ const ManagePolicy = () => {
 											Country of Origin
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{USER_DETAILS?.country}
+											{USER_DETAILS?.travelling_info?.country}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -313,12 +346,10 @@ const ManagePolicy = () => {
 											Effective Date
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{format(
-												new Date(
-													USER_DETAILS?.user_policy_transaction?.start_date
-												),
-												'MMM dd, yyyy'
-											)}
+											{dayjs(
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.start_date
+											).format('MMM DD, YYYY')}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -326,12 +357,10 @@ const ManagePolicy = () => {
 											Expiry Date
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{format(
-												new Date(
-													USER_DETAILS?.user_policy_transaction?.end_date
-												),
-												'MMM dd, yyyy'
-											)}
+											{dayjs(
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.end_date
+											).format('MMM DD, YYYY')}
 										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
@@ -339,50 +368,52 @@ const ManagePolicy = () => {
 											Duration
 										</div>
 										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{USER_DETAILS?.user_policy_transaction?.duration} days
+											{
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.duration
+											}{' '}
+											days
 										</p>
 									</div>
-									{USER_DETAILS?.user_policy_transaction
+									{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 										?.extension_start_date ? (
 										<div className="tw-grid tw-grid-cols-2">
 											<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 												Extension Starts
 											</div>
 											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-												{format(
-													new Date(
-														USER_DETAILS?.user_policy_transaction?.extension_start_date
-													),
-													'MMM dd, yyyy'
-												)}
+												{dayjs(
+													USER_DETAILS?.travelling_info
+														?.user_policy_transaction[0]?.extension_start_date
+												).format('MMM DD, YYYY')}
 											</p>
 										</div>
 									) : null}
 
-									{USER_DETAILS?.user_policy_transaction?.extension_end_date ? (
+									{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.extension_end_date ? (
 										<div className="tw-grid tw-grid-cols-2">
 											<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 												Extension Ends
 											</div>
 											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-												{format(
-													new Date(
-														USER_DETAILS?.user_policy_transaction?.extension_end_date
-													),
-													'MMM dd, yyyy'
-												)}
+												{dayjs(
+													USER_DETAILS?.travelling_info
+														?.user_policy_transaction[0]?.extension_end_date
+												).format('MMM DD, YYYY')}
 											</p>
 										</div>
 									) : null}
-									{USER_DETAILS?.user_policy_transaction?.extension_duration ? (
+									{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.extension_duration ? (
 										<div className="tw-grid tw-grid-cols-2">
 											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 												Extension Duration
 											</div>
 											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 												{
-													USER_DETAILS?.user_policy_transaction
-														?.extension_duration
+													USER_DETAILS?.travelling_info
+														?.user_policy_transaction[0]?.extension_duration
 												}{' '}
 												days
 											</p>
@@ -399,21 +430,33 @@ const ManagePolicy = () => {
 												style: 'currency',
 												currency: 'USD',
 											}).format(
-												USER_DETAILS?.user_policy_transaction?.extension_price
-													? USER_DETAILS?.user_policy_transaction?.price +
-															USER_DETAILS?.user_policy_transaction
-																?.extension_price
-													: USER_DETAILS?.user_policy_transaction?.price
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.extension_price
+													? USER_DETAILS?.travelling_info
+															?.user_policy_transaction[0]?.price +
+															USER_DETAILS?.travelling_info
+																?.user_policy_transaction[0]?.extension_price
+													: USER_DETAILS?.travelling_info
+															?.user_policy_transaction[0]?.price
 											)}{' '}
 										</span>
 									</div>
 								</div>
 							</div>
 
-							{USER_DETAILS?.user_policy_transaction?.extension_status !==
-								'extended' &&
-								USER_DETAILS?.user_policy_transaction?.status !==
-									'declined' && (
+							{(USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+								?.extension_duration
+								? Number(
+										USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+											?.extension_duration
+								  )
+								: 0 +
+								  Number(
+										USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+											?.duration
+								  )) < 180 &&
+								USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+									?.status !== 'declined' && (
 									<div className="tw-w-full tw-flex tw-justify-end tw-items-end">
 										<button
 											className="btn-style-one dark-green-color"
@@ -493,7 +536,9 @@ const ManagePolicy = () => {
 								</div>
 								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 									{format(
-										new Date(USER_DETAILS?.user_policy_transaction?.start_date),
+										new Date(
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.start_date
+										),
 										'MMM dd, yyyy'
 									)}
 								</p>
@@ -504,7 +549,9 @@ const ManagePolicy = () => {
 								</div>
 								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 									{format(
-										new Date(USER_DETAILS?.user_policy_transaction?.end_date),
+										new Date(
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.end_date
+										),
 										'MMM dd, yyyy'
 									)}
 								</p>
@@ -514,10 +561,15 @@ const ManagePolicy = () => {
 									Duration
 								</div>
 								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-									{USER_DETAILS?.user_policy_transaction?.duration} days
+									{
+										USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+											?.duration
+									}{' '}
+									days
 								</p>
 							</div>
-							{USER_DETAILS?.user_policy_transaction?.extension_start_date ? (
+							{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+								?.extension_start_date ? (
 								<div className="tw-grid tw-grid-cols-2">
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 										Extension Starts
@@ -525,7 +577,7 @@ const ManagePolicy = () => {
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										{format(
 											new Date(
-												USER_DETAILS?.user_policy_transaction?.extension_start_date
+												USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.extension_start_date
 											),
 											'MMM dd, yyyy'
 										)}
@@ -533,7 +585,8 @@ const ManagePolicy = () => {
 								</div>
 							) : null}
 
-							{USER_DETAILS?.user_policy_transaction?.extension_end_date ? (
+							{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+								?.extension_end_date ? (
 								<div className="tw-grid tw-grid-cols-2">
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 										Extension Ends
@@ -541,20 +594,24 @@ const ManagePolicy = () => {
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										{format(
 											new Date(
-												USER_DETAILS?.user_policy_transaction?.extension_end_date
+												USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.extension_end_date
 											),
 											'MMM dd, yyyy'
 										)}
 									</p>
 								</div>
 							) : null}
-							{USER_DETAILS?.user_policy_transaction?.extension_duration ? (
+							{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+								?.extension_duration ? (
 								<div className="tw-grid tw-grid-cols-2">
 									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 										Extension Duration
 									</div>
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{USER_DETAILS?.user_policy_transaction?.extension_duration}{' '}
+										{
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+												?.extension_duration
+										}{' '}
 										days
 									</p>
 								</div>
@@ -567,7 +624,10 @@ const ManagePolicy = () => {
 									{Intl.NumberFormat('en-US', {
 										style: 'currency',
 										currency: 'USD',
-									}).format(USER_DETAILS?.user_policy_transaction?.price)}
+									}).format(
+										USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+											?.price
+									)}
 								</p>
 							</div>
 						</div>
@@ -591,7 +651,7 @@ const ManagePolicy = () => {
 													rangeColors={['#8e6abf']}
 													minDate={
 														new Date(
-															USER_DETAILS?.user_policy_transaction?.end_date
+															USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.end_date
 														)
 													}
 													maxDate={addDays(dateState[0].startDate, 179)}
@@ -607,7 +667,7 @@ const ManagePolicy = () => {
 													rangeColors={['#8e6abf']}
 													minDate={
 														new Date(
-															USER_DETAILS?.user_policy_transaction?.end_date
+															USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.end_date
 														)
 													}
 													maxDate={addDays(dateState[0].startDate, 179)}
@@ -672,6 +732,32 @@ const ManagePolicy = () => {
 																? 225
 																: duration > 150 && duration <= 180 && 270
 														)}{' '}
+												</p>
+											</div>
+											<div className="tw-grid tw-grid-cols-2 tw-w-full tw-pb-2">
+												<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
+													Total Duration
+												</div>
+												<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#524380] tw-font-bold">
+													{Number(
+														differenceInDays(
+															new Date(dateState[0].endDate),
+															new Date(dateState[0].startDate)
+														) + 1
+													) +
+														Number(
+															USER_DETAILS?.travelling_info
+																?.user_policy_transaction[0]?.duration
+														) +
+														(USER_DETAILS?.travelling_info
+															?.user_policy_transaction[0]?.extension_duration
+															? Number(
+																	USER_DETAILS?.travelling_info
+																		?.user_policy_transaction[0]
+																		?.extension_duration
+															  )
+															: 0)}{' '}
+													days
 												</p>
 											</div>
 										</div>
