@@ -282,7 +282,7 @@ const ManagePolicy = () => {
 				'Extension must start from a day after current coverage end date',
 				'error'
 			);
-		} else if (totalDuration >= 180) {
+		} else if (totalDuration > 180) {
 			alert(
 				'Duration not Allowed',
 				'You can not extend your policy coverage to more than 180 days',
