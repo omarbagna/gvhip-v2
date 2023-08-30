@@ -15,6 +15,7 @@ import {
 	CircularProgress,
 	FormControlLabel,
 	FormHelperText,
+	IconButton,
 	Skeleton,
 	Stack,
 } from '@mui/material';
@@ -24,6 +25,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import useAxiosAuth from 'hooks/useAxiosAuth';
 import { AiOutlineFilePdf } from 'react-icons/ai';
 import dayjs from 'dayjs';
+import { IoClose } from 'react-icons/io5';
 //import { axiosPrivate } from 'pages/api/axios';
 const MySwal = withReactContent(Swal);
 
@@ -557,9 +559,16 @@ const ManagePolicy = () => {
 						onClick={(e) => e.stopPropagation()}
 						className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 tw-h-[95vh] tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-5 tw-overflow-y-auto">
 						<div className="tw-w-full tw-hidden md:tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b-2">
-							<h2 className="tw-w-full tw-font-medium tw-text-lg tw-text-[#524380] tw-flex tw-justify-start tw-items-end tw-pb-2 tw-border-b-2">
-								Current Policy Details
-							</h2>
+							<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-pb-2 tw-border-b-2">
+								<h2 className="tw-font-medium tw-text-lg tw-text-[#524380]">
+									Current Policy Details
+								</h2>
+								<IconButton
+									aria-label="close scanner"
+									onClick={() => setManagePolicy(false)}>
+									<IoClose className="tw-text-xl tw-text-[#8e6abf]" />
+								</IconButton>
+							</div>
 
 							<div className="tw-grid tw-grid-cols-2">
 								<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
