@@ -375,6 +375,20 @@ const ManagePolicy = () => {
 											days
 										</p>
 									</div>
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+											Price
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{Intl.NumberFormat('en-US', {
+												style: 'currency',
+												currency: 'USD',
+											}).format(
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.price
+											)}
+										</p>
+									</div>
 									{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 										?.extension_start_date ? (
 										<div className="tw-grid tw-grid-cols-2">
@@ -419,11 +433,28 @@ const ManagePolicy = () => {
 											</p>
 										</div>
 									) : null}
+									{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.extension_price ? (
+										<div className="tw-grid tw-grid-cols-2">
+											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+												Extension Price
+											</div>
+											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+												{Intl.NumberFormat('en-US', {
+													style: 'currency',
+													currency: 'USD',
+												}).format(
+													USER_DETAILS?.travelling_info
+														?.user_policy_transaction[0]?.extension_price
+												)}
+											</p>
+										</div>
+									) : null}
 								</div>
 								<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
-											Price
+											Total Price
 										</div>
 										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
 											{Intl.NumberFormat('en-US', {
@@ -634,9 +665,32 @@ const ManagePolicy = () => {
 						<div className="tw-w-full">
 							<form onSubmit={handleSubmit(submitExtensionRequest)}>
 								<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-pb-3">
-									<h2 className="tw-w-full tw-font-medium tw-text-lg tw-text-[#524380] tw-flex tw-justify-start tw-items-end">
-										Extension Period
-									</h2>
+									<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
+										<h2 className="tw-w-full tw-font-medium tw-text-lg tw-text-[#524380] tw-flex tw-justify-start tw-items-end">
+											Extension Period
+										</h2>
+
+										<div className="tw-flex tw-justify-end tw-items-center tw-gap-2">
+											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
+												Current Duration:
+											</div>
+											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
+												{Number(
+													USER_DETAILS?.travelling_info
+														?.user_policy_transaction[0]?.duration
+												) +
+													(USER_DETAILS?.travelling_info
+														?.user_policy_transaction[0]?.extension_duration
+														? Number(
+																USER_DETAILS?.travelling_info
+																	?.user_policy_transaction[0]
+																	?.extension_duration
+														  )
+														: 0)}{' '}
+												days
+											</p>
+										</div>
+									</div>
 
 									<div className="tw-w-full tw-h-fit tw-flex tw-flex-col lg:tw-flex-row tw-justify-center tw-gap-4 tw-items-center tw-border-y-2 tw-px-2 tw-py-3">
 										<div className="tw-w-full md:tw-w-fit tw-flex tw-justify-center lg:tw-justify-start tw-items-center tw-gap-2 tw-shrink-0">

@@ -461,6 +461,20 @@ const Dashboard = () => {
 										days
 									</p>
 								</div>
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+										Price
+									</div>
+									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+										{Intl.NumberFormat('en-US', {
+											style: 'currency',
+											currency: 'USD',
+										}).format(
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+												?.price
+										)}
+									</p>
+								</div>
 							</div>
 							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b">
 								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
@@ -507,6 +521,23 @@ const Dashboard = () => {
 										</p>
 									</div>
 								) : null}
+								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+									?.extension_price ? (
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+											Extension Price
+										</div>
+										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+											{Intl.NumberFormat('en-US', {
+												style: 'currency',
+												currency: 'USD',
+											}).format(
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.extension_price
+											)}
+										</p>
+									</div>
+								) : null}
 							</div>
 							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 								{USER_DETAILS?.dependants?.length > 1 && (
@@ -521,7 +552,7 @@ const Dashboard = () => {
 								)}
 								<div className="tw-grid tw-grid-cols-2">
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
-										Price
+										Total Price
 									</div>
 									{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 										?.extension_price ? (
