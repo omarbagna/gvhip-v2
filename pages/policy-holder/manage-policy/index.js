@@ -370,7 +370,7 @@ const ManagePolicy = () => {
 				total_price: subTotal,
 			};
 
-			//if (submitRequest) extendPolicy.mutate(finalExtensionData);
+			if (submitRequest) extendPolicy.mutate(finalExtensionData);
 		}
 	};
 
