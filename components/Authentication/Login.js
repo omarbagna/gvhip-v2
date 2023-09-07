@@ -32,7 +32,7 @@ const Login = () => {
 		mode: 'all',
 		reValidateMode: 'onChange',
 		defaultValues: {
-			email: '',
+			login: '',
 			password: '',
 		},
 	});
@@ -69,27 +69,29 @@ const Login = () => {
 					<form onSubmit={handleSubmit(logIn)}>
 						<Controller
 							control={control}
-							name={`email`}
+							name={`login`}
 							defaultValue={''}
 							rules={{
+								/*
 								pattern: {
 									value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/gi,
 									message: 'Please enter a valid email address',
 								},
-								required: 'Please enter your email',
+								*/
+								required: 'Please enter your email or policy number',
 							}}
 							render={({
 								field: { ref, ...field },
 								fieldState: { error, invalid },
 							}) => (
 								<div className="form-group">
-									<label>Email</label>
+									<label>Email or Policy Number</label>
 									<input
 										{...field}
 										ref={ref}
-										type="email"
+										type="text"
 										className="form-control"
-										placeholder="Email"
+										placeholder="Email or Policy Number"
 									/>
 									{invalid && (
 										<p className="tw-text-xs tw-text-red-400">

@@ -7,21 +7,21 @@ export default NextAuth({
 		CredentialsProvider({
 			name: 'Credentials',
 			credentials: {
-				email: {
-					label: 'Email',
-					type: 'email',
-					placeholder: 'email',
+				login: {
+					label: 'Email or Policy Number',
+					type: 'text',
+					placeholder: 'email or policy number',
 				},
 				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials) {
-				const { email, password } = credentials;
+				const { login, password } = credentials;
 
 				try {
 					const response = await axios.post(
 						'/login',
 						{
-							email: email,
+							login: login.replace(' ', ''),
 							password: password,
 						},
 						{

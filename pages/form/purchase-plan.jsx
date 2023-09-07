@@ -27,13 +27,10 @@ import {
 	FormControlLabel,
 	FormHelperText,
 	Typography,
-	InputAdornment,
-	Tooltip,
-	IconButton,
 } from '@mui/material';
 import Accordion from '@/components/Accordion';
 
-import { BiQrScan, BiTime } from 'react-icons/bi';
+import { BiTime } from 'react-icons/bi';
 import { BsGlobeEuropeAfrica } from 'react-icons/bs';
 //import { RiSecurePaymentLine } from 'react-icons/ri';
 //import axios from 'axios';
@@ -52,7 +49,6 @@ import DependantArray from '@/components/Form/dependantArray';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import { toast } from 'react-toastify';
-import { Html5QrcodeScanner } from 'html5-qrcode';
 
 const alertError = (title = null, text = null) => {
 	MySwal.fire({
@@ -223,10 +219,7 @@ const Form = () => {
 		} else {
 			//scrollIntoViewHelper(errors);
 
-			alertError(
-				'Fill all Required Fields',
-				'Some required fields have not been filled on the form, please fill them in and try again'
-			);
+			toast.error('Please fill all required fields');
 		}
 	};
 
@@ -241,66 +234,9 @@ const Form = () => {
 				end_date: basicData.end_date,
 				country: basicData.country,
 				insured_person: basicData.insured_person,
-
-				//applicant_type: 'other',
 			});
 		}
 	}, [reset, basicData]);
-
-	/*
-	useEffect(() => {
-		if (applicantType === 'self') {
-			setValue(
-				`applicant[${0}].first_name`,
-				watch(`insured_person[${0}].first_name`),
-				{ shouldValidate: true }
-			);
-			setValue(
-				`applicant[${0}].last_name`,
-				watch(`insured_person[${0}].last_name`),
-				{ shouldValidate: true }
-			);
-			setValue(`applicant[${0}].email`, watch(`insured_person[${0}].email`), {
-				shouldValidate: true,
-			});
-			setValue(
-				`applicant[${0}].telephone`,
-				watch(`insured_person[${0}].telephone`),
-				{ shouldValidate: true }
-			);
-		}
-		if (applicantType === 'other' || applicantType === 'company') {
-			setValue(`applicant[${0}].first_name`, '');
-			setValue(`applicant[${0}].last_name`, '');
-			setValue(`applicant[${0}].telephone`, '');
-			setValue(`applicant[${0}].email`, '');
-		}
-	}, [watch, setValue, applicantType]);
-
-	useEffect(() => {
-		if (basicData) {
-			if (duration <= 30) {
-				setPaymentAmount(45);
-				setPaymentDiscount(0);
-			} else if (duration > 30 && duration <= 60) {
-				setPaymentAmount(90 - 90 / 10);
-				setPaymentDiscount(10);
-			} else if (duration > 60 && duration <= 90) {
-				setPaymentAmount(135 - 135 / 15);
-				setPaymentDiscount(15);
-			} else if (duration > 90 && duration <= 120) {
-				setPaymentAmount(180 - 180 / 20);
-				setPaymentDiscount(20);
-			} else if (duration > 120 && duration <= 150) {
-				setPaymentAmount(225 - 225 / 25);
-				setPaymentDiscount(25);
-			} else if (duration > 150 && duration <= 180) {
-				setPaymentAmount(270 - 270 / 30);
-				setPaymentDiscount(30);
-			}
-		}
-	}, [watch, duration, basicData]);
-	*/
 
 	const renderButton = () => {
 		if (formStep > 2) {
@@ -360,43 +296,6 @@ const Form = () => {
 	const handleOpen = (value) => {
 		setOpen(open === value ? 0 : value);
 	};
-
-	/*
-	const testPayData = JSON.stringify({
-		invoice_number: `IN${Math.random().toString(36).substring(2, 10)}`,
-		amount: '1',
-		description: 'INSURANCE PLAN PURCHASE',
-		redirect_url: 'https://gsti-test.netlify.app/authentication',
-		callback_url: 'https://gsti-test.netlify.app/authentication',
-	});
-
-	const testPaymentRequest = async (data) => {
-		const { data: response } = await axiosHubtel.post(
-			'/rx-hubtel-pay.php',
-			data
-		);
-		return response;
-	};
-
-	const makeTestPayment = useMutation(
-		(paymentTestData) => testPaymentRequest(paymentTestData),
-
-		{
-			onSuccess: (data) => {
-				console.log('Success response ', data);
-				if (data?.status === 'Success') {
-					//window.sessionStorage.clear();
-					//router.push(`/authentication`);
-					window.location.replace(data?.data?.checkoutUrl);
-					//console.log(data);
-				}
-			},
-			onError: (error) => {
-				console.log(error);
-			},
-		}
-	);
-	*/
 
 	const paymentRequest = async (data) => {
 		const { data: response } = await axios.post('/register', data);
@@ -465,30 +364,6 @@ const Form = () => {
 				duration: prices[index]?.duration,
 			});
 		});
-
-		/*
-		const formData = JSON.stringify({
-			method: 'REQUEST_PAYMENT',
-			api_key: 'd37e4e08a0fc40b39abf5ce36a8d70c75fe05b83',
-			user: 'mobile',
-			firstname: data?.applicant[0]?.first_name
-				? data?.applicant[0]?.first_name
-				: data?.applicant[0]?.company_name,
-			surname: data?.applicant[0]?.last_name
-				? data?.applicant[0]?.last_name
-				: data?.applicant[0]?.company_address,
-			contact_number: data?.applicant[0]?.telephone
-				? data?.applicant[0]?.telephone
-				: data?.applicant[0]?.company_telephone,
-			email: data?.applicant[0]?.email
-				? data?.applicant[0]?.email
-				: data?.applicant[0]?.company_email,
-			amount: paymentAmount,
-			request_id: Math.random().toString(36).substring(2, 12),
-			redirect_url: 'https://gsti-test.netlify.app/authentication',
-			callback_url: 'https://gsti-test.netlify.app/',
-		});
-		*/
 
 		const onboardingData = {
 			/*

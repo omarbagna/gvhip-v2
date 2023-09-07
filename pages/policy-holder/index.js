@@ -1,27 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
-import { Badge, Skeleton, Stack } from '@mui/material';
-import { format, parseISO } from 'date-fns';
-import { HiOutlineLocationMarker, HiOutlineMail } from 'react-icons/hi';
-import { BsPhone, BsQrCode } from 'react-icons/bs';
-import { useSession } from 'next-auth/react';
+import { Badge, IconButton, Skeleton, Stack, Tooltip } from '@mui/material';
+//import { format, parseISO } from 'date-fns';
+//import { HiOutlineLocationMarker, HiOutlineMail } from 'react-icons/hi';
+//import { BsPhone, BsQrCode } from 'react-icons/bs';
+//import { useSession } from 'next-auth/react';
 //import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import useAxiosAuth from 'hooks/useAxiosAuth';
-import { MdOutlinePolicy } from 'react-icons/md';
+//import { MdOutlinePolicy } from 'react-icons/md';
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import { TbEye } from 'react-icons/tb';
+import { IoClose } from 'react-icons/io5';
+import { differenceInDays } from 'date-fns';
 //import { axiosPrivate } from 'pages/api/axios';
 
 const Dashboard = () => {
 	const axiosPrivate = useAxiosAuth();
 	//const router = useRouter();
-
-	const { status, data } = useSession();
-
-	console.log(status, data);
+	const [histories, setHistories] = useState(null);
+	const [showExtensionHistory, setShowExtensionHistory] = useState(false);
 
 	const getUserDetails = async () => {
 		const response = await axiosPrivate.get('/account/dashboard');
@@ -52,9 +53,8 @@ const Dashboard = () => {
 			toast.error(`${error?.response?.data?.STATUSMSG}`);
 			//logout();
 		},
-		*/
-
 		staleTime: 500000,
+		*/
 	});
 
 	const USER_DETAILS = userDetails?.data?.data?.data
@@ -62,7 +62,7 @@ const Dashboard = () => {
 		: null;
 
 	return (
-		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">
+		<div className="tw-max-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56">
 			<DashboardNav />
 			<div className="tw-w-full tw-h-full tw-py-10 tw-px-6 md:tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
 				<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
@@ -208,6 +208,56 @@ const Dashboard = () => {
 									</div>
 									<p className="tw-uppercase tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
 										+{USER_DETAILS?.travelling_info?.telephone}
+									</p>
+								</div>
+								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+									?.extension_start_date ? (
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+											Extension status
+										</div>
+										<p className="tw-capitalize tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-green-500 tw-font-bold">
+											Extended
+										</p>
+									</div>
+								) : null}
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+										Expires in
+									</div>
+									<p
+										className={`tw-capitalize tw-w-full tw-flex tw-justify-end tw-text-base ${
+											Number(
+												differenceInDays(
+													new Date(
+														USER_DETAILS?.travelling_info
+															?.user_policy_transaction[0]?.extension_end_date
+															? USER_DETAILS?.travelling_info
+																	?.user_policy_transaction[0]
+																	?.extension_end_date
+															: USER_DETAILS?.travelling_info
+																	?.user_policy_transaction[0]?.end_date
+													),
+													new Date()
+												)
+											) +
+												2 >
+											5
+												? 'tw-text-green-500'
+												: 'tw-text-red-500'
+										}  tw-font-bold`}>
+										{differenceInDays(
+											new Date(
+												USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.extension_end_date
+													? USER_DETAILS?.travelling_info
+															?.user_policy_transaction[0]?.extension_end_date
+													: USER_DETAILS?.travelling_info
+															?.user_policy_transaction[0]?.end_date
+											),
+											new Date()
+										) + 2}{' '}
+										days
 									</p>
 								</div>
 							</div>
@@ -369,36 +419,54 @@ const Dashboard = () => {
 														+{person?.telephone}
 													</p>
 												</div>
-												{/** 
-												<h4 className="tw-font-medium tw-text-lg">
-													{person?.first_name} {person?.last_name}
-												</h4>
-
-												<span className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-start tw-gap-3">
-													<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
-														<HiOutlineLocationMarker className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
-														<p className="tw-text-sm">{person?.country}</p>
-													</span>
-													<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
-														<MdOutlinePolicy className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
-														<p className="tw-text-sm tw-uppercase">
-															{person?.policy_number}
+												{person?.user_policy_transaction[0]
+													?.extension_start_date ? (
+													<div className="tw-w-full tw-grid tw-grid-cols-2">
+														<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+															Extension status
+														</div>
+														<p className="tw-capitalize tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-green-500 tw-font-bold">
+															Extended
 														</p>
-													</span>
-												</span>
-												<span className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-place-content-start tw-place-items-start tw-gap-3">
-													<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
-														<HiOutlineMail className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
-														<p className="tw-text-sm tw-lowercase">
-															{person?.email}
-														</p>
-													</span>
-													<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
-														<BsPhone className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
-														<p className="tw-text-sm">{person?.telephone}</p>
-													</span>
-												</span>
-												*/}
+													</div>
+												) : null}
+												<div className="tw-w-full tw-grid tw-grid-cols-2">
+													<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+														Expires in
+													</div>
+													<p
+														className={`tw-capitalize tw-w-full tw-flex tw-justify-end tw-text-base ${
+															Number(
+																differenceInDays(
+																	new Date(
+																		person?.user_policy_transaction[0]
+																			?.extension_end_date
+																			? person?.user_policy_transaction[0]
+																					?.extension_end_date
+																			: person?.user_policy_transaction[0]
+																					?.end_date
+																	),
+																	new Date()
+																)
+															) +
+																2 >
+															5
+																? 'tw-text-green-500'
+																: 'tw-text-red-500'
+														}  tw-font-bold`}>
+														{differenceInDays(
+															new Date(
+																person?.user_policy_transaction[0]
+																	?.extension_end_date
+																	? person?.user_policy_transaction[0]
+																			?.extension_end_date
+																	: person?.user_policy_transaction[0]?.end_date
+															),
+															new Date()
+														) + 2}{' '}
+														days
+													</p>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -415,16 +483,16 @@ const Dashboard = () => {
 									}
 								</h3>
 							</div>
-							<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
+							<div className="tw-w-full tw-flex tw-flex-col gap-2 tw-py-3 tw-border-y">
 								<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
-									Traveller details
+									Travel details
 								</h2>
 								<div className="tw-grid tw-grid-cols-2">
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 										Country of Origin
 									</div>
 									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{USER_DETAILS?.country}
+										{USER_DETAILS?.travelling_info?.country}
 									</p>
 								</div>
 								<div className="tw-grid tw-grid-cols-2">
@@ -461,86 +529,7 @@ const Dashboard = () => {
 										days
 									</p>
 								</div>
-								<div className="tw-grid tw-grid-cols-2">
-									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
-										Price
-									</div>
-									<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-										{Intl.NumberFormat('en-US', {
-											style: 'currency',
-											currency: 'USD',
-										}).format(
-											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-												?.price
-										)}
-									</p>
-								</div>
-							</div>
-							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b">
-								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-									?.extension_start_date ? (
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Extension Starts
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{dayjs(
-												USER_DETAILS?.travelling_info
-													?.user_policy_transaction[0]?.extension_start_date
-											).format('MMM DD, YYYY')}
-										</p>
-									</div>
-								) : null}
-
-								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-									?.extension_end_date ? (
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Extension Ends
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{dayjs(
-												USER_DETAILS?.travelling_info
-													?.user_policy_transaction[0]?.extension_end_date
-											).format('MMM DD, YYYY')}
-										</p>
-									</div>
-								) : null}
-								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-									?.extension_duration ? (
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
-											Extension Duration
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{
-												USER_DETAILS?.travelling_info
-													?.user_policy_transaction[0]?.extension_duration
-											}{' '}
-											days
-										</p>
-									</div>
-								) : null}
-								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-									?.extension_price ? (
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
-											Extension Price
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{Intl.NumberFormat('en-US', {
-												style: 'currency',
-												currency: 'USD',
-											}).format(
-												USER_DETAILS?.travelling_info
-													?.user_policy_transaction[0]?.extension_price
-											)}
-										</p>
-									</div>
-								) : null}
-							</div>
-							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
-								{USER_DETAILS?.dependants?.length > 1 && (
+								{USER_DETAILS?.dependants?.length > 0 && (
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
 											No of Travellers
@@ -550,6 +539,96 @@ const Dashboard = () => {
 										</p>
 									</div>
 								)}
+								<div className="tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+										Price
+									</div>
+									<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-lg tw-text-[#8e6abf] tw-font-bold">
+										{Intl.NumberFormat('en-US', {
+											style: 'currency',
+											currency: 'USD',
+										}).format(
+											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+												?.price
+										)}
+									</span>
+								</div>
+							</div>
+							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-py-1">
+								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+									?.extension_histories?.length > 0 ? (
+									<div className="tw-w-full tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+											Extensions
+										</div>
+
+										<Tooltip
+											placement="left-end"
+											title={`View ${USER_DETAILS?.travelling_info?.first_name}'s extension history`}>
+											<p
+												onClick={() => {
+													setHistories({
+														name: `${USER_DETAILS?.travelling_info?.first_name} ${USER_DETAILS?.travelling_info?.last_name}`,
+														extensions:
+															USER_DETAILS?.travelling_info
+																?.user_policy_transaction[0]
+																?.extension_histories,
+													});
+													setShowExtensionHistory(true);
+												}}
+												className="tw-transition-all tw-duration-300 tw-ease-in-out tw-cursor-pointer tw-w-full tw-flex tw-justify-end tw-rounded-full tw-border-2 tw-border-transparent hover:tw-border-[#8e6abf] tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 hover:tw-text-[#8e6abf] tw-font-bold">
+												{USER_DETAILS?.travelling_info?.first_name}{' '}
+												{USER_DETAILS?.travelling_info?.last_name}{' '}
+												<span className="tw-cursor-pointer  tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
+													<TbEye className="tw-text-xl" />
+												</span>
+											</p>
+										</Tooltip>
+									</div>
+								) : null}
+
+								{USER_DETAILS?.dependants?.map((person, index) => {
+									if (
+										person.user_policy_transaction[0]?.extension_histories
+											?.length > 0
+									) {
+										return (
+											<div
+												key={index}
+												className="tw-w-full tw-grid tw-grid-cols-2">
+												<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+													Extensions
+												</div>
+
+												<Tooltip
+													placement="left-end"
+													title={`View ${person.first_name}'s extension history`}>
+													<p
+														onClick={() => {
+															setHistories({
+																name: `${person.first_name} ${person.last_name}`,
+																extensions:
+																	person.user_policy_transaction[0]
+																		?.extension_histories,
+															});
+															setShowExtensionHistory(true);
+														}}
+														className="tw-transition-all tw-duration-300 tw-ease-in-out tw-cursor-pointer tw-w-full tw-flex tw-justify-end tw-rounded-full tw-border-2 tw-border-transparent hover:tw-border-[#8e6abf] tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 hover:tw-text-[#8e6abf] tw-font-bold">
+														{person.first_name} {person.last_name}{' '}
+														<span className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
+															<TbEye className="tw-text-xl" />
+														</span>
+													</p>
+												</Tooltip>
+											</div>
+										);
+									} else {
+										return null;
+									}
+								})}
+							</div>
+							{/**
+							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
 								<div className="tw-grid tw-grid-cols-2">
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
 										Total Price
@@ -584,6 +663,7 @@ const Dashboard = () => {
 									)}
 								</div>
 							</div>
+								 */}
 						</div>
 					</div>
 				)}
@@ -661,6 +741,154 @@ const Dashboard = () => {
 									sx={{ fontSize: '1rem', width: '100%' }}
 								/>
 							</Stack>
+						</div>
+					</div>
+				)}
+
+				{showExtensionHistory && (
+					<div
+						onClick={() => {
+							setShowExtensionHistory(false);
+							setHistories(null);
+						}}
+						className="tw-fixed tw-top-0 tw-left-0 tw-z-[999] tw-flex tw-justify-center tw-items-center tw-w-screen tw-h-screen tw-bg-black/50">
+						<div
+							data-aos="zoom-in"
+							data-aos-duration="600"
+							onClick={(e) => e.stopPropagation()}
+							className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 tw-h-5/6 tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-4 md:tw-px-8 tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-5 tw-overflow-y-auto">
+							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-pb-3">
+								<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-pb-2 tw-my-5 tw-border-b-2">
+									<h2 className="tw-font-medium tw-text-2xl tw-text-[#524380]">
+										Extension History {histories && `(${histories?.name})`}
+									</h2>
+									<IconButton
+										aria-label="close modal"
+										onClick={() => {
+											setShowExtensionHistory(false);
+											setHistories(null);
+										}}>
+										<IoClose className="tw-text-xl tw-text-[#8e6abf]" />
+									</IconButton>
+								</div>
+								{histories && (
+									<div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-4">
+										{histories?.extensions?.map((extensionData, index) => (
+											<div
+												key={index}
+												className="tw-transition-all tw-duration-300 tw-ease-in-out tw-w-full tw-h-fit tw-bg-white tw-text-[#8e6abf] tw-border-2 tw-shadow-md tw-shadow-[#6c14e8]/10 hover:tw-shadow-lg hover:tw-shadow-[#6c14e8]/30 tw-rounded-lg tw-py-5 tw-px-4 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+												<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-pbz-3">
+													<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
+														Extension details
+													</h2>
+
+													<div className="tw-grid tw-grid-cols-2">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+															Extended By
+														</div>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+															{extensionData?.extension_status_updated_by}
+														</p>
+													</div>
+
+													<div className="tw-grid tw-grid-cols-2">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+															Extension Starts
+														</div>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+															{dayjs(
+																extensionData?.extension_start_date
+															).format('MMM DD, YYYY')}
+														</p>
+													</div>
+
+													<div className="tw-grid tw-grid-cols-2">
+														<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
+															Extension Ends
+														</div>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+															{dayjs(extensionData?.extension_end_date).format(
+																'MMM DD, YYYY'
+															)}
+														</p>
+													</div>
+
+													<div className="tw-grid tw-grid-cols-2">
+														<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+															Extension Duration
+														</div>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+															{extensionData?.extension_duration} days
+														</p>
+													</div>
+
+													<div className="tw-grid tw-grid-cols-2">
+														<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+															Extension Price
+														</div>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+															{Intl.NumberFormat('en-US', {
+																style: 'currency',
+																currency: 'USD',
+															}).format(extensionData?.extension_price)}
+														</p>
+													</div>
+
+													<div className="tw-w-full tw-flex tw-justify-center tw-border-t-2 tw-pt-3 tw-mt-2">
+														<span className="tw-w-fit tw-h-fit tw-p-2 tw-flex tw-gap-2 tw-justify-center tw-items-end tw-rounded-md tw-bg-gradient-to-tr tw-from-[#874cda] tw-to-[#8e6abf]">
+															<span className="tw-text-xs tw-text-gray-100 tw-font-normal">
+																Updated:
+															</span>
+															<p className="tw-text-xs tw-text-gray-50 tw-font-semibold">
+																{dayjs(
+																	extensionData?.extension_status_update_date
+																).format('MMM DD, YYYY')}{' '}
+																at{' '}
+																{dayjs(
+																	extensionData?.extension_status_update_date
+																).format('hh:mm a')}
+															</p>
+														</span>
+													</div>
+												</div>
+											</div>
+										))}
+									</div>
+								)}
+
+								{!histories && (
+									<div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 xl:tw-grid-cols-3">
+										<div className="tw-transition-all tw-duration-300 tw-ease-in-out tw-w-full tw-h-fit tw-bg-white tw-text-[#8e6abf] tw-border-2 tw-shadow-md tw-shadow-[#6c14e8]/10 hover:tw-shadow-lg hover:tw-shadow-[#6c14e8]/30 tw-rounded-lg tw-py-5 tw-px-4 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
+											<Stack spacing={1} sx={{ width: '100%' }}>
+												<Skeleton
+													variant="text"
+													sx={{ fontSize: '2rem', width: '50%' }}
+												/>
+												<Skeleton
+													variant="text"
+													sx={{ fontSize: '1rem', width: '60%' }}
+												/>
+												<Skeleton
+													variant="text"
+													sx={{ fontSize: '1rem', width: '40%' }}
+												/>
+												<Skeleton
+													variant="text"
+													sx={{ fontSize: '1rem', width: '80%' }}
+												/>
+												<Skeleton
+													variant="text"
+													sx={{ fontSize: '1rem', width: '70%' }}
+												/>
+												<Skeleton
+													variant="text"
+													sx={{ fontSize: '1rem', width: '60%' }}
+												/>
+											</Stack>
+										</div>
+									</div>
+								)}
+							</div>
 						</div>
 					</div>
 				)}

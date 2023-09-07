@@ -18,10 +18,11 @@ const SelectInput = (props) => {
 				helperText={helpertext}
 				error={error}
 				onChange={onChange}>
-				{options?.map(({ name, value }, index) => (
+				{options?.map(({ name, value, disabled }, index) => (
 					<MenuItem
 						key={index}
 						value={!value ? name : value}
+						disabled={disabled ? disabled : false}
 						className="tw-capitalize">
 						{name}
 					</MenuItem>

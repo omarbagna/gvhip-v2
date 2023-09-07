@@ -2,11 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
-import { format } from 'date-fns';
 import { Controller, useForm } from 'react-hook-form';
 import SelectInput from '@/components/Input/SelectInput';
 import DefaultInput from '@/components/Input/DefaultInput';
-import { BsQrCode } from 'react-icons/bs';
 import { useMutation } from 'react-query';
 //import { axiosPrivate } from 'pages/api/axios';
 import {
@@ -130,6 +128,7 @@ const FindPolicy = () => {
 			var html5QrcodeScanner = new Html5QrcodeScanner('reader', {
 				fps: 10,
 				qrbox: 300,
+				rememberLastUsedCamera: true,
 			});
 
 			function onScanSuccess(decodedText, decodedResult) {
@@ -435,7 +434,7 @@ const FindPolicy = () => {
 								</div>
 								<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
 									<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
-										Traveller details
+										Travel details
 									</h2>
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
@@ -478,7 +477,7 @@ const FindPolicy = () => {
 												policyHolder?.travelling_info
 													?.user_policy_transaction[0]?.duration
 											}{' '}
-											days
+											Days
 										</p>
 									</div>
 								</div>
@@ -493,6 +492,59 @@ const FindPolicy = () => {
 													?.user_policy_transaction[0]?.travel_plan?.plan_name
 											}
 										</span>
+									</div>
+									{policyHolder?.travelling_info?.user_policy_transaction[0]
+										?.extension_start_date ? (
+										<div className="tw-grid tw-grid-cols-2">
+											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+												Extension status
+											</div>
+											<p className="tw-capitalize tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-green-500 tw-font-bold">
+												Extended
+											</p>
+										</div>
+									) : null}
+									<div className="tw-grid tw-grid-cols-2">
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+											Expires in
+										</div>
+										<p
+											className={`tw-capitalize tw-w-full tw-flex tw-justify-end tw-text-base ${
+												Number(
+													differenceInDays(
+														new Date(
+															policyHolder?.travelling_info
+																?.user_policy_transaction[0]?.extension_end_date
+																? policyHolder?.travelling_info
+																		?.user_policy_transaction[0]
+																		?.extension_end_date
+																: policyHolder?.travelling_info
+																		?.user_policy_transaction[0]?.end_date
+														),
+														new Date()
+													)
+												) +
+													2 >
+												5
+													? 'tw-text-green-500'
+													: 'tw-text-red-500'
+											}  tw-font-bold`}>
+											{Number(
+												differenceInDays(
+													new Date(
+														policyHolder?.travelling_info
+															?.user_policy_transaction[0]?.extension_end_date
+															? policyHolder?.travelling_info
+																	?.user_policy_transaction[0]
+																	?.extension_end_date
+															: policyHolder?.travelling_info
+																	?.user_policy_transaction[0]?.end_date
+													),
+													new Date()
+												)
+											) + 2}{' '}
+											days
+										</p>
 									</div>
 									<div className="tw-grid tw-grid-cols-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">

@@ -142,13 +142,15 @@ const Profile = () => {
 						*/}
 						</div>
 						<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-gap-8 tw-pb-8 tw-border-b-2">
-							<Avatar
-								src="#"
-								className="tw-uppercase"
-								sx={{ width: '100px', height: '100px' }}>
-								{USER_PROFILE?.first_name?.[0]}
-								{USER_PROFILE?.last_name?.[0]}
-							</Avatar>
+							<div className="tw-hidden md:tw-block">
+								<Avatar
+									src="#"
+									className="tw-uppercase"
+									sx={{ width: '100px', height: '100px' }}>
+									{USER_PROFILE?.first_name?.[0]}
+									{USER_PROFILE?.last_name?.[0]}
+								</Avatar>
+							</div>
 
 							<div className="tw-w-full tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-3">
 								<h4 className="tw-font-medium tw-text-lg">
@@ -165,9 +167,9 @@ const Profile = () => {
 											{USER_PROFILE?.email}
 										</p>
 									</span>
-									<span className="tw-flex tw-justify-start tw-items-center tw-gap-2">
+									<span className="tw-w-full tw-flex tw-justify-start md:tw-justify-center lg:tw-justify-start xl:tw-justify-center tw-items-center tw-gap-2">
 										<BsPhone className="tw-text-xl tw-shrink-0 tw-text-gray-500" />
-										<p className="tw-text-sm">{USER_PROFILE?.telephone}</p>
+										<p className="tw-text-sm">+{USER_PROFILE?.telephone}</p>
 									</span>
 								</span>
 							</div>
