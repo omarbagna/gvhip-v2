@@ -256,7 +256,7 @@ const Dashboard = () => {
 															?.user_policy_transaction[0]?.end_date
 											),
 											new Date()
-										) + 2}{' '}
+										) + 1}{' '}
 										days
 									</p>
 								</div>
@@ -463,7 +463,7 @@ const Dashboard = () => {
 																	: person?.user_policy_transaction[0]?.end_date
 															),
 															new Date()
-														) + 2}{' '}
+														) + 1}{' '}
 														days
 													</p>
 												</div>
@@ -485,7 +485,10 @@ const Dashboard = () => {
 							</div>
 							<div className="tw-w-full tw-flex tw-flex-col gap-2 tw-py-3 tw-border-y">
 								<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
-									Travel details
+									{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
+										?.extension_histories?.length > 0
+										? 'Initial details'
+										: 'Travel details'}
 								</h2>
 								<div className="tw-grid tw-grid-cols-2">
 									<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
@@ -551,39 +554,42 @@ const Dashboard = () => {
 											USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 												?.price
 										)}
+										<em className="tw-font-light tw-text-xs">/person</em>
 									</span>
 								</div>
 							</div>
 							<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-py-1">
 								{USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 									?.extension_histories?.length > 0 ? (
-									<div className="tw-w-full tw-grid tw-grid-cols-2">
+									<div className="tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-2">
 										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 											Extensions
 										</div>
 
-										<Tooltip
-											placement="left-end"
-											title={`View ${USER_DETAILS?.travelling_info?.first_name}'s extension history`}>
-											<p
-												onClick={() => {
-													setHistories({
-														name: `${USER_DETAILS?.travelling_info?.first_name} ${USER_DETAILS?.travelling_info?.last_name}`,
-														extensions:
-															USER_DETAILS?.travelling_info
-																?.user_policy_transaction[0]
-																?.extension_histories,
-													});
-													setShowExtensionHistory(true);
-												}}
-												className="tw-transition-all tw-duration-300 tw-ease-in-out tw-cursor-pointer tw-w-full tw-flex tw-justify-end tw-rounded-full tw-border-2 tw-border-transparent hover:tw-border-[#8e6abf] tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 hover:tw-text-[#8e6abf] tw-font-bold">
-												{USER_DETAILS?.travelling_info?.first_name}{' '}
-												{USER_DETAILS?.travelling_info?.last_name}{' '}
-												<span className="tw-cursor-pointer  tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
-													<TbEye className="tw-text-xl" />
-												</span>
-											</p>
-										</Tooltip>
+										<div className="tw-w-full tw-flex tw-justify-start tw-items-center">
+											<Tooltip
+												placement="left-end"
+												title={`View ${USER_DETAILS?.travelling_info?.first_name}'s extension history`}>
+												<p
+													onClick={() => {
+														setHistories({
+															name: `${USER_DETAILS?.travelling_info?.first_name} ${USER_DETAILS?.travelling_info?.last_name}`,
+															extensions:
+																USER_DETAILS?.travelling_info
+																	?.user_policy_transaction[0]
+																	?.extension_histories,
+														});
+														setShowExtensionHistory(true);
+													}}
+													className="tw-transition-all tw-duration-300 tw-ease-in-out tw-w-fit tw-cursor-pointer tw-flex tw-justify-center tw-rounded-full tw-border-2 tw-pl-3 tw-pr-1 tw-border-transparent hover:tw-border-[#8e6abf] tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 hover:tw-text-[#8e6abf] tw-font-bold">
+													{USER_DETAILS?.travelling_info?.first_name}{' '}
+													{USER_DETAILS?.travelling_info?.last_name}{' '}
+													<span className="tw-cursor-pointer  tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
+														<TbEye className="tw-text-xl" />
+													</span>
+												</p>
+											</Tooltip>
+										</div>
 									</div>
 								) : null}
 
@@ -595,31 +601,37 @@ const Dashboard = () => {
 										return (
 											<div
 												key={index}
-												className="tw-w-full tw-grid tw-grid-cols-2">
-												<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
-													Extensions
-												</div>
+												className="tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-2">
+												{USER_DETAILS?.travelling_info
+													?.user_policy_transaction[0]?.extension_histories
+													?.length > 0 ? null : (
+													<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+														Extensions
+													</div>
+												)}
 
-												<Tooltip
-													placement="left-end"
-													title={`View ${person.first_name}'s extension history`}>
-													<p
-														onClick={() => {
-															setHistories({
-																name: `${person.first_name} ${person.last_name}`,
-																extensions:
-																	person.user_policy_transaction[0]
-																		?.extension_histories,
-															});
-															setShowExtensionHistory(true);
-														}}
-														className="tw-transition-all tw-duration-300 tw-ease-in-out tw-cursor-pointer tw-w-full tw-flex tw-justify-end tw-rounded-full tw-border-2 tw-border-transparent hover:tw-border-[#8e6abf] tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 hover:tw-text-[#8e6abf] tw-font-bold">
-														{person.first_name} {person.last_name}{' '}
-														<span className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
-															<TbEye className="tw-text-xl" />
-														</span>
-													</p>
-												</Tooltip>
+												<div className="tw-w-full tw-flex tw-justify-start tw-items-center">
+													<Tooltip
+														placement="left-end"
+														title={`View ${person.first_name}'s extension history`}>
+														<p
+															onClick={() => {
+																setHistories({
+																	name: `${person.first_name} ${person.last_name}`,
+																	extensions:
+																		person.user_policy_transaction[0]
+																			?.extension_histories,
+																});
+																setShowExtensionHistory(true);
+															}}
+															className="tw-transition-all tw-duration-300 tw-ease-in-out tw-cursor-pointer tw-flex tw-w-fit tw-justify-center tw-rounded-full tw-border-2 tw-pl-3 tw-pr-1 tw-border-transparent hover:tw-border-[#8e6abf] tw-text-sm tw-items-center tw-gap-0 tw-text-gray-600 hover:tw-text-[#8e6abf] tw-font-bold">
+															{person.first_name} {person.last_name}{' '}
+															<span className="tw-cursor-pointer tw-flex tw-justify-center tw-items-center tw-transition-all tw-duration-500 tw-ease-in-out tw-rounded-full tw-h-8 tw-w-8 tw-text-[#8e6abf]">
+																<TbEye className="tw-text-xl" />
+															</span>
+														</p>
+													</Tooltip>
+												</div>
 											</div>
 										);
 									} else {

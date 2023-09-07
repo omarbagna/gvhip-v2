@@ -46,6 +46,7 @@ const ManagePolicy = () => {
 	const [showExtensionHistory, setShowExtensionHistory] = useState(false);
 	const [extensionOptions, setExtensionOptions] = useState(null);
 	const [dateStates, setDateStates] = useState(null);
+	const [allExtendable, setAllExtendable] = useState(true);
 
 	const { reset, watch, control, handleSubmit } = useForm({
 		mode: 'all',
@@ -62,7 +63,8 @@ const ManagePolicy = () => {
 			],
 		},
 	});
-	console.log(dateStates);
+
+	let extensionTotal = 0;
 
 	const { fields, append, remove } = useFieldArray({
 		control,
@@ -159,26 +161,28 @@ const ManagePolicy = () => {
 						?.user_policy_transaction[0]?.extension_duration
 						? USER_DETAILS?.travelling_info?.user_policy_transaction[0]
 								?.extension_duration
-						: USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-								?.duration,
+						: 0,
+					initial_duration:
+						USER_DETAILS?.travelling_info?.user_policy_transaction[0]?.duration,
 				},
 			];
 
 			USER_DETAILS?.dependants?.map((value) => {
 				return dates.push({
 					policy_number: value.policy_number,
-					extension_start_date: USER_DETAILS?.travelling_info
-						?.user_policy_transaction[0]?.extension_start_date
+					extension_start_date: value?.user_policy_transaction[0]
+						?.extension_start_date
 						? value.user_policy_transaction[0]?.extension_start_date
 						: value.user_policy_transaction[0]?.start_date,
-					extension_end_date: USER_DETAILS?.travelling_info
-						?.user_policy_transaction[0]?.extension_end_date
+					extension_end_date: value?.user_policy_transaction[0]
+						?.extension_end_date
 						? value.user_policy_transaction[0]?.extension_end_date
 						: value.user_policy_transaction[0]?.end_date,
-					extension_duration: USER_DETAILS?.travelling_info
-						?.user_policy_transaction[0]?.extension_duration
+					extension_duration: value?.travelling_info?.user_policy_transaction[0]
+						?.extension_duration
 						? value.user_policy_transaction[0]?.extension_duration
-						: value.user_policy_transaction[0]?.duration,
+						: 0,
+					initial_duration: value?.user_policy_transaction[0]?.duration,
 				});
 			});
 
@@ -186,6 +190,34 @@ const ManagePolicy = () => {
 			setDateStates(dates);
 		}
 	}, [USER_DETAILS]);
+
+	useEffect(() => {
+		if (dateStates) {
+			let endDates = [];
+
+			dateStates?.map((value) => {
+				return endDates.push(value.extension_end_date);
+			});
+
+			const allEqual = endDates.every((val) => val === endDates[0]);
+
+			if (!allEqual) {
+				reset({
+					extension_type: 'specify',
+					confirm_extension: false,
+					extension_details: [
+						{
+							policy_number: '',
+							extension_start: '',
+							extension_end: '',
+						},
+					],
+				});
+
+				setAllExtendable(allEqual);
+			}
+		}
+	}, [dateStates, reset]);
 
 	const submitExtendPolicy = async (data) => {
 		const { data: response } = await axiosPrivate.put(
@@ -199,7 +231,6 @@ const ManagePolicy = () => {
 		(extensionData) => submitExtendPolicy(extensionData),
 		{
 			onSuccess: (data) => {
-				console.log('Success response ', data);
 				if (data?.status === 200) {
 					//window.location.replace(data.redirect_url);
 					//alert('Success', data?.message, 'success');
@@ -229,12 +260,13 @@ const ManagePolicy = () => {
 
 		if (data.extension_type === 'all') {
 			extensionOptions.map(({ value }) => {
-				let extensionDuration = Number(
-					differenceInDays(
-						new Date(extensionData[0].extension_end),
-						new Date(extensionData[0].extension_start)
-					) + 1
-				);
+				let extensionDuration =
+					Number(
+						differenceInDays(
+							new Date(extensionData[0].extension_end),
+							new Date(extensionData[0].extension_start)
+						)
+					) + 1;
 
 				let extensionPrice =
 					extensionDuration <= 30
@@ -251,13 +283,7 @@ const ManagePolicy = () => {
 
 				let totalDuration =
 					Number(extensionDuration) +
-					(USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-						?.extension_duration
-						? Number(
-								USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-									?.duration
-						  )
-						: 0) +
+					Number(dateStates[0]?.initial_duration) +
 					Number(dateStates[0]?.extension_duration);
 
 				if (totalDuration > 180) {
@@ -279,12 +305,13 @@ const ManagePolicy = () => {
 			});
 		} else if (data.extension_type === 'specify') {
 			extensionData.map((item) => {
-				let extensionDuration = Number(
-					differenceInDays(
-						new Date(item.extension_end),
-						new Date(item.extension_start)
-					) + 1
-				);
+				let extensionDuration =
+					Number(
+						differenceInDays(
+							new Date(item.extension_end),
+							new Date(item.extension_start)
+						)
+					) + 1;
 
 				let extensionPrice =
 					extensionDuration <= 30
@@ -301,13 +328,13 @@ const ManagePolicy = () => {
 
 				let totalDuration =
 					Number(extensionDuration) +
-					(USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-						?.extension_duration
-						? Number(
-								USER_DETAILS?.travelling_info?.user_policy_transaction[0]
-									?.duration
-						  )
-						: 0) +
+					Number(
+						dateStates[
+							dateStates?.findIndex(
+								(option) => option.policy_number === item.policy_number
+							)
+						]?.initial_duration
+					) +
 					Number(
 						dateStates[
 							dateStates?.findIndex(
@@ -647,8 +674,8 @@ const ManagePolicy = () => {
 						className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 tw-max-h-[95vh] tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-5 tw-overflow-y-auto">
 						<div className="tw-w-full tw-hidden md:tw-flex tw-flex-col tw-gap-2 tw-py-3 tw-border-b-2">
 							<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-pb-2 tw-border-b-2">
-								<h2 className="tw-font-medium tw-text-lg tw-text-[#524380]">
-									Current Policy Details
+								<h2 className="tw-font-medium tw-text-lg tw-text-[#7862AF]">
+									Initial Policy Details
 								</h2>
 								<IconButton
 									aria-label="close scanner"
@@ -693,6 +720,14 @@ const ManagePolicy = () => {
 											?.duration
 									}{' '}
 									days
+								</p>
+							</div>
+							<div className="tw-grid tw-grid-cols-2">
+								<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
+									No of Travellers
+								</div>
+								<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
+									{USER_DETAILS?.dependants?.length + 1}{' '}
 								</p>
 							</div>
 							<div className="tw-grid tw-grid-cols-2">
@@ -781,83 +816,86 @@ const ManagePolicy = () => {
 							<form onSubmit={handleSubmit(submitExtensionRequest)}>
 								<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 ">
 									<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-border-b-2 tw-pb-3">
-										<h2 className="tw-w-full tw-font-medium tw-text-lg tw-text-[#524380] tw-flex tw-justify-start tw-items-end tw-text-left">
+										<h2 className="tw-w-full tw-font-medium tw-text-lg tw-text-[#7862AF] tw-flex tw-justify-start tw-items-end tw-text-left">
 											Extension Period
 										</h2>
 
-										<div className="tw-w-full tw-text-left md:tw-w-2/6 lg:tw-w-1/6 tw-flex tw-justify-end tw-items-center tw-gap-2">
-											{USER_DETAILS?.dependants?.length > 0 ? (
-												<Controller
-													name={'extension_type'}
-													control={control}
-													defaultValue={''}
-													rules={{
-														required: 'Please select extension type',
-														onChange: (e) => {
-															reset({
-																extension_type: e.target.value,
-																confirm_extension: false,
-																extension_details: [
+										{allExtendable && (
+											<div className="tw-w-full tw-text-left md:tw-w-2/6 lg:tw-w-1/6 tw-flex tw-justify-end tw-items-center tw-gap-2">
+												{USER_DETAILS?.dependants?.length > 0 ? (
+													<Controller
+														name={'extension_type'}
+														control={control}
+														defaultValue={''}
+														rules={{
+															required: 'Please select extension type',
+															onChange: (e) => {
+																reset({
+																	extension_type: e.target.value,
+																	confirm_extension: false,
+																	extension_details: [
+																		{
+																			policy_number: '',
+																			extension_start: '',
+																			extension_end: '',
+																		},
+																	],
+																});
+															},
+														}}
+														render={({
+															field: { ref, ...field },
+															fieldState: { error, invalid },
+														}) => (
+															<SelectInput
+																{...field}
+																ref={ref}
+																error={invalid}
+																helpertext={invalid ? error.message : null}
+																label="Extension for"
+																options={[
 																	{
-																		policy_number: '',
-																		extension_start: '',
-																		extension_end: '',
+																		name: 'all',
+																		value: 'all',
 																	},
-																],
-															});
-														},
-													}}
-													render={({
-														field: { ref, ...field },
-														fieldState: { error, invalid },
-													}) => (
-														<SelectInput
-															{...field}
-															ref={ref}
-															error={invalid}
-															helpertext={invalid ? error.message : null}
-															label="Extension for"
-															options={[
-																{
-																	name: 'all',
-																	value: 'all',
-																},
-																{
-																	name: 'specify',
-																	value: 'specify',
-																},
-															]}
-															required
-														/>
-													)}
-												/>
-											) : (
-												<>
-													<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-text-sm tw-text-gray-600">
-														Current Duration:
-													</div>
-													<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
-														{Number(
-															USER_DETAILS?.travelling_info
-																?.user_policy_transaction[0]?.duration
-														) +
-															(USER_DETAILS?.travelling_info
-																?.user_policy_transaction[0]?.extension_duration
-																? Number(
-																		USER_DETAILS?.travelling_info
-																			?.user_policy_transaction[0]
-																			?.extension_duration
-																  )
-																: 0)}{' '}
-														days
-													</p>
-												</>
-											)}
-										</div>
+																	{
+																		name: 'specify',
+																		value: 'specify',
+																	},
+																]}
+																required
+															/>
+														)}
+													/>
+												) : (
+													<>
+														<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-text-sm tw-text-gray-600">
+															Current Duration:
+														</div>
+														<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-900 tw-font-bold">
+															{Number(
+																USER_DETAILS?.travelling_info
+																	?.user_policy_transaction[0]?.duration
+															) +
+																(USER_DETAILS?.travelling_info
+																	?.user_policy_transaction[0]
+																	?.extension_duration
+																	? Number(
+																			USER_DETAILS?.travelling_info
+																				?.user_policy_transaction[0]
+																				?.extension_duration
+																	  )
+																	: 0)}{' '}
+															days
+														</p>
+													</>
+												)}
+											</div>
+										)}
 									</div>
 
 									{watch('extension_type') === 'all' ? (
-										<div className="tw-w-full tw-h-fit tw-flex tw-flex-col xl:tw-flex-row tw-justify-center tw-items-center lg:tw-items-end xl:tw-items-center tw-gap-4 tw-px-2 tw-py-3">
+										<div className="tw-w-full tw-h-fit tw-flex tw-flex-col xl:tw-flex-row tw-justify-center tw-items-center lg:tw-items-end xl:tw-items-center tw-gap-4 tw-px-2 tw-py-3 tw-border-b-2">
 											<div className="tw-w-full xl:tw-w-2/3 tw-flex tw-justify-center lg:tw-justify-start tw-items-center tw-gap-2 tw-shrink-0">
 												<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-3">
 													<Controller
@@ -986,7 +1024,7 @@ const ManagePolicy = () => {
 															<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
 																Duration
 															</div>
-															<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#524380] tw-font-bold">
+															<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#7862AF] tw-font-bold">
 																{differenceInDays(
 																	new Date(
 																		watch('extension_details[0].extension_end')
@@ -1004,7 +1042,7 @@ const ManagePolicy = () => {
 															<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
 																Price
 															</div>
-															<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#524380] tw-font-bold">
+															<p className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-base tw-text-[#7862AF] tw-font-bold">
 																{Intl.NumberFormat('en-US', {
 																	style: 'currency',
 																	currency: 'USD',
@@ -1170,13 +1208,190 @@ const ManagePolicy = () => {
 																		  ) <= 180 &&
 																		  270
 																)}{' '}
+																<em className="tw-font-light tw-text-xs">
+																	/person
+																</em>
 															</p>
 														</div>
 														<div className="tw-grid tw-grid-cols-2 tw-w-full tw-pb-1">
 															<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
+																Total
+															</div>
+															<p className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-base tw-text-[#7862AF] tw-font-bold">
+																{Intl.NumberFormat('en-US', {
+																	style: 'currency',
+																	currency: 'USD',
+																}).format(
+																	(Number(
+																		differenceInDays(
+																			new Date(
+																				watch(
+																					'extension_details[0].extension_end'
+																				)
+																			),
+																			new Date(
+																				watch(
+																					'extension_details[0].extension_start'
+																				)
+																			)
+																		) + 1
+																	) <= 30
+																		? 45
+																		: Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) > 30 &&
+																		  Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) <= 60
+																		? 90
+																		: Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) > 60 &&
+																		  Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) <= 90
+																		? 135
+																		: Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) > 90 &&
+																		  Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) <= 120
+																		? 180
+																		: Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) > 120 &&
+																		  Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) <= 150
+																		? 225
+																		: Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) > 150 &&
+																		  Number(
+																				differenceInDays(
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_end'
+																						)
+																					),
+																					new Date(
+																						watch(
+																							'extension_details[0].extension_start'
+																						)
+																					)
+																				) + 1
+																		  ) <= 180 &&
+																		  270) *
+																		(USER_DETAILS?.dependants?.length + 1)
+																)}{' '}
+															</p>
+														</div>
+														{/**
+														<div className="tw-grid tw-grid-cols-2 tw-w-full tw-pb-1">
+															<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
 																Total Duration
 															</div>
-															<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#524380] tw-font-bold">
+															<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#7862AF] tw-font-bold">
 																{Number(
 																	differenceInDays(
 																		new Date(
@@ -1203,9 +1418,10 @@ const ManagePolicy = () => {
 																days
 															</p>
 														</div>
+														 */}
 													</>
 												) : (
-													<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#524380] tw-font-medium">
+													<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#7862AF] tw-font-medium">
 														Select start and end dates
 													</p>
 												)}
@@ -1571,7 +1787,7 @@ const ManagePolicy = () => {
 																			<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
 																				Duration
 																			</div>
-																			<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#524380] tw-font-bold">
+																			<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#7862AF] tw-font-bold">
 																				{extensionDuration} day(s)
 																			</p>
 																		</div>
@@ -1579,7 +1795,7 @@ const ManagePolicy = () => {
 																			<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600">
 																				Price
 																			</div>
-																			<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#524380] tw-font-bold">
+																			<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#7862AF] tw-font-bold">
 																				{extensionDuration &&
 																					Intl.NumberFormat('en-US', {
 																						style: 'currency',
@@ -1612,15 +1828,17 @@ const ManagePolicy = () => {
 																			<p
 																				className={`tw-w-full tw-flex tw-justify-end tw-text-base ${
 																					Number(extensionDuration) +
-																						(USER_DETAILS?.travelling_info
-																							?.user_policy_transaction[0]
-																							?.extension_duration
-																							? Number(
-																									USER_DETAILS?.travelling_info
-																										?.user_policy_transaction[0]
-																										?.duration
-																							  )
-																							: 0) +
+																						Number(
+																							dateStates[
+																								dateStates?.findIndex(
+																									(option) =>
+																										option.policy_number ===
+																										watch(
+																											`extension_details[${index}].policy_number`
+																										)
+																								)
+																							]?.initial_duration
+																						) +
 																						Number(
 																							dateStates[
 																								dateStates?.findIndex(
@@ -1637,15 +1855,17 @@ const ManagePolicy = () => {
 																						: 'tw-text-green-500'
 																				}  tw-font-bold`}>
 																				{Number(extensionDuration) +
-																					(USER_DETAILS?.travelling_info
-																						?.user_policy_transaction[0]
-																						?.extension_duration
-																						? Number(
-																								USER_DETAILS?.travelling_info
-																									?.user_policy_transaction[0]
-																									?.duration
-																						  )
-																						: 0) +
+																					Number(
+																						dateStates[
+																							dateStates?.findIndex(
+																								(option) =>
+																									option.policy_number ===
+																									watch(
+																										`extension_details[${index}].policy_number`
+																									)
+																							)
+																						]?.initial_duration
+																					) +
 																					Number(
 																						dateStates[
 																							dateStates?.findIndex(
@@ -1662,7 +1882,7 @@ const ManagePolicy = () => {
 																		</div>
 																	</>
 																) : (
-																	<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#524380] tw-font-medium">
+																	<p className="tw-w-full tw-flex tw-justify-end tw-text-base tw-text-[#7862AF] tw-font-medium">
 																		Select start and end dates
 																	</p>
 																)}
@@ -1698,6 +1918,54 @@ const ManagePolicy = () => {
 										</>
 									)}
 
+									<div className="tw-w-full tw-flex tw-flex-col tw-items-start tw-justify-start tw-gap-5 ">
+										{watch('extension_details')?.map((traveller, index) => {
+											let extensionDuration =
+												differenceInDays(
+													new Date(
+														watch(`extension_details[${index}].extension_end`)
+													),
+													new Date(
+														watch(`extension_details[${index}].extension_start`)
+													)
+												) + 1;
+
+											const price =
+												extensionDuration <= 30
+													? 45
+													: extensionDuration > 30 && extensionDuration <= 60
+													? 90
+													: extensionDuration > 60 && extensionDuration <= 90
+													? 135
+													: extensionDuration > 90 && extensionDuration <= 120
+													? 180
+													: extensionDuration > 120 && extensionDuration <= 150
+													? 225
+													: extensionDuration > 150 &&
+													  extensionDuration <= 180 &&
+													  270;
+
+											extensionTotal +=
+												price *
+												(watch('extension_type') === 'all'
+													? USER_DETAILS?.dependants?.length + 1
+													: 1);
+										})}
+
+										<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5 tw-py-2 tw-border-b-2">
+											<span className="tw-capitalize tw-font-normal tw-text-lg tw-text-[#171e41]">
+												Sub Total
+											</span>
+
+											<h2 className="tw-font-medium tw-text-xl tw-text-[#7862AF] tw-flex tw-justify-center tw-items-end tw-gap-1">
+												{Intl.NumberFormat('en-US', {
+													style: 'currency',
+													currency: 'USD',
+												}).format(extensionTotal)}
+											</h2>
+										</div>
+									</div>
+
 									<div className="tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-text-left">
 										<Controller
 											control={control}
@@ -1720,7 +1988,14 @@ const ManagePolicy = () => {
 																checked={watch(`confirm_extension`)}
 															/>
 														}
-														label={`Confirm policy extension `}
+														label={`Confirm policy extension for ${
+															watch('extension_type') === 'all'
+																? USER_DETAILS?.dependants?.length + 1
+																: watch('extension_details')?.length
+														} traveller(s) for ${Intl.NumberFormat('en-US', {
+															style: 'currency',
+															currency: 'USD',
+														}).format(extensionTotal)}`}
 													/>
 													<FormHelperText error>
 														{invalid ? error.message : null}
@@ -1760,7 +2035,7 @@ const ManagePolicy = () => {
 						className="tw-font-medium tw-text-center tw-text-lg tw-w-5/6 tw-h-5/6 tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-4 md:tw-px-8 tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-5 tw-overflow-y-auto">
 						<div className="tw-w-full tw-flex tw-flex-col tw-gap-2 tw-pb-3">
 							<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-pb-2 tw-my-5 tw-border-b-2">
-								<h2 className="tw-font-medium tw-text-2xl tw-text-[#524380]">
+								<h2 className="tw-font-medium tw-text-2xl tw-text-[#7862AF]">
 									Extension History
 								</h2>
 								<IconButton

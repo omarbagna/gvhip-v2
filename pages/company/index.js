@@ -3,10 +3,9 @@
 import React from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
 import { Badge, Skeleton, Stack } from '@mui/material';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { HiOutlineLocationMarker, HiOutlineMail } from 'react-icons/hi';
 import { BsPhone } from 'react-icons/bs';
-import { useSession } from 'next-auth/react';
 //import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import useAxiosAuth from 'hooks/useAxiosAuth';
@@ -16,10 +15,6 @@ import { MdOutlinePolicy } from 'react-icons/md';
 const Dashboard = () => {
 	const axiosPrivate = useAxiosAuth();
 	//const router = useRouter();
-
-	const { status, data } = useSession();
-
-	console.log(status, data);
 
 	const getUserDetails = async () => {
 		const response = await axiosPrivate.get('/account/dashboard');

@@ -157,7 +157,6 @@ const ManagePolicy = () => {
 		(extensionData) => submitExtendPolicy(extensionData),
 		{
 			onSuccess: (data) => {
-				console.log('Success response ', data);
 				if (data?.status === 200) {
 					//window.location.replace(data.redirect_url);
 					alert('Success', data?.message, 'success');
@@ -182,7 +181,6 @@ const ManagePolicy = () => {
 			extension_price: paymentAmount,
 		};
 
-		console.log(data);
 		let rightExtensionStartDate = isEqual(
 			parseISO(format(new Date(dateState[0]?.startDate), 'yyyy-MM-dd')),
 			parseISO(

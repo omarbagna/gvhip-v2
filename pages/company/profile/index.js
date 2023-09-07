@@ -99,7 +99,6 @@ const Profile = () => {
 		(newPasswordData) => triggerPasswordChange(newPasswordData),
 		{
 			onSuccess: (data) => {
-				console.log('Success response ', data);
 				if (data?.status === 200) {
 					//window.location.replace(data.redirect_url);
 					alert('Success', 'Password changed successfully', 'success');

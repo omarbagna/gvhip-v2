@@ -89,10 +89,8 @@ const FindPolicy = () => {
 
 	const findPolicy = useMutation((searchData) => searchPolicy(searchData), {
 		onSuccess: (data) => {
-			console.log('Success response ', data);
 			if (data?.status === 'success') {
 				//window.location.replace(data.redirect_url);
-				console.log(data);
 				setNotFound(false);
 				setPolicyHolder(data?.user);
 				reset();
@@ -103,7 +101,6 @@ const FindPolicy = () => {
 			}
 		},
 		onError: (error) => {
-			console.log(error);
 			alert('User not found', null, 'error');
 			setNotFound(true);
 			setPolicyHolder(null);
@@ -111,12 +108,10 @@ const FindPolicy = () => {
 	});
 
 	const submitSearchRequest = (data) => {
-		console.log(data);
 		setPolicyHolder(null);
 		setNotFound(false);
 		const searchData = data;
 
-		//console.log(data, searchData);
 		findPolicy.mutate(searchData);
 
 		//window.sessionStorage.setItem('basicData', basicData);
@@ -134,7 +129,6 @@ const FindPolicy = () => {
 
 			function onScanSuccess(decodedText, decodedResult) {
 				// Handle on success condition with the decoded text or result.
-				//console.log(`Scan result: ${decodedText}`, decodedResult);
 				html5QrcodeScanner.clear();
 				// ^ this will stop the scanner (video feed) and clear the scan area.
 				if (decodedText) {
@@ -298,6 +292,7 @@ const FindPolicy = () => {
 											helpertext={invalid ? error.message : null}
 											label="Passport Number/ Policy Number"
 											type="text"
+											autoFocus
 											required
 											InputProps={{
 												endAdornment: (
@@ -543,7 +538,7 @@ const FindPolicy = () => {
 													),
 													new Date()
 												)
-											) + 2}{' '}
+											) + 1}{' '}
 											days
 										</p>
 									</div>

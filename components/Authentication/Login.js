@@ -78,20 +78,20 @@ const Login = () => {
 									message: 'Please enter a valid email address',
 								},
 								*/
-								required: 'Please enter your email or policy number',
+								required: 'Please enter your policy number',
 							}}
 							render={({
 								field: { ref, ...field },
 								fieldState: { error, invalid },
 							}) => (
 								<div className="form-group">
-									<label>Email or Policy Number</label>
+									<label>Policy Number</label>
 									<input
 										{...field}
 										ref={ref}
 										type="text"
 										className="form-control"
-										placeholder="Email or Policy Number"
+										placeholder="Policy Number"
 									/>
 									{invalid && (
 										<p className="tw-text-xs tw-text-red-400">
