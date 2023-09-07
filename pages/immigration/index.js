@@ -24,6 +24,7 @@ import { Html5QrcodeScanner } from 'html5-qrcode';
 import { IoClose } from 'react-icons/io5';
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import { differenceInDays } from 'date-fns';
 const MySwal = withReactContent(Swal);
 
 const alert = (title = null, text = null, icon = null) => {
