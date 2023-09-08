@@ -1003,7 +1003,7 @@ const Form = () => {
 																								? 'red'
 																								: '#616B7D',
 																						}}
-																						excludeCountries={['gh']}
+																						//excludeCountries={['gh']}
 																						country={'us'}
 																						countryCodeEditable={false}
 																						enableSearch={true}
@@ -1186,7 +1186,7 @@ const Form = () => {
 																									? 'red'
 																									: '#616B7D',
 																							}}
-																							excludeCountries={['gh']}
+																							//excludeCountries={['gh']}
 																							country={'us'}
 																							countryCodeEditable={false}
 																							enableSearch={true}
