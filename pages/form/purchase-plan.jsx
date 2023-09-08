@@ -308,6 +308,7 @@ const Form = () => {
 			onSuccess: (data) => {
 				//console.log('Success response ', data);
 				if (data?.status === 200) {
+					toast.success('Submitted');
 					toast('Redirecting', {
 						position: 'top-right',
 						autoClose: 6000,
@@ -318,6 +319,7 @@ const Form = () => {
 						progress: undefined,
 						theme: 'light',
 					});
+
 					window.sessionStorage.clear();
 
 					window.location.replace(data?.checkoutUrl);
@@ -334,6 +336,9 @@ const Form = () => {
 				}
 			},
 			onError: (error) => {
+				toast.error(error?.message);
+				//toast.error(error?.response);
+
 				if (error?.response?.data?.errors) {
 					Object.values(error?.response?.data?.errors).map((value) => {
 						return toast.error(value[0]);
