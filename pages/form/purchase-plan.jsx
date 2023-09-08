@@ -656,7 +656,7 @@ const Form = () => {
 																								}
 																							}}
 																							label="Date of Birth"
-																							format="MMM dd, yyyy"
+																							format="dd/MM/yyyy"
 																							slotProps={{
 																								textField: {
 																									placeholder: 'Date of Birth',
@@ -804,7 +804,7 @@ const Form = () => {
 																								}
 																							}}
 																							label="Arrival date in Ghana"
-																							format="MMM dd, yyyy"
+																							format="dd/MM/yyyy"
 																						/>
 																					</LocalizationProvider>
 																					<FormHelperText>
@@ -865,7 +865,7 @@ const Form = () => {
 																								}
 																							}}
 																							label="Departure date from Ghana"
-																							format="MMM dd, yyyy"
+																							format="dd/MM/yyyy"
 																						/>
 																					</LocalizationProvider>
 																					<FormHelperText>
