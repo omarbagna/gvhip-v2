@@ -195,7 +195,7 @@ const DependantArray = ({ nestIndex, control, watch }) => {
 														}
 													}}
 													label="Date of Birth"
-													format="MMM dd, yyyy"
+													format="dd/MM/yyyy"
 												/>
 											</LocalizationProvider>
 											<FormHelperText>

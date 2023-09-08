@@ -941,7 +941,7 @@ const ManagePolicy = () => {
 																			}
 																		}}
 																		label="Extension start"
-																		format="MMM dd, yyyy"
+																		format="dd/MM/yyyy"
 																	/>
 																</LocalizationProvider>
 																<FormHelperText>
@@ -998,7 +998,7 @@ const ManagePolicy = () => {
 																			}
 																		}}
 																		label="Extension end"
-																		format="MMM dd, yyyy"
+																		format="dd/MM/yyyy"
 																		disabled={
 																			watch(
 																				`extension_details[0].extension_start`
@@ -1687,7 +1687,7 @@ const ManagePolicy = () => {
 																								}
 																							}}
 																							label="Extension start"
-																							format="MMM dd, yyyy"
+																							format="dd/MM/yyyy"
 																							disabled={
 																								watch(
 																									`extension_details[${index}].policy_number`
@@ -1759,7 +1759,7 @@ const ManagePolicy = () => {
 																							}
 																						}}
 																						label="Extension end"
-																						format="MMM dd, yyyy"
+																						format="dd/MM/yyyy"
 																						disabled={
 																							watch(
 																								`extension_details[${index}].extension_start`
