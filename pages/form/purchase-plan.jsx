@@ -369,6 +369,8 @@ const Form = () => {
 		data?.insured_person.map((person, index) => {
 			return insuredData.push({
 				...person,
+				arrival_date: dayjs(person?.arrival_date).format('YYYY-MM-DD'),
+				departure_date: dayjs(person?.departure_date).format('YYYY-MM-DD'),
 				name: `${person?.first_name} ${person?.last_name}`,
 				price: prices[index]?.price,
 				discount: prices[index]?.discount,
