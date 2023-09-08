@@ -325,6 +325,12 @@ const Form = () => {
 					//makeTestPayment.mutate(testPayData);
 					//router.push(`/authentication`);
 					//console.log(data);
+				} else {
+					if (!data?.success) {
+						Object.values(data?.data).map((value) => {
+							return toast.error(value[0]);
+						});
+					}
 				}
 			},
 			onError: (error) => {
@@ -651,6 +657,11 @@ const Form = () => {
 																							}}
 																							label="Date of Birth"
 																							format="MMM dd, yyyy"
+																							slotProps={{
+																								textField: {
+																									placeholder: 'Date of Birth',
+																								},
+																							}}
 																						/>
 																					</LocalizationProvider>
 																					<FormHelperText>
@@ -869,6 +880,9 @@ const Form = () => {
 																		name={`insured_person[${index}].address_ghana`}
 																		control={control}
 																		defaultValue={''}
+																		rules={{
+																			required: 'Please enter address',
+																		}}
 																		render={({
 																			field: { ref, ...field },
 																			fieldState: { error, invalid },
@@ -882,6 +896,7 @@ const Form = () => {
 																				}
 																				label="Address in Ghana"
 																				type="text"
+																				required
 																			/>
 																		)}
 																	/>
@@ -1005,6 +1020,9 @@ const Form = () => {
 																		name={`insured_person[${index}].address`}
 																		control={control}
 																		defaultValue={''}
+																		rules={{
+																			required: 'Please enter address',
+																		}}
 																		render={({
 																			field: { ref, ...field },
 																			fieldState: { error, invalid },
@@ -1018,6 +1036,7 @@ const Form = () => {
 																				}
 																				label="Address in Home Country"
 																				type="text"
+																				required
 																			/>
 																		)}
 																	/>
@@ -1084,6 +1103,9 @@ const Form = () => {
 																			name={`insured_person[${index}].emergency_contact_address`}
 																			control={control}
 																			defaultValue={''}
+																			rules={{
+																				required: 'Please enter address',
+																			}}
 																			render={({
 																				field: { ref, ...field },
 																				fieldState: { error, invalid },
@@ -1097,6 +1119,7 @@ const Form = () => {
 																					}
 																					label="Address"
 																					type="text"
+																					required
 																				/>
 																			)}
 																		/>
