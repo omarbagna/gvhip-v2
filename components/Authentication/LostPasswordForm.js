@@ -3,24 +3,10 @@ import axios from 'pages/api/axios';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-const MySwal = withReactContent(Swal);
-
-const alert = (title = null, text = null, icon = null) => {
-	MySwal.fire({
-		title: title,
-		text: text,
-		icon: icon,
-		timer: 8000,
-		timerProgressBar: true,
-		showConfirmButton: false,
-	});
-};
+import { toast } from 'react-toastify';
 
 const LostPasswordForm = () => {
-	const { control, handleSubmit } = useForm({
+	const { control, handleSubmit, reset } = useForm({
 		mode: 'all',
 		reValidateMode: 'onChange',
 		defaultValues: {
@@ -29,6 +15,9 @@ const LostPasswordForm = () => {
 	});
 
 	const triggerPasswordReset = async (data) => {
+		toast.loading('Sending reset link', {
+			toastId: 'sendingLink',
+		});
 		const { data: response } = await axios.post(
 			'/send-password-reset-link',
 			data
@@ -42,15 +31,32 @@ const LostPasswordForm = () => {
 			onSuccess: (data) => {
 				if (data?.status === 200) {
 					//window.location.replace(data.redirect_url);
-					alert('Success', 'Reset link sent successfully', 'success');
+					toast.update('sendingLink', {
+						render: 'Reset link sent successfully',
+						type: 'success',
+						isLoading: false,
+						autoClose: false,
+						closeButton: true,
+					});
 
 					reset();
 				} else if (data?.status !== 200) {
-					alert('Failed to send rest link', 'Please try again later', 'error');
+					toast.update('sendingLink', {
+						render: 'Failed to send rest link. Please try again later',
+						type: 'error',
+						isLoading: false,
+						autoClose: 4500,
+					});
 				}
 			},
 			onError: (error) => {
 				console.log(error);
+				toast.update('sendingLink', {
+					render: error?.message,
+					type: 'error',
+					isLoading: false,
+					autoClose: 4500,
+				});
 			},
 		}
 	);

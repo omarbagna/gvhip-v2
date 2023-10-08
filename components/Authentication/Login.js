@@ -6,21 +6,7 @@ import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { Backdrop, CircularProgress } from '@mui/material';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import { NextResponse } from 'next/server';
-const MySwal = withReactContent(Swal);
-
-const alert = (title = null, text = null, icon = null) => {
-	MySwal.fire({
-		title: title,
-		text: text,
-		icon: icon,
-		timer: 8000,
-		timerProgressBar: true,
-		showConfirmButton: false,
-	});
-};
+import { toast } from 'react-toastify';
 
 const Login = () => {
 	const [loading, setLoading] = useState(false);
@@ -39,20 +25,27 @@ const Login = () => {
 	const router = useRouter();
 
 	const logIn = async (data) => {
+		toast.loading('Signing in please wait', {
+			toastId: 'signingIn',
+		});
 		setLoading(true);
 		const status = await signIn('credentials', {
 			...data,
 			redirect: false,
 			callbackUrl: '/policy-holder',
 		});
-		//alert('Sign in failed', 'Invalid email or password', 'error');
-		console.log(status);
 		if (status.ok) {
 			setLoading(false);
+			toast.dismiss('signingIn');
 			router.push(status.url);
 		} else {
 			setLoading(false);
-			alert('Sign in failed', 'Invalid email or password', 'error');
+			toast.update('signingIn', {
+				render: 'Invalid email or password',
+				type: 'error',
+				isLoading: false,
+				autoClose: 3500,
+			});
 		}
 
 		setLoading(false);
@@ -149,7 +142,9 @@ const Login = () => {
 								</Link>
 							</div>
 						</div>
-						<button type="submit">Log In</button>
+						<button className="form-btn" type="submit">
+							Log In
+						</button>
 					</form>
 				</div>
 			</div>

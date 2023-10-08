@@ -8957,7 +8957,7 @@ Profile Authentication Area CSS
 .login-form form .lost-your-password-wrap a:hover::after {
 	width: 100%;
 }
-.login-form form button {
+.login-form form .form-btn {
 	border: none;
 	display: block;
 	margin-top: 20px;
@@ -8971,7 +8971,7 @@ Profile Authentication Area CSS
 	font-size: var(--fontSize);
 	font-weight: 600;
 }
-.login-form form button:hover {
+.login-form form .form-btn:hover {
 	background-color: var(--blueDarkColor);
 	color: var(--whiteColor);
 }
