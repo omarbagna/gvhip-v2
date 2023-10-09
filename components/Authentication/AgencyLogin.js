@@ -8,7 +8,7 @@ import { signIn } from 'next-auth/react';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { toast } from 'react-toastify';
 
-const Login = () => {
+const AgencyLogin = () => {
 	const [loading, setLoading] = useState(false);
 	const {
 		control,
@@ -56,7 +56,7 @@ const Login = () => {
 			<div className="col-lg-6 col-md-12">
 				<div className="login-form">
 					{/**
-				<h2>Login</h2>
+				<h2>AgencyLogin</h2>
 				 */}
 
 					<form onSubmit={handleSubmit(logIn)}>
@@ -65,26 +65,25 @@ const Login = () => {
 							name={`login`}
 							defaultValue={''}
 							rules={{
-								/*
 								pattern: {
 									value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/gi,
 									message: 'Please enter a valid email address',
 								},
-								*/
-								required: 'Please enter your policy number',
+
+								required: 'Please enter your email address',
 							}}
 							render={({
 								field: { ref, ...field },
 								fieldState: { error, invalid },
 							}) => (
 								<div className="form-group">
-									<label>Policy Number</label>
+									<label>Email</label>
 									<input
 										{...field}
 										ref={ref}
-										type="text"
+										type="email"
 										className="form-control"
-										placeholder="Policy Number"
+										placeholder="Email address"
 									/>
 									{invalid && (
 										<p className="tw-text-xs tw-text-red-400">
@@ -163,4 +162,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default AgencyLogin;

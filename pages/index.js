@@ -2,9 +2,11 @@ import React from 'react';
 import Navbar4 from '@/components/Layout/Navigations/Navbar4';
 import Banner from '@/components/HomePages/Insurance/Banner';
 import Features from '@/components/HomePages/Insurance/Features';
+import Partners from '@/components/HomePages/Insurance/Partners';
 import Goal from '@/components/HomePages/Insurance/Goal';
 import HowToApply from '@/components/HomePages/Insurance/HowToApply';
 import Target from '@/components/HomePages/Insurance/Target';
+import TouristAttractions from '@/components/HomePages/Insurance/TouristAttractions';
 //import TestimonialThree from '@/components/Testimonials/TestimonialThree';
 //import Services from '@/components/HomePages/Insurance/Services';
 import Faq from '@/components/HomePages/Insurance/Faq';
@@ -17,9 +19,11 @@ export default function Index() {
 			<Navbar4 />
 			<Banner />
 			<Features />
+			<Partners />
 			<Goal />
 			<HowToApply />
 			<Target />
+			<TouristAttractions />
 			{/**
 			<TestimonialThree />
 			<Services />

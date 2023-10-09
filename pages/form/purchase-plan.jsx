@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import logo from '@/public/images/gsti_logo.jpeg';
@@ -11,7 +12,6 @@ import { differenceInDays, addDays } from 'date-fns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-//import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 const MySwal = withReactContent(Swal);
@@ -29,21 +29,12 @@ import {
 	Typography,
 } from '@mui/material';
 import Accordion from '@/components/Accordion';
-
 import { BiTime } from 'react-icons/bi';
-import { BsGlobeEuropeAfrica } from 'react-icons/bs';
-//import { RiSecurePaymentLine } from 'react-icons/ri';
-//import axios from 'axios';
-import { useMutation } from 'react-query';
-//import Button from '../../components/Button/Button';
+import { useMutation, useQuery } from 'react-query';
 import { MdDelete, MdEdit, MdOutlineExpandMore } from 'react-icons/md';
 import { IoAdd } from 'react-icons/io5';
-//import { AiFillSafetyCertificate, AiOutlineFilePdf } from 'react-icons/ai';
-//import { scrollIntoViewHelper } from 'helpers/scrollIntoViewHelper';
 import { planTabsData } from 'data/plansData';
 import axios from 'pages/api/axios';
-//import { useRouter } from 'next/router';
-//import { allergies, conditions } from 'data/conditionsAndAllergies';
 import dayjs from 'dayjs';
 import DependantArray from '@/components/Form/dependantArray';
 import PhoneInput from 'react-phone-input-2';
@@ -73,32 +64,24 @@ const Form = () => {
 	//const [paymentDiscount, setPaymentDiscount] = useState(0);
 	const [open, setOpen] = useState(1);
 	const [showMore, setShowMore] = useState(false);
+	const [saveData, setSaveData] = useState(false);
 	const [prices, setPrices] = useState([]);
 
-	/*
-	const [existingConditions, setExistingConditions] = useState([]);
-	const [existingAllergies, setExistingAllergies] = useState([]);
+	const router = useRouter();
 
-	const handleChange = (event) => {
-		const {
-			target: { value },
-		} = event;
-		setExistingConditions(
-			// On autofill we get a stringified value.
-			typeof value === 'string' ? value.split(',') : value
+	const temporalQuery = router.query;
+
+	const getTemporalData = async () => {
+		const response = await axios.get(
+			`/get-user-data?uid=${temporalQuery?.uid}`
 		);
+
+		return response;
 	};
 
-	const handleChangeAllergy = (event) => {
-		const {
-			target: { value },
-		} = event;
-		setExistingAllergies(
-			// On autofill we get a stringified value.
-			typeof value === 'string' ? value.split(',') : value
-		);
-	};
-	*/
+	const temporalData = useQuery('temporal-data', getTemporalData, {
+		enabled: temporalQuery?.uid && formStep === 1 ? true : false,
+	});
 
 	const handleShowDetails = () => {
 		setShowMore((prev) => !prev);
@@ -108,17 +91,6 @@ const Form = () => {
 		const data = window.sessionStorage.getItem('basicData');
 		if (data !== null) setBasicData(JSON.parse(data));
 	}, []);
-
-	/*
-	const duration = basicData
-		? Number(
-				differenceInDays(
-					new Date(basicData.end_date),
-					new Date(basicData.start_date)
-				) + 1
-		  )
-		: null;
-	*/
 
 	let subTotal = 0;
 
@@ -212,13 +184,36 @@ const Form = () => {
 		setPrices(userPrices);
 	};
 
+	const saveTemporalDataRequest = async (data) => {
+		const { data: response } = await axios.post('/temporary-user-data', data);
+		return response;
+	};
+
+	const saveTemporalData = useMutation(
+		(temporalData) => saveTemporalDataRequest(temporalData),
+		{
+			onSuccess: (data) => {
+				//console.log('Success response ', data);
+				if (data?.status === 200) {
+					router.query.uid = data?.unique_id;
+					router.query.checkout = data?.checkoutUrl;
+					router.push(router);
+					setSaveData(false);
+					setFormStep((prev) => prev + 1);
+				}
+			},
+			onError: (error) => {
+				toast.error(error?.message);
+			},
+		}
+	);
+
 	const goToNext = () => {
 		trigger();
 		if (isValid) {
-			setFormStep((prev) => prev + 1);
+			calculatePrices();
+			setSaveData(true);
 		} else {
-			//scrollIntoViewHelper(errors);
-
 			toast.error('Please fill all required fields');
 		}
 	};
@@ -228,15 +223,44 @@ const Form = () => {
 	};
 
 	useEffect(() => {
-		if (basicData) {
+		if (temporalData?.data?.data?.data || basicData) {
 			reset({
-				start_date: basicData.start_date,
-				end_date: basicData.end_date,
-				country: basicData.country,
-				insured_person: basicData.insured_person,
+				start_date: temporalData?.data?.data?.data ? '' : basicData.start_date,
+				end_date: temporalData?.data?.data?.data ? '' : basicData.end_date,
+				country: temporalData?.data?.data?.data ? '' : basicData.country,
+				insured_person: temporalData?.data?.data?.data?.insured_person,
 			});
 		}
-	}, [reset, basicData]);
+	}, [reset, temporalData?.data?.data?.data, basicData]);
+
+	useEffect(() => {
+		if (saveData) {
+			let insuredData = [];
+			let total = 0;
+			prices.map(
+				(traveller) => (total += traveller?.price * traveller?.no_of_travellers)
+			);
+			watch('insured_person')?.map((person, index) => {
+				return insuredData.push({
+					...person,
+					arrival_date: dayjs(person?.arrival_date).format('YYYY-MM-DD'),
+					departure_date: dayjs(person?.departure_date).format('YYYY-MM-DD'),
+					name: `${person?.first_name} ${person?.last_name}`,
+					price: prices[index]?.price,
+					discount: prices[index]?.discount,
+					duration: prices[index]?.duration,
+				});
+			});
+
+			const temporalData = {
+				insured_person: insuredData,
+				total_price: total,
+				uid: temporalQuery?.uid ? temporalQuery?.uid : null,
+			};
+
+			saveTemporalData.mutate(temporalData);
+		}
+	}, [saveData]);
 
 	const renderButton = () => {
 		if (formStep > 2) {
@@ -266,7 +290,6 @@ const Form = () => {
 						//disabled={!isValid}
 						onClick={() => {
 							goToNext();
-							calculatePrices();
 						}}
 						type="button">
 						Next <i className="bx bx-chevron-right"></i>
@@ -297,6 +320,7 @@ const Form = () => {
 		setOpen(open === value ? 0 : value);
 	};
 
+	/*
 	const paymentRequest = async (data) => {
 		const { data: response } = await axios.post('/register', data);
 		return response;
@@ -356,14 +380,28 @@ const Form = () => {
 						);
 					})
 				);
-				*/
+				
 			},
 		}
 	);
+	*/
 
 	const submitForm = (data) => {
-		window.sessionStorage.setItem('basicData', JSON.stringify(data));
+		toast('Redirecting', {
+			position: 'top-right',
+			autoClose: 6000,
+			hideProgressBar: false,
+			closeOnClick: false,
+			pauseOnHover: false,
+			draggable: false,
+			progress: undefined,
+			theme: 'light',
+		});
 
+		window.sessionStorage.clear();
+
+		window.location.replace(temporalQuery?.checkout);
+		/*
 		let insuredData = [];
 
 		data?.insured_person.map((person, index) => {
@@ -379,43 +417,12 @@ const Form = () => {
 		});
 
 		const onboardingData = {
-			/*
-			name:
-				data?.// === 'company'
-					? data?.applicant[0]?.company_name
-					: data?.applicant[0]?.first_name,
-
-			first_name:
-				data?.// === 'company'
-					? data?.applicant[0]?.company_name
-					: data?.applicant[0]?.first_name,
-			last_name:
-				data?.// === 'company'
-					? data?.applicant[0]?.company_address
-					: data?.applicant[0]?.last_name,
-			email:
-				data?.// === 'company'
-					? data?.applicant[0]?.company_email
-					: data?.applicant[0]?.email,
-			telephone:
-				data?.// === 'company'
-					? data?.applicant[0]?.company_telephone
-					: data?.applicant[0]?.telephone,
-			country: data?.country,
-			//: data?.//,
-			*/
 			insured_person: insuredData,
 			total_price: subTotal,
-			/*
-			start_date: data?.start_date,
-			end_date: data?.end_date,
-			duration: duration,
-			price: paymentAmount,
-			discount: paymentDiscount,
-			*/
 		};
 
 		makePayment.mutate(onboardingData);
+		*/
 	};
 
 	return (
@@ -450,23 +457,15 @@ const Form = () => {
 									Duration
 								</p>
 							</span>
-							<p>
-								{basicData &&
+							{watch('insured_person')?.map((traveller, index) => {
+								let travelDuration =
 									differenceInDays(
-										new Date(basicData.end_date),
-										new Date(basicData.start_date)
-									) + 1}{' '}
-								Days
-							</p>
-						</div>
-						<div className="tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-2">
-							<span className="tw-flex tw-justify-start tw-items-center tw-gap-1">
-								<BsGlobeEuropeAfrica className="tw-text-lg tw-text-gray-700" />
-								<p className="tw-capitalize tw-font-normal tw-text-xs tw-text-gray-700 tw-border-b-2 tw-border-[#7862AF]">
-									Country of Residence
-								</p>
-							</span>
-							<p>{watch('country')} </p>
+										new Date(watch(`insured_person[${index}].departure_date`)),
+										new Date(watch(`insured_person[${index}].arrival_date`))
+									) + 1;
+
+								return <p key={index}>{travelDuration} Days</p>;
+							})}
 						</div>
 					</div>
 				</div>
@@ -2301,6 +2300,7 @@ const Form = () => {
 					</div>
 				</div>
 
+				{/*
 				<Backdrop
 					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
 					open={makePayment.isLoading}>
@@ -2311,13 +2311,36 @@ const Form = () => {
 						</p>
 					</div>
 				</Backdrop>
+				 */}
+
+				<Backdrop
+					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+					open={saveTemporalData.isLoading}>
+					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+						<CircularProgress color="inherit" />
+						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
+							Please wait
+						</p>
+					</div>
+				</Backdrop>
+
+				<Backdrop
+					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+					open={temporalData.isFetching}>
+					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+						<CircularProgress color="inherit" />
+						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
+							Please wait
+						</p>
+					</div>
+				</Backdrop>
 
 				<div className="tw-hidden lg:tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-0 tw-bg-white tw-w-[30rem] tw-h-[85vh] tw-overflow-y-auto tw-sticky tw-top-32 tw-right-0 tw-px-10 tw-py-8">
 					<p className="tw-font-title tw-font-bold tw-uppercase tw-text-sm tw-text-gray-500 tw-flex tw-justify-center tw-items-end tw-gap-1">
 						summary
 					</p>
 
-					{watch('insured_person').map((traveller, index) => {
+					{watch('insured_person')?.map((traveller, index) => {
 						let travelDuration =
 							differenceInDays(
 								new Date(watch(`insured_person[${index}].departure_date`)),

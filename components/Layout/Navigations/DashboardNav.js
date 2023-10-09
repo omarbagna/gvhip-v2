@@ -17,10 +17,10 @@ import { BiHomeAlt, BiUser } from 'react-icons/bi';
 import { MdOutlinePolicy } from 'react-icons/md';
 import { signOut, useSession } from 'next-auth/react';
 import { AiOutlineSearch } from 'react-icons/ai';
-import useAxiosAuth from 'hooks/useAxiosAuth';
+//import useAxiosAuth from 'hooks/useAxiosAuth';
 
 const DashboardNav = () => {
-	const axiosPrivate = useAxiosAuth();
+	//const axiosPrivate = useAxiosAuth();
 
 	const { data: session, status } = useSession();
 
@@ -34,15 +34,8 @@ const DashboardNav = () => {
 		e.preventDefault();
 		setLoading(true);
 
-		if (session?.user?.user?.role === 'guest') {
-			const res = await axiosPrivate.post('/account/logout');
+		await signOut({ callbackUrl: '/' });
 
-			if (res.status === 200) {
-				await signOut({ callbackUrl: '/authentication' });
-			}
-		} else {
-			await signOut({ callbackUrl: '/authentication' });
-		}
 		setLoading(false);
 	};
 

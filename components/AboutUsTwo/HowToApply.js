@@ -74,7 +74,7 @@ const HowToApply = () => {
 							<div className="lets-start-box">
 								<Link href="/form/get-quote">
 									<a className="btn-style-one dark-green-color">
-										Get a Quote <i className="bx bx-chevron-right"></i>
+										Get Started <i className="bx bx-chevron-right"></i>
 									</a>
 								</Link>
 							</div>

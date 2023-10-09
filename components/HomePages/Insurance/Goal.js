@@ -55,7 +55,7 @@ const Goal = () => {
 								data-aos-delay="300">
 								<Link href="/form/get-quote">
 									<a className="btn-style-one dark-green-color">
-										Get a Quote <i className="bx bx-chevron-right"></i>
+										Get Started <i className="bx bx-chevron-right"></i>
 									</a>
 								</Link>
 							</div>

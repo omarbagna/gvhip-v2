@@ -12,7 +12,7 @@ import logo from '@/public/images/gsti_logo.jpeg';
 const Authentication = () => {
 	return (
 		<>
-			<div className="page-title-area">
+			<div className="page-title-area !tw-py-16">
 				<div className="container">
 					<div className="page-title-content">
 						<Link href="/">

@@ -5,17 +5,23 @@ import Link from '@/utils/ActiveLink';
 import Image from 'next/image';
 
 import logo from '@/public/images/gsti_logo.jpeg';
+import ministryLogo from '@/public/images/ministry-logo.png';
+import immigrationLogo from '@/public/images/GIS-LOGO.jpg';
+import ghsLogo from '@/public/images/ghs.jpg';
+import airlinesLogo from '@/public/images/ghana-airlines.gif';
 import supportImg from '@/public/images/supportImg.jpg';
 import learnImg from '@/public/images/learnImg.jpg';
 import { signIn, useSession } from 'next-auth/react';
 import { Skeleton } from '@mui/material';
 import ReactFlagsSelect from 'react-flags-select';
+import { AiOutlineClose } from 'react-icons/ai';
 import { getCookie, hasCookie, setCookie } from 'cookies-next';
 
 const Navbar4 = () => {
 	const { data: session, status } = useSession();
 
 	const [menu, setMenu] = React.useState(true);
+	const [showAgencyModal, setShowAgencyModal] = React.useState(false);
 	const [selected, setSelected] = React.useState('US');
 	const toggleNavbar = () => {
 		setMenu(!menu);
@@ -89,7 +95,7 @@ const Navbar4 = () => {
 									<Image src={logo} alt="site logo" className="rounded-2" />
 								</a>
 							</Link>
-							<div className="tw-absolute tw-top-1/2 -tw-translate-y-1/2 tw-left-16 tw-h-fit lg:tw-hidden tw-mr-8 tw-w-fit">
+							<div className="tw-absolute tw-top-6 -tw-translate-y-1/2 tw-left-16 tw-h-fit lg:tw-hidden tw-mr-8 tw-w-fit">
 								<ReactFlagsSelect
 									countries={[
 										'GB',
@@ -439,6 +445,43 @@ const Navbar4 = () => {
 										</ul>
 									</li>
 
+									{status === 'authenticated' && session ? null : status ===
+											'unauthenticated' && !session ? (
+										<li className="nav-item">
+											<Link href="#">
+												<a className="dropdown-toggle nav-link">Sign In</a>
+											</Link>
+											<ul className="dropdown-menu lg:!tw-w-fit">
+												<li className="nav-item">
+													<span
+														className="tw-cursor-pointer"
+														onClick={() => signIn()}>
+														<a className="nav-link">Policy Holder Sign in</a>
+													</span>
+												</li>
+												<li className="nav-item">
+													<span //href="/agency-login"
+														className="tw-cursor-pointer"
+														onClick={() => {
+															toggleNavbar();
+															setShowAgencyModal(true);
+														}}>
+														<a className="nav-link">Agency Sign in</a>
+													</span>
+												</li>
+											</ul>
+										</li>
+									) : (
+										status === 'loading' && (
+											<div className="others-option">
+												<Skeleton
+													variant="text"
+													sx={{ fontSize: '2rem', width: '100px' }}
+												/>
+											</div>
+										)
+									)}
+
 									{/**
 								<li className="nav-item">
 									<Link href="/authentication" activeClassName="active">
@@ -457,21 +500,12 @@ const Navbar4 = () => {
 										</a>
 									</Link>
 								</div>
-							) : status === 'unauthenticated' && !session ? (
-								<div className="others-option">
-									<span // href="/authentication"
-										onClick={() => signIn()}>
-										<a className="btn-style-one crimson-color tw-cursor-pointer">
-											Sign In
-										</a>
-									</span>
-								</div>
-							) : (
+							) : status === 'unauthenticated' && !session ? null : (
 								status === 'loading' && (
 									<div className="others-option">
 										<Skeleton
 											variant="text"
-											sx={{ fontSize: '2rem', width: '120px' }}
+											sx={{ fontSize: '2rem', width: '100px' }}
 										/>
 									</div>
 								)
@@ -502,6 +536,99 @@ const Navbar4 = () => {
 					</div>
 				</div>
 			</div>
+
+			{showAgencyModal && (
+				<div
+					className="tw-fixed tw-top-0 tw-left-0 tw-z-[999] tw-w-screen tw-h-screen tw-bg-black/20 tw-backdrop-blur-sm tw-flex tw-justify-center tw-items-center"
+					onClick={() => setShowAgencyModal(false)}>
+					<div
+						data-aos="zoom-in"
+						data-aos-duration="800"
+						className="tw-rounded-xl tw-bg-white tw-w-full md:tw-w-4/5 lg:tw-w-2/3 tw-h-full md:tw-h-fit tw-px-5 tw-py-10 tw-flex tw-flex-col overflow-auto"
+						onClick={(e) => e.stopPropagation()}>
+						<div className="section-title tw-flex tw-justify-between tw-items-center">
+							<h2 className="nunito-font">Select Agency</h2>
+
+							<span
+								className="md:tw-hidden tw-cursor-pointer btn-style-back crimson-color tw-rounded-full tw-flex tw-justify-center tw-items-center tw-w-8 tw-h-8 md:tw-w-12 md:tw-h-12 tw-p-2"
+								onClick={() => setShowAgencyModal(false)}>
+								<AiOutlineClose className="tw-text-xl md:tw-text-3xl" />
+							</span>
+						</div>
+
+						<div className="tw-w-full tw-h-full tw-grid tw-grid-cols-2 tw-place-items-center tw-gap-2 md:tw-gap-5">
+							<div className="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-gap-3">
+								<Link href="/login/ministry">
+									<div className="tw-group tw-w-2/3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-3">
+										<span className="tw-cursor-pointer tw-transition-all tw-duration-400 tw-ease-in-out group-hover:tw-scale-105 tw-h-40 tw-rounded-xl tw-w-fit tw-flex tw-justify-center tw-items-center tw-bg-black tw-p-2">
+											<Image
+												src={ministryLogo}
+												alt="ministry logo"
+												width={230}
+												height={100}
+											/>
+										</span>
+										<p className="tw-text-base md:tw-text-lg tw-text-center tw-cursor-pointer group-hover:tw-text-[#8e6abf]">
+											Ministry of Foreign Affairs
+										</p>
+									</div>
+								</Link>
+							</div>
+							<div className="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-gap-3">
+								<Link href="/login/immigration">
+									<div className="tw-group tw-w-2/3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-3">
+										<span className="tw-cursor-pointer tw-transition-all tw-duration-400 tw-ease-in-out group-hover:tw-scale-105 tw-h-40 tw-rounded-xl tw-w-fit tw-flex tw-justify-center tw-items-center tw-p-2">
+											<Image
+												src={immigrationLogo}
+												alt="immigration logo"
+												width={120}
+												height={120}
+											/>
+										</span>
+										<p className="tw-text-base md:tw-text-lg tw-text-center tw-cursor-pointer group-hover:tw-text-[#8e6abf]">
+											Ghana Immigration Service
+										</p>
+									</div>
+								</Link>
+							</div>
+							<div className="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-gap-3">
+								<Link href="/login/ghs">
+									<div className="tw-group tw-w-2/3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-3">
+										<span className="tw-cursor-pointer tw-transition-all tw-duration-400 tw-ease-in-out group-hover:tw-scale-105 tw-h-40 tw-rounded-xl tw-w-fit tw-flex tw-justify-center tw-items-center tw-p-2">
+											<Image
+												src={ghsLogo}
+												alt="ghs logo"
+												width={120}
+												height={120}
+											/>
+										</span>
+										<p className="tw-text-base md:tw-text-lg tw-text-center tw-cursor-pointer group-hover:tw-text-[#8e6abf]">
+											Ghana Port Health Services (GHS)
+										</p>
+									</div>
+								</Link>
+							</div>
+							<div className="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-gap-3">
+								<Link href="/policy-check">
+									<div className="tw-group tw-w-2/3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-3">
+										<span className="tw-cursor-pointer tw-transition-all tw-duration-400 tw-ease-in-out group-hover:tw-scale-105 tw-h-40 tw-rounded-xl tw-w-fit tw-flex tw-justify-center tw-items-center tw-p-2">
+											<Image
+												src={airlinesLogo}
+												alt="ghana airlines logo"
+												width={120}
+												height={120}
+											/>
+										</span>
+										<p className="tw-text-base md:tw-text-lg tw-text-center tw-cursor-pointer group-hover:tw-text-[#8e6abf]">
+											Ghana Airlines
+										</p>
+									</div>
+								</Link>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
 		</>
 	);
 };

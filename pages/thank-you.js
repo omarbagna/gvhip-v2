@@ -1,11 +1,28 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import axios from 'pages/api/axios';
+import { useQuery } from 'react-query';
+import { Backdrop, CircularProgress } from '@mui/material';
+import { useRouter } from 'next/router';
 
 import logo from '@/public/images/gsti_logo.jpeg';
-import thankYouImg from '@/public/images/thank-you.png';
 
 const ThankYou = () => {
+	const router = useRouter();
+
+	const paymentQuery = router.query;
+
+	const registerUserRequest = async () => {
+		const response = await axios.post(`/register/${paymentQuery?.uid}`);
+
+		return response;
+	};
+
+	const registerUser = useQuery('register-user', registerUserRequest, {
+		enabled: paymentQuery?.uid ? true : false,
+	});
+
 	return (
 		<div className="thank-you-area">
 			<div className="d-table">
@@ -39,6 +56,17 @@ const ThankYou = () => {
 					</div>
 				</div>
 			</div>
+
+			<Backdrop
+				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+				open={registerUser.isLoading}>
+				<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+					<CircularProgress color="inherit" />
+					<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
+						Please wait
+					</p>
+				</div>
+			</Backdrop>
 		</div>
 	);
 };
