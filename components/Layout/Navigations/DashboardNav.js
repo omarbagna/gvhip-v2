@@ -5,6 +5,9 @@ import Link from '@/utils/ActiveLink';
 import Image from 'next/image';
 
 import logo from '@/public/images/gsti_logo.jpeg';
+import ministryLogo from '@/public/images/ministry-logo.png';
+import immigrationLogo from '@/public/images/GIS-LOGO.jpg';
+import ghsLogo from '@/public/images/ghs.jpg';
 import {
 	Avatar,
 	Backdrop,
@@ -48,10 +51,22 @@ const DashboardNav = () => {
 						<a className="navbar-brand p-1">
 							<Image
 								height={50}
-								width={60}
-								src={logo}
+								width={session?.user?.user?.agency === 'ministries' ? 100 : 60}
+								src={
+									session?.user?.user?.agency === 'immigration'
+										? immigrationLogo
+										: session?.user?.user?.agency === 'ministries'
+										? ministryLogo
+										: session?.user?.user?.agency === 'porthealth'
+										? ghsLogo
+										: logo
+								}
 								alt="site logo"
-								className="rounded-2"
+								className={`rounded-2 ${
+									session?.user?.user?.agency === 'ministries'
+										? 'tw-bg-black'
+										: ''
+								}`}
 							/>
 						</a>
 					</Link>
