@@ -138,6 +138,8 @@ const Form = () => {
 					new Date(traveller.arrival_date)
 				) + 1;
 
+			console.log(traveller.dependants?.length);
+
 			return userPrices.push({
 				traveller_no: index + 1,
 				no_of_travellers: traveller.dependants?.length + 1,
@@ -201,9 +203,11 @@ const Form = () => {
 					setSaveData(false);
 					setFormStep((prev) => prev + 1);
 				}
+				setSaveData(false);
 			},
 			onError: (error) => {
 				toast.error(error?.message);
+				setSaveData(false);
 			},
 		}
 	);
@@ -223,23 +227,33 @@ const Form = () => {
 	};
 
 	useEffect(() => {
-		if (temporalData?.data?.data?.data || basicData) {
+		if (temporalData?.data?.data?.data) {
 			reset({
-				start_date: temporalData?.data?.data?.data ? '' : basicData.start_date,
-				end_date: temporalData?.data?.data?.data ? '' : basicData.end_date,
-				country: temporalData?.data?.data?.data ? '' : basicData.country,
 				insured_person: temporalData?.data?.data?.data?.insured_person,
+			});
+		} else if (basicData) {
+			reset({
+				start_date: basicData?.start_date,
+				end_date: basicData?.end_date,
+				country: basicData?.country,
+				insured_person: basicData?.insured_person,
 			});
 		}
 	}, [reset, temporalData?.data?.data?.data, basicData]);
 
 	useEffect(() => {
+		let totalPayable = 0;
 		if (saveData) {
 			let insuredData = [];
-			let total = 0;
-			prices.map(
-				(traveller) => (total += traveller?.price * traveller?.no_of_travellers)
-			);
+			prices.map((traveller, index) => {
+				totalPayable += traveller?.price * traveller?.no_of_travellers;
+				return console.log(
+					traveller?.price,
+					traveller?.no_of_travellers,
+					index
+				);
+			});
+
 			watch('insured_person')?.map((person, index) => {
 				return insuredData.push({
 					...person,
@@ -254,7 +268,7 @@ const Form = () => {
 
 			const temporalData = {
 				insured_person: insuredData,
-				total_price: total,
+				total_price: totalPayable,
 				uid: temporalQuery?.uid ? temporalQuery?.uid : null,
 			};
 
