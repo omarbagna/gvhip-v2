@@ -10,7 +10,7 @@ const LostPasswordForm = () => {
 		mode: 'all',
 		reValidateMode: 'onChange',
 		defaultValues: {
-			email: '',
+			policy_number: '',
 		},
 	});
 
@@ -71,27 +71,29 @@ const LostPasswordForm = () => {
 				<div className="container">
 					<div className="lost-password-box">
 						<p>
-							Lost your password? Please enter your email address. You will
+							Lost your password? Please enter your policy number. You will
 							receive a link to create a new password via email.
 						</p>
 						<form onSubmit={handleSubmit(resetPasswordRequest)}>
 							<Controller
 								control={control}
-								name={`email`}
+								name={`policy_number`}
 								defaultValue={''}
 								rules={{
+									/*
 									pattern: {
 										value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/gi,
 										message: 'Please enter a valid email address',
 									},
-									required: 'Please enter your email',
+									*/
+									required: 'Please enter your policy number',
 								}}
 								render={({
 									field: { ref, ...field },
 									fieldState: { error, invalid },
 								}) => (
 									<div className="form-group">
-										<label>Email</label>
+										<label>Policy number</label>
 										<input
 											{...field}
 											ref={ref}

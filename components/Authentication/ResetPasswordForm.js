@@ -68,7 +68,7 @@ const ResetPasswordForm = () => {
 	const resetPassword = async (data) => {
 		const resetData = {
 			token: resetParams?.token,
-			email: resetParams?.email,
+			policy_number: resetParams?.policy_number,
 			password: data.new_password,
 			password_confirmation: data.confirm_password,
 		};
