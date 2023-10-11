@@ -48,8 +48,8 @@ const attractions = [
 const AttractionsBanner = () => {
 	return (
 		<div className="testimonials-area with-top-border o-hidden ptb-100 !tw-bg-[#fffbfb] tw-px-8 lg:tw-px-14">
-			<div className="tw-flex tw-justify-between tw-items-center tw-gap-6">
-				<div className="insurance-banner-content tw-w-1/2">
+			<div className="tw-flex tw-flex-col lg:tw-flex-row tw-justify-between tw-items-center tw-gap-6">
+				<div className="insurance-banner-content tw-mt-10 lg:tw-mt-0 lg:tw-w-1/2">
 					<h1
 						data-aos="fade-up"
 						data-aos-duration="1200"
@@ -59,7 +59,7 @@ const AttractionsBanner = () => {
 					</h1>
 				</div>
 
-				<div className="tw-w-1/2">
+				<div className="tw-w-full lg:tw-w-1/2">
 					<Swiper
 						spaceBetween={25}
 						centeredSlides={true}
