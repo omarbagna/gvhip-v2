@@ -10,10 +10,42 @@ import { Pagination, Autoplay, A11y, EffectCoverflow } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import Image from 'next/image';
+import Link from 'next/link';
+
+const attractions = [
+	{
+		id: 1,
+		name: 'Kakum National Park',
+		image: kakum,
+		alt: 'kakum canopy walk',
+		url: '/tourist-attractions/kakum',
+	},
+	{
+		id: 2,
+		name: 'Elmina Castle',
+		image: elmina,
+		alt: 'elmina castle',
+		url: '/tourist-attractions/elmina',
+	},
+	{
+		id: 3,
+		name: 'Boti Falls',
+		image: boti,
+		alt: 'boti falls',
+		url: '/tourist-attractions/boti',
+	},
+	{
+		id: 4,
+		name: 'Mole National Park',
+		image: mole,
+		alt: 'mole national park',
+		url: '/tourist-attractions/mole',
+	},
+];
 
 const TouristAttractions = () => {
 	return (
-		<div className="testimonials-area with-top-border o-hidden ptb-100">
+		<div className="testimonials-area with-top-border o-hidden ptb-100 !tw-bg-[#fffbfb]">
 			<div
 				className="section-title"
 				data-aos="fade-up"
@@ -39,7 +71,8 @@ const TouristAttractions = () => {
 				}}
 				autoplay={{
 					delay: 3000,
-					pauseOnMouseEnter: false,
+					pauseOnMouseEnter: true,
+					disableOnInteraction: false,
 				}}
 				breakpoints={{
 					1: {
@@ -51,78 +84,28 @@ const TouristAttractions = () => {
 				}}
 				className="testimonials-slides-four tw-h-[50vh]"
 				modules={[Pagination, Autoplay, A11y, EffectCoverflow]}>
-				<SwiperSlide>
-					<div className="tw-relative tw-w-full tw-h-full tw-overflow-hidden tw-rounded-lg">
-						<div className="tw-absolute tw-z-10 tw-top-0 tw-left-0 tw-bg-[#8e6abf]/30 tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center">
-							<h3 className="nunito-font tw-text-center tw-text-white tw-text-2xl">
-								Kakum National Park
-							</h3>
-						</div>
-						<Image
-							src={kakum}
-							alt="kakum canopy walk"
-							width={0}
-							height={0}
-							layout="fill"
-							objectFit="cover"
-							className="tw-rounded-lg"
-						/>
-					</div>
-				</SwiperSlide>
-				<SwiperSlide>
-					<div className="tw-relative tw-w-full tw-h-full tw-overflow-hidden tw-rounded-lg">
-						<div className="tw-absolute tw-z-10 tw-top-0 tw-left-0 tw-bg-[#8e6abf]/30 tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center">
-							<h3 className="nunito-font tw-text-center tw-text-white tw-text-2xl">
-								Elmina Castle
-							</h3>
-						</div>
-						<Image
-							src={elmina}
-							alt="elmina castle"
-							width={0}
-							height={0}
-							layout="fill"
-							objectFit="cover"
-							className="tw-rounded-lg"
-						/>
-					</div>
-				</SwiperSlide>
-				<SwiperSlide>
-					<div className="tw-relative tw-w-full tw-h-full tw-overflow-hidden tw-rounded-lg">
-						<div className="tw-absolute tw-z-10 tw-top-0 tw-left-0 tw-bg-[#8e6abf]/30 tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center">
-							<h3 className="nunito-font tw-text-center tw-text-white tw-text-2xl">
-								Boti Falls
-							</h3>
-						</div>
-						<Image
-							src={boti}
-							alt="boti falls"
-							width={0}
-							height={0}
-							layout="fill"
-							objectFit="cover"
-							className="tw-rounded-lg"
-						/>
-					</div>
-				</SwiperSlide>
-				<SwiperSlide>
-					<div className="tw-relative tw-w-full tw-h-full tw-overflow-hidden tw-rounded-lg">
-						<div className="tw-absolute tw-z-10 tw-top-0 tw-left-0 tw-bg-[#8e6abf]/30 tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center">
-							<h3 className="nunito-font tw-text-center tw-text-white tw-text-2xl">
-								Mole National Park
-							</h3>
-						</div>
-						<Image
-							src={mole}
-							alt="mole national park"
-							width={0}
-							height={0}
-							layout="fill"
-							objectFit="cover"
-							className="tw-rounded-lg"
-						/>
-					</div>
-				</SwiperSlide>
+				{attractions.map((attraction, index) => (
+					<SwiperSlide key={index}>
+						<Link href={attraction.url} passHref>
+							<div className="tw-group tw-relative tw-w-full tw-h-full tw-overflow-hidden tw-rounded-lg tw-cursor-pointer">
+								<div className="tw-transition-all tw-duration-300 tw-ease-in-out tw-absolute tw-z-10 tw-top-0 tw-left-0 tw-bg-[#8e6abf]/30 group-hover:tw-bg-[#8e6abf]/60 tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center tw-cursor-pointer">
+									<h3 className="nunito-font tw-transition-all tw-duration-300 tw-ease-in-out tw-text-center tw-text-white tw-text-2xl tw-cursor-pointer group-hover:tw-scale-150">
+										{attraction.name}
+									</h3>
+								</div>
+								<Image
+									src={attraction.image}
+									alt={attraction.alt}
+									width={0}
+									height={0}
+									layout="fill"
+									objectFit="cover"
+									className="tw-rounded-lg tw-cursor-pointer tw-transition-all tw-duration-300 tw-ease-in-out group-hover:tw-scale-125 group-hover:tw-rotate-6"
+								/>
+							</div>
+						</Link>
+					</SwiperSlide>
+				))}
 			</Swiper>
 		</div>
 	);

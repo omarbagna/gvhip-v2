@@ -12,7 +12,12 @@ module.exports = {
 		ignoreDuringBuilds: true,
 	},
 	images: {
-		domains: ['chart.googleapis.com', 'gvhip-v2.netlify.app', 'localhost:3000'],
+		domains: [
+			'chart.googleapis.com',
+			'gvhip-v2.netlify.app',
+			'images.unsplash.com',
+			'localhost:3000',
+		],
 		/*
 		remotePatterns: [
 			{

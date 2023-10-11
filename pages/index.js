@@ -20,10 +20,10 @@ export default function Index() {
 			<Banner />
 			<Features />
 			<Partners />
+			<TouristAttractions />
 			<Goal />
 			<HowToApply />
 			<Target />
-			<TouristAttractions />
 			{/**
 			<TestimonialThree />
 			<Services />
