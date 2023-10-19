@@ -20,6 +20,7 @@ import { BiHomeAlt, BiUser } from 'react-icons/bi';
 import { MdOutlinePolicy } from 'react-icons/md';
 import { signOut, useSession } from 'next-auth/react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { TbCalendarStats } from 'react-icons/tb';
 //import useAxiosAuth from 'hooks/useAxiosAuth';
 
 const DashboardNav = () => {
@@ -50,8 +51,8 @@ const DashboardNav = () => {
 					<Link href="/">
 						<a className="navbar-brand p-1">
 							<Image
-								height={50}
-								width={session?.user?.user?.agency === 'ministries' ? 100 : 60}
+								height={60}
+								width={session?.user?.user?.agency === 'ministries' ? 180 : 60}
 								src={
 									session?.user?.user?.agency === 'immigration'
 										? immigrationLogo
@@ -70,6 +71,15 @@ const DashboardNav = () => {
 							/>
 						</a>
 					</Link>
+					<h1>
+						{session?.user?.user?.agency === 'immigration'
+							? 'Ghana Immigration Service'
+							: session?.user?.user?.agency === 'ministries'
+							? 'Ministry of Foreign Affairs'
+							: session?.user?.user?.agency === 'porthealth'
+							? 'Ghana Port Health Service (GHS)'
+							: null}
+					</h1>
 					<div
 						className="tw-transition-all tw-duration-150 tw-shrink-0 tw-ease-in tw-w-fit tw-h-fit tw-p-1 tw-cursor-pointer tw-rounded-md hover:tw-bg-slate-400/10"
 						onClick={toggleDropdown}>
@@ -162,8 +172,8 @@ const DashboardNav = () => {
 											: session?.user?.user?.role === 'policy_holder' &&
 											  '/policy-holder'
 									}
-									activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-									<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+									activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF] tw-font-medium">
+									<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2 hover:tw-text-[#7862AF]">
 										<BiHomeAlt className="tw-shrink-0 tw-text-2xl" /> Dashboard
 									</a>
 								</Link>
@@ -177,8 +187,8 @@ const DashboardNav = () => {
 												: session?.user?.user?.role === 'policy_holder' &&
 												  '/policy-holder/manage-policy'
 										}
-										activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-										<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+										activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF] tw-font-medium">
+										<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2 hover:tw-text-[#7862AF]">
 											<MdOutlinePolicy className="tw-shrink-0 tw-text-2xl" />{' '}
 											Manage Policy
 										</a>
@@ -193,8 +203,8 @@ const DashboardNav = () => {
 											: session?.user?.user?.role === 'policy_holder' &&
 											  '/policy-holder/profile'
 									}
-									activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-									<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+									activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF] tw-font-medium">
+									<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2 hover:tw-text-[#7862AF]">
 										<BiUser className="tw-shrink-0 tw-text-2xl" /> Profile
 									</a>
 								</Link>
@@ -204,16 +214,32 @@ const DashboardNav = () => {
 								<>
 									<Link
 										href="/immigration"
-										activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-										<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+										activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF] tw-font-medium">
+										<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2 hover:tw-text-[#7862AF]">
+											<BiHomeAlt className="tw-shrink-0 tw-text-2xl" />{' '}
+											Dashboard
+										</a>
+									</Link>
+									<Link
+										href="/immigration/stats"
+										activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF] tw-font-medium">
+										<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2 hover:tw-text-[#7862AF]">
+											<TbCalendarStats className="tw-shrink-0 tw-text-2xl" />{' '}
+											Statistics
+										</a>
+									</Link>
+									<Link
+										href="/immigration/find-policy"
+										activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF] tw-font-medium">
+										<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2 hover:tw-text-[#7862AF]">
 											<AiOutlineSearch className="tw-shrink-0 tw-text-2xl" />{' '}
 											Find Policy
 										</a>
 									</Link>
 									<Link
 										href="/immigration/profile"
-										activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF]">
-										<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2">
+										activeClassName="tw-bg-[#7862AF]/10 tw-text-[#7862AF] tw-font-medium">
+										<a className="tw-w-fit lg:tw-w-56 tw-py-4 tw-px-6 tw-flex tw-flex-col tw-justify-center tw-items-center lg:tw-flex-row lg:tw-justify-start lg:tw-items-end tw-gap-2 hover:tw-text-[#7862AF]">
 											<BiUser className="tw-shrink-0 tw-text-2xl" /> Profile
 										</a>
 									</Link>

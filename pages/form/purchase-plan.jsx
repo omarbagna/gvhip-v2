@@ -198,7 +198,6 @@ const Form = () => {
 				//console.log('Success response ', data);
 				if (data?.status === 200) {
 					router.query.uid = data?.unique_id;
-					router.query.checkout = data?.checkoutUrl;
 					router.push(router);
 					setSaveData(false);
 					setFormStep((prev) => prev + 1);
@@ -247,16 +246,20 @@ const Form = () => {
 			let insuredData = [];
 			prices.map((traveller, index) => {
 				totalPayable += traveller?.price * traveller?.no_of_travellers;
-				return console.log(
-					traveller?.price,
-					traveller?.no_of_travellers,
-					index
-				);
+				return;
 			});
 
 			watch('insured_person')?.map((person, index) => {
 				return insuredData.push({
 					...person,
+					dependants:
+						person.dependants?.length > 0
+							? person.dependants?.map((dependant) => ({
+									...dependant,
+									country: person?.country,
+							  }))
+							: [],
+
 					arrival_date: dayjs(person?.arrival_date).format('YYYY-MM-DD'),
 					departure_date: dayjs(person?.departure_date).format('YYYY-MM-DD'),
 					name: `${person?.first_name} ${person?.last_name}`,
@@ -334,9 +337,8 @@ const Form = () => {
 		setOpen(open === value ? 0 : value);
 	};
 
-	/*
 	const paymentRequest = async (data) => {
-		const { data: response } = await axios.post('/register', data);
+		const { data: response } = await axios.post('/make-payment', data);
 		return response;
 	};
 
@@ -344,7 +346,6 @@ const Form = () => {
 		(paymentData) => paymentRequest(paymentData),
 		{
 			onSuccess: (data) => {
-				//console.log('Success response ', data);
 				if (data?.status === 200) {
 					toast.success('Submitted');
 					toast('Redirecting', {
@@ -361,10 +362,6 @@ const Form = () => {
 					window.sessionStorage.clear();
 
 					window.location.replace(data?.checkoutUrl);
-
-					//makeTestPayment.mutate(testPayData);
-					//router.push(`/authentication`);
-					//console.log(data);
 				} else {
 					if (!data?.success) {
 						Object.values(data?.data).map((value) => {
@@ -382,61 +379,18 @@ const Form = () => {
 						return toast.error(value[0]);
 					});
 				}
-
-				/*
-				alertError(
-					'Submission Error',
-					Object.values(error?.response?.data?.errors).map((value, index) => {
-						return (
-							<p key={index}>
-								`${index + 1}. ${value}`<br />
-							</p>
-						);
-					})
-				);
-				
 			},
 		}
 	);
-	*/
 
 	const submitForm = (data) => {
-		toast('Redirecting', {
-			position: 'top-right',
-			autoClose: 6000,
-			hideProgressBar: false,
-			closeOnClick: false,
-			pauseOnHover: false,
-			draggable: false,
-			progress: undefined,
-			theme: 'light',
-		});
-
 		window.sessionStorage.clear();
 
-		window.location.replace(temporalQuery?.checkout);
-		/*
-		let insuredData = [];
-
-		data?.insured_person.map((person, index) => {
-			return insuredData.push({
-				...person,
-				arrival_date: dayjs(person?.arrival_date).format('YYYY-MM-DD'),
-				departure_date: dayjs(person?.departure_date).format('YYYY-MM-DD'),
-				name: `${person?.first_name} ${person?.last_name}`,
-				price: prices[index]?.price,
-				discount: prices[index]?.discount,
-				duration: prices[index]?.duration,
-			});
-		});
-
-		const onboardingData = {
-			insured_person: insuredData,
-			total_price: subTotal,
+		const paymentData = {
+			uid: temporalQuery?.uid,
 		};
 
-		makePayment.mutate(onboardingData);
-		*/
+		makePayment.mutate(paymentData);
 	};
 
 	return (
@@ -2330,6 +2284,17 @@ const Form = () => {
 				<Backdrop
 					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
 					open={saveTemporalData.isLoading}>
+					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
+						<CircularProgress color="inherit" />
+						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
+							Please wait
+						</p>
+					</div>
+				</Backdrop>
+
+				<Backdrop
+					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+					open={makePayment.isLoading}>
 					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 						<CircularProgress color="inherit" />
 						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">

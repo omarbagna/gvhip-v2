@@ -24,6 +24,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ScrollToTop from '@/components/Layout/ScrollToTop';
 
 import Head from 'next/head';
+import { StateContext } from 'context/StateContext';
 
 function MyApp({ Component, pageProps }) {
 	const [queryClient] = useState(() => new QueryClient());
@@ -40,24 +41,25 @@ function MyApp({ Component, pageProps }) {
 
 			<QueryClientProvider client={queryClient}>
 				<Hydrate state={pageProps.dehydratedState}>
-					<SessionProvider session={pageProps.session}>
-						<NextNProgress color="#8e6abf" height={5} />
-						<Component {...pageProps} />
-						<ToastContainer
-							position="top-right"
-							autoClose={10000}
-							hideProgressBar={false}
-							newestOnTop={false}
-							closeOnClick
-							rtl={false}
-							pauseOnFocusLoss
-							draggable
-							pauseOnHover
-							theme="colored"
-						/>
-					</SessionProvider>
+					<StateContext>
+						<SessionProvider session={pageProps.session}>
+							<NextNProgress color="#8e6abf" height={5} />
+							<Component {...pageProps} />
+							<ToastContainer
+								position="top-right"
+								autoClose={10000}
+								hideProgressBar={false}
+								newestOnTop={false}
+								closeOnClick
+								rtl={false}
+								pauseOnFocusLoss
+								draggable
+								pauseOnHover
+								theme="colored"
+							/>
+						</SessionProvider>
+					</StateContext>
 				</Hydrate>
-
 				<ReactQueryDevtools initialIsOpen={false} position="bottom-left" />
 			</QueryClientProvider>
 

@@ -2,29 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import DashboardNav from '@/components/Layout/Navigations/DashboardNav';
-import { Controller, useForm } from 'react-hook-form';
-import SelectInput from '@/components/Input/SelectInput';
-import DefaultInput from '@/components/Input/DefaultInput';
 import { useMutation } from 'react-query';
-//import { axiosPrivate } from 'pages/api/axios';
-import {
-	Backdrop,
-	CircularProgress,
-	IconButton,
-	InputAdornment,
-	Skeleton,
-	Stack,
-	Tooltip,
-} from '@mui/material';
+import { Backdrop, CircularProgress, Skeleton, Stack } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useAxiosAuth from 'hooks/useAxiosAuth';
-import { BiQrScan } from 'react-icons/bi';
-import { Html5QrcodeScanner } from 'html5-qrcode';
-import { IoClose } from 'react-icons/io5';
-import dayjs from 'dayjs';
-import Image from 'next/image';
-import { differenceInDays } from 'date-fns';
+
+import LineChart from '@/components/Dashboard/LineChart';
+import Link from 'next/link';
 const MySwal = withReactContent(Swal);
 
 const alert = (title = null, text = null, icon = null) => {
@@ -38,749 +23,173 @@ const alert = (title = null, text = null, icon = null) => {
 	});
 };
 
-const FindPolicy = () => {
+const Dashboard = () => {
 	const axiosPrivate = useAxiosAuth();
 
-	const [declinePolicyModal, setDeclinePolicyModal] = useState(false);
-	const [policyHolder, setPolicyHolder] = useState(null);
-	const [notFound, setNotFound] = useState(false);
-	const [showScanner, setShowScanner] = useState(false);
-	const [triggerScanSearch, setTriggerScanSearch] = useState(false);
-
-	const { reset, control, handleSubmit, setValue } = useForm({
-		mode: 'all',
-		reValidateMode: 'onChange',
-		defaultValues: {
-			search_term: '',
-			search_type: 'policy_number',
-		},
-	});
-
-	const handleShowScanner = () => {
-		setShowScanner((prev) => !prev);
-	};
-	const handleCloseScanner = () => {
-		document.getElementById('html5-qrcode-button-camera-stop').click();
-		setTimeout(() => {
-			setShowScanner(false);
-		}, 1000);
-	};
-
-	const {
-		watch: watchDecline,
-		reset: declineReset,
-		control: declineControl,
-		handleSubmit: handleDeclineSubmit,
-	} = useForm({
-		mode: 'all',
-		reValidateMode: 'onChange',
-		defaultValues: {
-			reason: '',
-			desc: '',
-		},
-	});
-
-	const searchPolicy = async (data) => {
-		const { data: response } = await axiosPrivate.get(
-			`/admin/search-user?search_type=${data?.search_type}&search_term=${data?.search_term}`
-		);
-		return response;
-	};
-
-	const findPolicy = useMutation((searchData) => searchPolicy(searchData), {
-		onSuccess: (data) => {
-			if (data?.status === 'success') {
-				//window.location.replace(data.redirect_url);
-				setNotFound(false);
-				setPolicyHolder(data?.user);
-				reset();
-			} else if (data?.status !== 'success') {
-				alert('User not found', null, 'error');
-				setNotFound(true);
-				setPolicyHolder(null);
-			}
-		},
-		onError: (error) => {
-			alert('User not found', null, 'error');
-			setNotFound(true);
-			setPolicyHolder(null);
-		},
-	});
-
-	const submitSearchRequest = (data) => {
-		setPolicyHolder(null);
-		setNotFound(false);
-		const searchData = data;
-
-		findPolicy.mutate(searchData);
-
-		//window.sessionStorage.setItem('basicData', basicData);
-
-		//router.push(`/form/purchase-plan`);
-	};
-
-	useEffect(() => {
-		if (showScanner) {
-			var html5QrcodeScanner = new Html5QrcodeScanner('reader', {
-				fps: 10,
-				qrbox: 300,
-				rememberLastUsedCamera: true,
+	const nFormatter = (num) => {
+		const lookup = [
+			{ value: 1, symbol: '' },
+			{ value: 1e3, symbol: 'k' },
+			{ value: 1e6, symbol: 'M' },
+			{ value: 1e9, symbol: 'G' },
+			{ value: 1e12, symbol: 'T' },
+			{ value: 1e15, symbol: 'P' },
+			{ value: 1e18, symbol: 'E' },
+		];
+		const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+		var item = lookup
+			.slice()
+			.reverse()
+			.find(function (item) {
+				return num >= item.value;
 			});
-
-			function onScanSuccess(decodedText, decodedResult) {
-				// Handle on success condition with the decoded text or result.
-				html5QrcodeScanner.clear();
-				// ^ this will stop the scanner (video feed) and clear the scan area.
-				if (decodedText) {
-					setValue(`search_term`, decodedText);
-				}
-				// ...
-				setTriggerScanSearch(true);
-				setShowScanner(false);
-			}
-
-			html5QrcodeScanner.render(onScanSuccess);
-		}
-
-		if (triggerScanSearch) {
-			document.getElementById('search-policy-button').click();
-			setTriggerScanSearch(false);
-		}
-	}, [showScanner, setValue, triggerScanSearch]);
-
-	const triggerDeclinePolicy = async (data) => {
-		const { data: response } = await axiosPrivate.put(
-			'/admin/verify-user-trip',
-			data
-		);
-		return response;
+		return item
+			? (num / item.value).toFixed(1).replace(rx, '$1') + item.symbol
+			: '0';
 	};
 
-	const declinePolicy = useMutation(
-		(declineData) => triggerDeclinePolicy(declineData),
-		{
-			onSuccess: (data) => {
-				if (data?.status === 'success') {
-					alert('Success', 'Policy holder decline successful', 'success');
-					setPolicyHolder(null);
-					setNotFound(false);
-					setDeclinePolicyModal(false);
-					declineReset();
-				} else if (data?.status !== 'success') {
-					alert(
-						'Decline failed',
-						'Policy holder decline failed. Please try again later',
-						'error'
-					);
-				}
-			},
-			onError: (error) => {
-				console.log(error);
-			},
-		}
-	);
-
-	const submitDeclinePolicy = (data) => {
-		const declineData = {
-			status: 'declined',
-			policy_number: policyHolder?.travelling_info?.policy_number,
-			reason: data.reason === 'other' ? data.desc : data.reason,
-		};
-
-		declinePolicy.mutate(declineData);
-
-		//window.sessionStorage.setItem('basicData', basicData);
-
-		//router.push(`/form/purchase-plan`);
-	};
-
-	const triggerVerifyPolicy = async (data) => {
-		const { data: response } = await axiosPrivate.put(
-			'/admin/verify-user-trip',
-			data
-		);
-		return response;
-	};
-
-	const verifyPolicy = useMutation(
-		(verificationData) => triggerVerifyPolicy(verificationData),
-		{
-			onSuccess: (data) => {
-				if (data?.status === 'success') {
-					alert('Success', 'Policy holder verified successfully', 'success');
-					setPolicyHolder(null);
-					setNotFound(false);
-				} else if (data?.status !== 'success') {
-					alert(
-						'Verification failed',
-						'Policy holder verification failed. Please try again later',
-						'error'
-					);
-				}
-			},
-			onError: (error) => {
-				console.log(error);
-			},
-		}
-	);
-
-	const submitVerifyPolicy = (e) => {
-		e.preventDefault();
-
-		const verifyData = {
-			status: 'verified',
-			policy_number: policyHolder?.travelling_info?.policy_number,
-		};
-
-		verifyPolicy.mutate(verifyData);
-	};
+	const [open, setOpen] = useState(false);
+	const [filter, setFilter] = useState('this_week');
 
 	return (
-		<div className="tw-w-screen tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56 tw-overflow-hidden">
+		<div className="tw-w-full tw-min-h-screen tw-bg-[#FEFBFB] tw-py-20 lg:tw-pt-20 lg:tw-pl-56 tw-overflow-hidden">
 			<DashboardNav />
 			<div className="tw-w-full tw-h-full tw-py-10 tw-px-6 md:tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
-				<div className="tw-w-full tw-flex tw-flex-col xl:tw-flex-row tw-justify-start tw-items-start xl:tw-justify-between xl:tw-items-center tw-gap-5">
+				<div className="tw-w-full tw-flex tw-flex-col md:tw-flex-row tw-justify-between tw-items-center tw-gap-6">
 					<h2 className="tw-text-2xl md:tw-text-3xl tw-font-semibold tw-shrink-0">
-						Find Policy
+						Welcome
 					</h2>
-					<div className="tw-w-full xl:tw-w-2/3">
-						<form onSubmit={handleSubmit(submitSearchRequest)}>
-							<div className="tw-w-full tw-flex tw-flex-col md:tw-flex-row tw-justify-end tw-items-start tw-gap-3">
-								<div className="tw-w-full md:tw-w-1/4">
-									<Controller
-										control={control}
-										name={'search_type'}
-										rules={{
-											required: 'Please select search type',
-										}}
-										render={({
-											field: { ref, ...field },
-											fieldState: { error, invalid },
-										}) => (
-											<SelectInput
-												{...field}
-												ref={ref}
-												error={invalid}
-												helpertext={invalid ? error.message : null}
-												label="Search by"
-												options={[
-													{ name: 'passport number', value: 'passport_number' },
-													{ name: 'policy number', value: 'policy_number' },
-												]}
-												required
-											/>
-										)}
-									/>
-								</div>
 
-								<Controller
-									name={'search_term'}
-									control={control}
-									rules={{
-										required:
-											'Please enter passport number or policy number to search',
-									}}
-									render={({
-										field: { ref, ...field },
-										fieldState: { error, invalid },
-									}) => (
-										<DefaultInput
-											{...field}
-											id="search_term"
-											ref={ref}
-											error={invalid}
-											helpertext={invalid ? error.message : null}
-											label="Passport Number/ Policy Number"
-											type="text"
-											autoFocus
-											required
-											InputProps={{
-												endAdornment: (
-													<InputAdornment position="end">
-														<Tooltip title="Scan QR Code">
-															<IconButton
-																aria-label="toggle scan code"
-																onClick={() => handleShowScanner()}
-																edge="end">
-																<BiQrScan />
-															</IconButton>
-														</Tooltip>
-													</InputAdornment>
-												),
-											}}
-										/>
-									)}
-								/>
-
-								<button
-									id="search-policy-button"
-									className="btn-style-one dark-green-color"
-									type="submit">
-									Search
-								</button>
-							</div>
-						</form>
+					<div className="tw-w-fit tw-flex tw-justify-center tw-items-center tw-gap-3">
+						<div
+							onClick={() => setFilter('this_week')}
+							className={`tw-group tw-transition-all tw-text-sm tw-duration-200 tw-ease-in-out tw-p-1 tw-px-2 tw-rounded-md hover:tw-bg-[#8D69BF] hover:tw-text-white ${
+								filter === 'this_week'
+									? 'tw-bg-[#8D69BF] tw-text-white'
+									: 'tw-bg-[#FFECF4] tw-text-[#8D69BF]'
+							} tw-cursor-pointer`}>
+							This week
+						</div>
+						<div
+							onClick={() => setFilter('this_month')}
+							className={`tw-group tw-transition-all tw-text-sm tw-duration-200 tw-ease-in-out tw-p-1 tw-px-2 tw-rounded-md hover:tw-bg-[#8D69BF] hover:tw-text-white ${
+								filter === 'this_month'
+									? 'tw-bg-[#8D69BF] tw-text-white'
+									: 'tw-bg-[#FFECF4] tw-text-[#8D69BF]'
+							} tw-cursor-pointer`}>
+							This month
+						</div>
+						<div
+							onClick={() => setFilter('this_year')}
+							className={`tw-group tw-transition-all tw-text-sm tw-duration-200 tw-ease-in-out tw-p-1 tw-px-2 tw-rounded-md hover:tw-bg-[#8D69BF] hover:tw-text-white ${
+								filter === 'this_year'
+									? 'tw-bg-[#8D69BF] tw-text-white'
+									: 'tw-bg-[#FFECF4] tw-text-[#8D69BF]'
+							} tw-cursor-pointer`}>
+							This year
+						</div>
 					</div>
 				</div>
 
-				{policyHolder && (
-					<div className="tw-w-full tw-grid tw-grid-cols-1 lg:tw-grid-cols-3 xl:tw-grid-cols-2 tw-gap-5 tw-place-content-start tw-place-items-start">
-						<div className="tw-w-full tw-h-fit lg:tw-col-span-2 xl:tw-col-span-1  tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
-							<div className="tw-w-full tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
-								<div className="tw-w-full tw-flex tw-justify-start tw-gap-4 tw-items-start">
-									<Image
-										src={policyHolder?.travelling_info?.policy_qr_code}
-										alt="qr code"
-										height={120}
-										width={120}
-									/>
-									<div className="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-1 tw-pt-3">
-										<h3 className="tw-font-semibold tw-text-lg md:tw-text-xl tw-text-[#8e6abf]">
-											{policyHolder?.insured_person?.length > 0
-												? policyHolder?.insured_person[0]?.first_name
-												: policyHolder?.travelling_info?.first_name}{' '}
-											{policyHolder?.insured_person?.length > 0
-												? policyHolder?.insured_person[0]?.last_name
-												: policyHolder?.travelling_info?.last_name}
-										</h3>
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
-											<div className="tw-w-fit tw-shrink-0 tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-												Passport number:
-											</div>
-											<p className="tw-uppercase tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
-												{policyHolder?.insured_person?.length > 0
-													? policyHolder?.insured_person[0]?.passport_number
-													: policyHolder?.travelling_info?.passport_number}
-											</p>
-										</div>
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
-											<div className="tw-w-fit tw-shrink-0 tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-												Policy number:
-											</div>
-											<p className="tw-uppercase tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
-												{policyHolder?.travelling_info?.policy_number}
-											</p>
-										</div>
-										{/*<div className="tw-w-full tw-flex tw-justify-start tw-items-end tw-gap-3">
-										<div className="tw-w-fit tw-shrink-0 tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Policy Status:
-										</div>
-										<p className="tw-capitalize tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-600 tw-font-bold">
-											Active
-										</p>
-									</div>*/}
-									</div>
-								</div>
-								<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-t">
-									<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
-										Bio Data
-									</h2>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											First name
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.insured_person?.length > 0
-												? policyHolder?.insured_person[0]?.first_name
-												: policyHolder?.travelling_info?.first_name}
-										</p>
-									</div>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Last name
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.insured_person?.length > 0
-												? policyHolder?.insured_person[0]?.last_name
-												: policyHolder?.travelling_info?.last_name}
-										</p>
-									</div>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Date of Birth
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{dayjs(
-												policyHolder?.insured_person?.length > 0
-													? policyHolder?.insured_person[0]?.dob
-													: policyHolder?.travelling_info?.dob
-											).format('MMM DD, YYYY')}
-										</p>
-									</div>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Gender
-										</div>
-										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.insured_person?.length > 0
-												? policyHolder?.insured_person[0]?.gender
-												: policyHolder?.travelling_info?.gender}
-										</p>
-									</div>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
-											Passport Number
-										</div>
-										<p className="tw-uppercase tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.insured_person?.length > 0
-												? policyHolder?.insured_person[0]?.passport_number
-												: policyHolder?.travelling_info?.passport_number}
-										</p>
-									</div>
-								</div>
-								<div className="tw-w-full tw-flex tw-flex-col tw-space-y-2 tw-py-3 tw-border-y">
-									<h2 className="tw-w-full tw-font-title tw-font-medium tw-text-base tw-text-gray-600 tw-flex tw-justify-start tw-items-end">
-										Travel details
-									</h2>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Country of Origin
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{policyHolder?.insured_person?.length > 0
-												? policyHolder?.insured_person[0]?.country
-												: policyHolder?.travelling_info?.country}
-										</p>
-									</div>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Effective Date
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{dayjs(
-												policyHolder?.travelling_info
-													?.user_policy_transaction[0]?.start_date
-											).format('MMM DD, YYYY')}
-										</p>
-									</div>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-text-gray-500">
-											Expiry Date
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{dayjs(
-												policyHolder?.travelling_info
-													?.user_policy_transaction[0]?.end_date
-											).format('MMM DD, YYYY')}
-										</p>
-									</div>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
-											Duration
-										</div>
-										<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-											{
-												policyHolder?.travelling_info
-													?.user_policy_transaction[0]?.duration
-											}{' '}
-											Days
-										</p>
-									</div>
-								</div>
-								<div className="tw-w-full tw-flex tw-flex-col tw-gap-2">
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
-											Policy Name
-										</div>
-										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-sm tw-text-[#8e6abf] tw-font-bold">
-											{
-												policyHolder?.travelling_info
-													?.user_policy_transaction[0]?.travel_plan?.plan_name
-											}
-										</span>
-									</div>
-									{policyHolder?.travelling_info?.user_policy_transaction[0]
-										?.extension_start_date ? (
-										<div className="tw-grid tw-grid-cols-2">
-											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
-												Extension status
-											</div>
-											<p className="tw-capitalize tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-green-500 tw-font-bold">
-												Extended
-											</p>
-										</div>
-									) : null}
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
-											Expires in
-										</div>
-										<p
-											className={`tw-capitalize tw-w-full tw-flex tw-justify-end tw-text-base ${
-												Number(
-													differenceInDays(
-														new Date(
-															policyHolder?.travelling_info
-																?.user_policy_transaction[0]?.extension_end_date
-																? policyHolder?.travelling_info
-																		?.user_policy_transaction[0]
-																		?.extension_end_date
-																: policyHolder?.travelling_info
-																		?.user_policy_transaction[0]?.end_date
-														),
-														new Date()
-													)
-												) +
-													2 >
-												5
-													? 'tw-text-green-500'
-													: 'tw-text-red-500'
-											}  tw-font-bold`}>
-											{Number(
-												differenceInDays(
-													new Date(
-														policyHolder?.travelling_info
-															?.user_policy_transaction[0]?.extension_end_date
-															? policyHolder?.travelling_info
-																	?.user_policy_transaction[0]
-																	?.extension_end_date
-															: policyHolder?.travelling_info
-																	?.user_policy_transaction[0]?.end_date
-													),
-													new Date()
-												)
-											) + 1}{' '}
-											days
-										</p>
-									</div>
-									<div className="tw-grid tw-grid-cols-2">
-										<div className="tw-w-full tw-flex tw-justify-start tw-text-sm tw-font-semibold tw-text-gray-500">
-											Price
-										</div>
-										<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-xl tw-text-[#8e6abf] tw-font-bold">
-											{Intl.NumberFormat('en-US', {
-												style: 'currency',
-												currency: 'USD',
-											}).format(
-												policyHolder?.travelling_info
-													?.user_policy_transaction[0]?.price
-											)}{' '}
-										</span>
-									</div>
-								</div>
-							</div>
-
-							{policyHolder?.travelling_info?.user_policy_transaction[0]
-								?.status === 'pending' ? (
-								<>
-									<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-5">
-										<span
-											className="btn-style-back red-light-color tw-w-fit tw-h-fit tw-rounded-lg tw-px-4 tw-py-2 tw-flex tw-shadow-md tw-justify-center tw-items-center tw-text-base tw-cursor-pointer"
-											onClick={() => setDeclinePolicyModal((prev) => !prev)}>
-											Decline
-										</span>
-
-										<button
-											//size="lg"
-											className="btn-style-one dark-green-color"
-											//disabled={!isValid}
-											onClick={(e) => submitVerifyPolicy(e)}
-											type="button">
-											Verify
-										</button>
-									</div>
-									<div className="tw-w-full tw-flex-col tw-justify-start tw-items-start tw-gap-3">
-										<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-3 tw-rounded-lg">
-											<p className="tw-w-fit tw-text-left tw-text-base">
-												<strong>NB:</strong> An email will be sent to the policy
-												holder with their updated status once verified or
-												declined.
-											</p>
-										</div>
-									</div>
-								</>
-							) : null}
-						</div>
-
-						{policyHolder?.travelling_info?.user_policy_transaction[0]
-							?.status !== 'pending' ? (
-							<div className="tw-w-full tw-flex-col tw-justify-start tw-items-start tw-gap-3">
-								<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-3 tw-rounded-lg">
-									<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
-											Authorization status
-										</div>
-										<p
-											className={`tw-w-full tw-uppercase tw-flex tw-justify-end tw-text-base ${
-												policyHolder?.travelling_info
-													?.user_policy_transaction[0]?.status === 'verified'
-													? 'tw-text-green-600'
-													: 'tw-text-red-600'
-											}  tw-font-bold`}>
-											{
-												policyHolder?.travelling_info
-													?.user_policy_transaction[0]?.status
-											}
-										</p>
-									</div>
-									<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
-											Authorized by
-										</div>
-										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
-											{
-												policyHolder?.travelling_info
-													?.user_policy_transaction[0]?.status_updated_by
-											}
-										</p>
-									</div>
-									<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
-										<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
-											Authorized at
-										</div>
-										<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
-											{
-												policyHolder?.travelling_info
-													?.user_policy_transaction[0]?.status_update_date
-											}
-										</p>
-									</div>
-									{policyHolder?.travelling_info?.user_policy_transaction[0]
-										?.reason && (
-										<div className="tw-w-full tw-grid tw-grid-cols-2 tw-gap-1">
-											<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-600">
-												Reason
-											</div>
-											<p className="tw-w-full tw-capitalize tw-flex tw-justify-end tw-text-base tw-text-gray-800 tw-font-bold">
-												{
-													policyHolder?.travelling_info
-														?.user_policy_transaction[0]?.reason
-												}
-											</p>
-										</div>
-									)}
-								</div>
-								{/*policyHolder?.travelling_info?.user_policy_transaction[0]?.reason && (
-									<div className="tw-bg-[#7862AF]/20 tw-w-full tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-2 tw-h-fit tw-p-4 tw-rounded-lg">
-										<p className="tw-w-fit tw-text-left tw-text-base">
-											{policyHolder?.travelling_info?.user_policy_transaction[0]?.reason}
-										</p>
-									</div>
-								)*/}
-							</div>
-						) : null}
-					</div>
-				)}
-
-				{declinePolicyModal && (
-					<div
-						onClick={() => setDeclinePolicyModal((prev) => !prev)}
-						className="tw-fixed tw-top-0 tw-left-0 tw-z-[999] tw-flex tw-justify-center tw-items-center tw-w-screen tw-h-screen tw-bg-black/50">
+				<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-5 tw-place-content-start tw-place-items-start">
+					<Link href="/immigration/stats/?selectedQuery=all" passHref>
 						<div
-							data-aos="zoom-in"
-							data-aos-duration="600"
-							onClick={(e) => e.stopPropagation()}
-							className="tw-font-medium tw-text-center tw-text-lg tw-w-2/3 lg:tw-w-1/2 tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-8 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
-							<div className="tw-w-full">
-								<form onSubmit={handleDeclineSubmit(submitDeclinePolicy)}>
-									<div className="tw-w-full tw-flex tw-flex-col tw-gap-4 tw-pb-3">
-										<h2 className="tw-w-full tw-font-medium tw-text-2xl tw-text-[#524380] tw-flex tw-justify-start tw-items-end">
-											Decline Policy Holder
-										</h2>
-
-										<Controller
-											name={'reason'}
-											control={declineControl}
-											rules={{
-												required: 'Please select reason for decline',
-											}}
-											render={({
-												field: { ref, ...field },
-												fieldState: { error, invalid },
-											}) => (
-												<SelectInput
-													{...field}
-													ref={ref}
-													error={invalid}
-													helpertext={invalid ? error.message : null}
-													label="Reason"
-													options={[
-														{
-															name: 'passport number does not match',
-															value: 'passport number does not match',
-														},
-														{
-															name: 'date of birth does not match',
-															value: 'date of birth does not match',
-														},
-														{
-															name: 'first name or last name does not match',
-															value: 'first name or last name does not match',
-														},
-														{
-															name: 'gender does not match',
-															value: 'gender does not match',
-														},
-														{
-															name: 'other',
-															value: 'other',
-														},
-													]}
-													required
-												/>
-											)}
-										/>
-
-										{watchDecline('reason') === 'other' && (
-											<Controller
-												name={'desc'}
-												control={declineControl}
-												rules={{
-													required: 'Please enter your new password',
-												}}
-												render={({
-													field: { ref, ...field },
-													fieldState: { error, invalid },
-												}) => (
-													<DefaultInput
-														{...field}
-														ref={ref}
-														error={invalid}
-														helpertext={invalid ? error.message : null}
-														label="Reason Description"
-														type={'text-area'}
-														required
-													/>
-												)}
-											/>
-										)}
-
-										<div className="tw-w-full tw-flex tw-justify-end tw-items-end">
-											<button
-												className="btn-style-one dark-green-color"
-												type="submit">
-												Decline
-											</button>
-										</div>
-									</div>
-								</form>
+							className={`tw-group tw-cursor-pointer tw-transition tw-duration-200 tw-ease-in-out hover:tw-shadow-lg tw-w-full tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-4 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5`}>
+							<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
+								<span
+									className={`tw-font-light tw-cursor-pointer tw-text-sm tw-w-full tw-text-right`}>
+									All Processed Applications
+								</span>
+							</div>
+							<div className="tw-w-full tw-flex tw-justify-start tw-items-center">
+								<h3
+									className={`tw-font-medium tw-cursor-pointer tw-text-5xl tw-text-[#7862AF]`}>
+									219
+								</h3>
 							</div>
 						</div>
+					</Link>
+					<Link href="/immigration/stats/?selectedQuery=verified" passHref>
+						<div
+							className={`tw-group tw-cursor-pointer tw-transition tw-duration-200 tw-ease-in-out hover:tw-shadow-lg tw-w-full tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-4 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5`}>
+							<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
+								<span
+									className={`tw-font-light tw-cursor-pointer tw-text-sm tw-w-full tw-text-right`}>
+									Verified Applications
+								</span>
+							</div>
+							<div className="tw-w-full tw-flex tw-justify-start tw-items-center">
+								<h3
+									className={`tw-font-medium tw-cursor-pointer tw-text-5xl tw-text-green-500`}>
+									136
+								</h3>
+							</div>
+						</div>
+					</Link>
+					<Link href="/immigration/stats?selectedQuery=declined" passHref>
+						<div
+							className={`tw-group tw-cursor-pointer tw-transition tw-duration-200 tw-ease-in-out hover:tw-shadow-lg tw-w-full tw-h-fit
+								tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-4 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5`}>
+							<div className="tw-w-full tw-flex tw-justify-between tw-items-center">
+								<span
+									className={`tw-font-light tw-cursor-pointer tw-text-sm tw-w-full tw-text-right `}>
+									Declined Applications
+								</span>
+							</div>
+							<div className="tw-w-full tw-flex tw-justify-start tw-items-center">
+								<h3
+									className={`tw-font-medium tw-cursor-pointer tw-text-5xl tw-text-red-500`}>
+									83
+								</h3>
+							</div>
+						</div>
+					</Link>
+				</div>
+
+				<div className="tw-w-full tw-grid tw-grid-cols-1 xl:tw-grid-cols-3 tw-gap-5 tw-place-content-center tw-place-items-start">
+					<div className="tw-col-span-1 lg:tw-col-span-2 tw-hidden md:tw-block tw-w-full">
+						<LineChart />
 					</div>
-				)}
+
+					<div
+						className={`tw-transition tw-duration-200 tw-ease-in-out hover:tw-shadow-lg tw-w-full tw-h-full tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-4 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-5`}>
+						<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-pb-5">
+							<h3 className={`tw-font-medium tw-text-2xl tw-text-[#7862AF]`}>
+								Top 5 Visiting Countries
+							</h3>
+						</div>
+						<div className="tw-w-full tw-flex tw-justify-between tw-items-center tw-gap-3">
+							<div className="tw-w-fit tw-flex tw-justify-start tw-items-center tw-gap-3">
+								<span className="tw-group tw-transition-all tw-duration-200 tw-ease-in-out tw-p-1 tw-w-7 tw-h-7 tw-rounded-full tw-bg-[#FFECF4] tw-text-[#8D69BF] tw-font-medium tw-flex tw-justify-center tw-items-center">
+									1
+								</span>
+								<p className={`tw-font-normal tw-text-base tw-capitalize`}>
+									USA
+								</p>
+							</div>
+							<p
+								className={`tw-text-[#7862AF] tw-font-medium tw-text-lg tw-capitalize`}>
+								{nFormatter(2654799)}{' '}
+								<em className="tw-text-sm tw-font-normal tw-text-gray-500">
+									travellers
+								</em>
+							</p>
+						</div>
+					</div>
+				</div>
 
 				<Backdrop
 					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-					open={declinePolicy.isLoading}>
+					open={open}>
 					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
 						<CircularProgress color="inherit" />
 						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
-							Declining, please wait...
+							Please wait...
 						</p>
 					</div>
 				</Backdrop>
 
-				<Backdrop
-					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-					open={verifyPolicy.isLoading}>
-					<div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-5">
-						<CircularProgress color="inherit" />
-						<p className="tw-text-white tw-font-medium tw-text-center tw-text-lg tw-w-2/3">
-							Verifying, please wait...
-						</p>
-					</div>
-				</Backdrop>
-
-				{findPolicy.isLoading && (
+				{open && (
 					<div className="tw-w-full tw-grid tw-grid-cols-1 lg:tw-grid-cols-3 xl:tw-grid-cols-2 tw-gap-5 tw-place-content-start tw-place-items-start">
 						<div className="tw-w-full">
 							<Stack spacing={1} sx={{ width: '100%' }}>
@@ -839,97 +248,9 @@ const FindPolicy = () => {
 						</div>
 					</div>
 				)}
-
-				{notFound && (
-					<h4 className="tw-text-xl tw-font-medium">User not Found</h4>
-				)}
-
-				{!notFound && !policyHolder && !findPolicy.isLoading && (
-					<span className="tw-bg-[#7862AF]/20 tw-w-full tw-h-fit tw-p-3 md:tw-p-6 tw-rounded-lg">
-						<h5 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#7862AF] tw-font-semibold tw-text-lg md:tw-text-2xl">
-							GVHIP Verification Portal
-						</h5>
-						<h6 className="tw-mt-3 tw-w-full tw-text-left tw-text-[#171e41] tw-font-medium tw-text-lg md:tw-text-xl">
-							Ensuring Every Visitor&apos;s Safe Stay in Ghana!
-						</h6>
-						<p className="tw-w-full tw-text-left tw-text-sm md:tw-text-base">
-							Dear Officers, through this portal, you play a pivotal role in
-							safeguarding both our visitors and our homeland. Together,
-							let&apos;s ensure a smooth, welcoming experience for all entering
-							Ghana, while upholding the safety standards we&apos;re proud of.
-							<br />
-							<br />
-						</p>
-						<h6 className="tw-mt-5 tw-w-full tw-text-left tw-text-[#171e41] tw-font-medium tw-text-lg md:tw-text-xl">
-							How to Verify a Policy
-						</h6>
-						<p className="tw-w-full tw-mt-1 tw-text-left tw-text-sm md:tw-text-base">
-							<strong className="tw-text-[#171e41]">
-								1. Enter Passport Number:
-							</strong>{' '}
-							Use the passport number provided by the visitor.
-							<br />
-							<strong className="tw-text-[#171e41]">
-								2. Verify Policy Details:
-							</strong>{' '}
-							The system will display the policy&apos;s validity, coverage, and
-							other essential details.
-							<br />
-							<strong className="tw-text-[#171e41]">
-								3. Confirm Verification:
-							</strong>{' '}
-							Mark the policy as verified if all details match and are valid.
-							<br />
-							<br />
-							<strong className="tw-text-[#171e41]">A Warm Note:</strong>{' '}
-							Let&apos;s remember, while the GVHIP is mandatory, it&apos;s also
-							our way of showing that Ghana cares. Kindly guide visitors with
-							lapsed or missing policies to our dedicated helpdesk.
-						</p>
-						<p className="tw-w-full tw-mt-4 tw-text-left tw-text-sm md:tw-text-base">
-							<br />
-							<br />
-							<strong>Facing an issue with the portal? </strong> Click{' '}
-							<strong className="tw-text-[#7862AF]">here</strong> for immediate
-							assistance.
-							<br />
-							<br />
-							<strong>New to the portal? </strong> Access training materials and
-							resources <strong className="tw-text-[#7862AF]">here</strong>.
-						</p>
-					</span>
-				)}
 			</div>
-
-			{showScanner && (
-				<div
-					className="tw-w-screen tw-h-screen tw-fixed tw-top-0 tw-left-0 tw-z-[99] tw-flex tw-justify-center tw-items-end tw-bg-black/40"
-					onClick={() => handleCloseScanner()}>
-					<div
-						data-aos="slide-up"
-						data-aos-duration="800"
-						onClick={(e) => e.stopPropagation()}
-						className="tw-w-5/6 tw-h-[90vh] lg:tw-h-4/5 tw-rounded-t-2xl tw-p-4 md:tw-p-8 tw-bg-white tw-flex tw-flex-col tw-justify-start tw-items-center tw-gap-10">
-						<div className="tw-flex tw-w-full tw-justify-between tw-items-center">
-							<h2 className="tw-font-medium tw-text-2xl md:tw-text-4xl tw-text-[#171e41] tw-flex tw-justify-start tw-items-start tw-gap-1">
-								Scan QR Code
-							</h2>
-
-							<IconButton
-								aria-label="close scanner"
-								onClick={() => handleCloseScanner()}>
-								<IoClose className="tw-text-xl tw-text-[#8e6abf]" />
-							</IconButton>
-						</div>
-
-						<div
-							className="tw-rounded-xl tw-w-full md:tw-w-2/3 tw-h-fit tw-overflow-hidden"
-							id="reader"></div>
-					</div>
-				</div>
-			)}
 		</div>
 	);
 };
 
-export default FindPolicy;
+export default Dashboard;

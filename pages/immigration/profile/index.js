@@ -130,7 +130,7 @@ const Profile = () => {
 			<DashboardNav />
 			<div className="tw-w-full tw-h-full tw-py-10 tw-px-6 md:tw-px-12 tw-flex tw-flex-col tw-justify-start tw-items-start tw-gap-10">
 				<h2 className="tw-text-2xl md:tw-text-3xl tw-font-semibold">
-					Applicant Profile
+					User Profile
 				</h2>
 
 				{!userProfile.isLoading && USER_PROFILE && (

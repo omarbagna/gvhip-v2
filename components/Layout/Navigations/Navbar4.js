@@ -17,6 +17,37 @@ import ReactFlagsSelect from 'react-flags-select';
 import { AiOutlineClose } from 'react-icons/ai';
 import { getCookie, hasCookie, setCookie } from 'cookies-next';
 
+const agencies = [
+	{
+		id: 'ministries',
+		name: 'Ministry of Foreign Affairs',
+		logo: ministryLogo,
+		alt: 'ministry logo',
+		url: '/login/ministry',
+	},
+	{
+		id: 'immigration',
+		name: 'Ghana Immigration Service',
+		logo: immigrationLogo,
+		alt: 'immigration logo',
+		url: '/login/immigration',
+	},
+	{
+		id: 'porthealth',
+		name: 'Ghana Port Health Services (GHS)',
+		logo: ghsLogo,
+		alt: 'port health logo',
+		url: '/login/ghs',
+	},
+	{
+		id: 'airlines',
+		name: 'Ghana Airlines',
+		logo: airlinesLogo,
+		alt: 'airlines logo',
+		url: '/policy-check',
+	},
+];
+
 const Navbar4 = () => {
 	const { data: session, status } = useSession();
 
@@ -563,77 +594,29 @@ const Navbar4 = () => {
 						</div>
 
 						<div className="tw-w-full tw-h-full tw-grid tw-grid-cols-2 tw-place-items-center tw-gap-2 md:tw-gap-5">
-							<Link href="/login/ministry">
-								<div className="tw-group tw-transition-all tw-duration-500 tw-ease-in-out tw-w-full tw-h-full tw-rounded-lg tw-p-5 tw-border-2 tw-border-[#8e6abf] hover:tw-bg-gradient-to-tl hover:tw-from-[#8e6abf] hover:tw-to-[#7e3ed8] tw-flex tw-justify-center tw-items-center tw-gap-3 tw-cursor-pointer">
-									<div className="tw-w-2/3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-3">
-										<span className="tw-cursor-pointer tw-transition-all tw-duration-300 tw-ease-in-out group-hover:tw-scale-105 tw-h-40 tw-rounded-xl tw-w-fit tw-flex tw-justify-center tw-items-center tw-bg-black group-hover:tw-bg-transparent tw-p-2">
-											<Image
-												src={ministryLogo}
-												alt="ministry logo"
-												width={230}
-												height={100}
-											/>
-										</span>
-										<p className="tw-text-base md:tw-text-lg tw-text-center tw-cursor-pointer group-hover:tw-text-white">
-											Ministry of Foreign Affairs
-										</p>
+							{agencies?.map((agency) => (
+								<Link key={agency?.id} href={agency?.url}>
+									<div className="tw-group tw-transition-all tw-duration-500 tw-ease-in-out tw-w-full tw-h-full tw-rounded-lg tw-p-5 tw-border-2 tw-border-[#8e6abf] hover:tw-bg-gradient-to-tl hover:tw-from-[#8e6abf]/70 hover:tw-to-[#7e3ed8]/70 tw-flex tw-justify-center tw-items-center tw-gap-3 tw-cursor-pointer">
+										<div className="tw-w-2/3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-3">
+											<span
+												className={`tw-cursor-pointer tw-transition-all tw-duration-300 tw-ease-in-out group-hover:tw-scale-105 tw-h-40 tw-rounded-xl tw-w-fit tw-flex tw-justify-center tw-items-center ${
+													agency?.id === 'ministries' ? 'tw-bg-black' : ''
+												} group-hover:tw-bg-transparent tw-p-2`}>
+												<Image
+													src={agency?.logo}
+													alt={agency?.alt}
+													width={agency?.id === 'ministries' ? 230 : 120}
+													height={agency?.id === 'ministries' ? 100 : 120}
+													className="rounded-2"
+												/>
+											</span>
+											<p className="tw-text-base md:tw-text-lg tw-text-center tw-cursor-pointer group-hover:tw-text-white">
+												{agency?.name}
+											</p>
+										</div>
 									</div>
-								</div>
-							</Link>
-							<Link href="/login/immigration">
-								<div className="tw-group tw-transition-all tw-duration-500 tw-ease-in-out tw-w-full tw-h-full tw-rounded-lg tw-p-5 tw-border-2 tw-border-[#8e6abf] hover:tw-bg-gradient-to-tl hover:tw-from-[#8e6abf] hover:tw-to-[#7e3ed8] tw-flex tw-justify-center tw-items-center tw-gap-3 tw-cursor-pointer">
-									<div className="tw-w-2/3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-3">
-										<span className="tw-cursor-pointer tw-transition-all tw-duration-400 tw-ease-in-out group-hover:tw-scale-105 tw-h-40 tw-rounded-xl tw-w-fit tw-flex tw-justify-center tw-items-center tw-p-2">
-											<Image
-												src={immigrationLogo}
-												alt="immigration logo"
-												width={120}
-												height={120}
-												className="rounded-2"
-											/>
-										</span>
-										<p className="tw-text-base md:tw-text-lg tw-text-center tw-cursor-pointer group-hover:tw-text-white">
-											Ghana Immigration Service
-										</p>
-									</div>
-								</div>
-							</Link>
-							<Link href="/login/ghs">
-								<div className="tw-group tw-transition-all tw-duration-500 tw-ease-in-out tw-w-full tw-h-full tw-rounded-lg tw-p-5 tw-border-2 tw-border-[#8e6abf] hover:tw-bg-gradient-to-tl hover:tw-from-[#8e6abf] hover:tw-to-[#7e3ed8] tw-flex tw-justify-center tw-items-center tw-gap-3 tw-cursor-pointer">
-									<div className="tw-w-2/3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-3">
-										<span className="tw-cursor-pointer tw-transition-all tw-duration-400 tw-ease-in-out group-hover:tw-scale-105 tw-h-40 tw-rounded-xl tw-w-fit tw-flex tw-justify-center tw-items-center tw-p-2">
-											<Image
-												src={ghsLogo}
-												alt="ghs logo"
-												width={120}
-												height={120}
-												className="rounded-2"
-											/>
-										</span>
-										<p className="tw-text-base md:tw-text-lg tw-text-center tw-cursor-pointer group-hover:tw-text-white">
-											Ghana Port Health Services (GHS)
-										</p>
-									</div>
-								</div>
-							</Link>
-							<Link href="/policy-check">
-								<div className="tw-group tw-transition-all tw-duration-500 tw-ease-in-out tw-w-full tw-h-full tw-rounded-lg tw-p-5 tw-border-2 tw-border-[#8e6abf] hover:tw-bg-gradient-to-tl hover:tw-from-[#8e6abf] hover:tw-to-[#7e3ed8] tw-flex tw-justify-center tw-items-center tw-gap-3 tw-cursor-pointer">
-									<div className="tw-w-2/3 tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-3">
-										<span className="tw-cursor-pointer tw-transition-all tw-duration-400 tw-ease-in-out group-hover:tw-scale-105 tw-h-40 tw-rounded-xl tw-w-fit tw-flex tw-justify-center tw-items-center tw-p-2">
-											<Image
-												src={airlinesLogo}
-												alt="ghana airlines logo"
-												width={120}
-												height={120}
-												className="rounded-2"
-											/>
-										</span>
-										<p className="tw-text-base md:tw-text-lg tw-text-center tw-cursor-pointer group-hover:tw-text-white">
-											Ghana Airlines
-										</p>
-									</div>
-								</div>
-							</Link>
+								</Link>
+							))}
 						</div>
 					</div>
 				</div>
