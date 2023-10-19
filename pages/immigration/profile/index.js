@@ -20,6 +20,8 @@ import DefaultInput from '@/components/Input/DefaultInput';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useAxiosAuth from 'hooks/useAxiosAuth';
+import { toast } from 'react-toastify';
+import { signOut } from 'next-auth/react';
 const MySwal = withReactContent(Swal);
 
 const alert = (title = null, text = null, icon = null) => {
@@ -74,13 +76,15 @@ const Profile = () => {
 			}
 		},
 
-		onError: (error) => {
-			toast.error(`${error?.response?.data?.STATUSMSG}`);
-			//logout();
-		},
 		*/
+		onError: async (error) => {
+			if (error?.message?.toLowercase() === 'unauthenticated') {
+				toast.error('Session expired');
+				return await signOut({ callbackUrl: '/' });
+			}
+		},
 
-		staleTime: 500000,
+		//staleTime: 500000,
 	});
 
 	const USER_PROFILE = userProfile?.data?.data?.data
@@ -109,8 +113,11 @@ const Profile = () => {
 					alert('Password change failed', 'Please try again later', 'error');
 				}
 			},
-			onError: (error) => {
-				console.log(error);
+			onError: async (error) => {
+				if (error?.message?.toLowercase() === 'unauthenticated') {
+					toast.error('Session expired');
+					return await signOut({ callbackUrl: '/' });
+				}
 			},
 		}
 	);

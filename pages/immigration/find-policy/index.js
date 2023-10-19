@@ -25,6 +25,8 @@ import { IoClose } from 'react-icons/io5';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { differenceInDays } from 'date-fns';
+import { signOut } from 'next-auth/react';
+import { toast } from 'react-toastify';
 const MySwal = withReactContent(Swal);
 
 const alert = (title = null, text = null, icon = null) => {
@@ -100,7 +102,11 @@ const FindPolicy = () => {
 				setPolicyHolder(null);
 			}
 		},
-		onError: (error) => {
+		onError: async (error) => {
+			if (error?.message?.toLowercase() === 'unauthenticated') {
+				toast.error('Session expired');
+				return await signOut({ callbackUrl: '/' });
+			}
 			alert('User not found', null, 'error');
 			setNotFound(true);
 			setPolicyHolder(null);
@@ -174,8 +180,11 @@ const FindPolicy = () => {
 					);
 				}
 			},
-			onError: (error) => {
-				console.log(error);
+			onError: async (error) => {
+				if (error?.message?.toLowercase() === 'unauthenticated') {
+					toast.error('Session expired');
+					return await signOut({ callbackUrl: '/' });
+				}
 			},
 		}
 	);
@@ -218,8 +227,11 @@ const FindPolicy = () => {
 					);
 				}
 			},
-			onError: (error) => {
-				console.log(error);
+			onError: async (error) => {
+				if (error?.message?.toLowercase() === 'unauthenticated') {
+					toast.error('Session expired');
+					return await signOut({ callbackUrl: '/' });
+				}
 			},
 		}
 	);
