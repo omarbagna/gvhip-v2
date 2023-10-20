@@ -483,7 +483,7 @@ const Navbar4 = () => {
 									</li>
 
 									{status === 'authenticated' && session ? null : status ===
-											'unauthenticated' && !session ? (
+											'unauthenticated.' && !session ? (
 										<li className="nav-item">
 											<Link href="#">
 												<a className="dropdown-toggle nav-link">Sign In</a>
@@ -537,7 +537,7 @@ const Navbar4 = () => {
 										</a>
 									</Link>
 								</div>
-							) : status === 'unauthenticated' && !session ? null : (
+							) : status === 'unauthenticated.' && !session ? null : (
 								status === 'loading' && (
 									<div className="others-option">
 										<Skeleton

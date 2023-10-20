@@ -51,7 +51,7 @@ const columns = [
 	},
 	{
 		Header: 'Status',
-		accessor: 'status',
+		accessor: 'trip_status',
 		Cell: ({ value }) => {
 			if (value) {
 				return (
@@ -73,25 +73,6 @@ const columns = [
 	},
 ];
 
-const data = [
-	{
-		id: 1,
-		full_name: 'Omar Bagna',
-		policy_number: 'VHNX6860324L',
-		arrival_date: '2023-10-11',
-		departure_date: '2024-05-18',
-		status: 'verified',
-	},
-	{
-		id: 2,
-		full_name: 'Nasihat Omar',
-		policy_number: 'VHY23424002K',
-		arrival_date: '2023-09-08',
-		departure_date: '2024-02-20',
-		status: 'declined',
-	},
-];
-
 const Statistics = () => {
 	const axiosPrivate = useAxiosAuth();
 	const router = useRouter();
@@ -106,20 +87,34 @@ const Statistics = () => {
 	const [selected, setSelected] = useState(
 		selectedQuery ? selectedQuery : 'all'
 	);
-	const [filter, setFilter] = useState('today');
+	const [filter, setFilter] = useState('this_year');
 
-	const getUserProfile = async () => {
-		const response = await axiosPrivate.get('/admin/profile');
+	const getStatisticsData = async (filter = 'this_year') => {
+		const response = await axiosPrivate.get(
+			`/admin/statistics?filter=${filter}`
+		);
 
 		return response;
 	};
 
-	const userProfile = useQuery('profile', getUserProfile, {
-		staleTime: 500000,
-	});
+	const statisticsData = useQuery(
+		['stats', filter],
+		() => getStatisticsData(filter),
+		{
+			onError: (error) => {
+				console.log(error);
+				/*
+				if (error?.data?.message?.toLowercase() === 'unauthenticated') {
+					toast.error('Session expired');
+					return signOut({ callbackUrl: '/' });
+				}
+				*/
+			},
+		}
+	);
 
-	const USER_PROFILE = userProfile?.data?.data?.data
-		? userProfile?.data?.data?.data
+	const STATISTICS_DATA = statisticsData?.data?.data?.data
+		? statisticsData?.data?.data?.data
 		: null;
 
 	return (
@@ -131,7 +126,7 @@ const Statistics = () => {
 						Processing Stats
 					</h2>
 
-					{userProfile.isLoading ? (
+					{statisticsData.isLoading ? (
 						<div className="tw-w-fit tw-flex tw-justify-center tw-items-center tw-gap-3">
 							<Skeleton
 								variant="text"
@@ -158,18 +153,18 @@ const Statistics = () => {
 								Today
 							</div>
 							<div
-								onClick={() => setFilter('this month')}
+								onClick={() => setFilter('this_month')}
 								className={`tw-group tw-transition-all tw-text-sm tw-duration-200 tw-ease-in-out tw-p-1 tw-px-2 tw-rounded-md hover:tw-bg-[#8D69BF] hover:tw-text-white ${
-									filter === 'this month'
+									filter === 'this_month'
 										? 'tw-bg-[#8D69BF] tw-text-white'
 										: 'tw-bg-[#FFECF4] tw-text-[#8D69BF]'
 								} tw-cursor-pointer`}>
 								This month
 							</div>
 							<div
-								onClick={() => setFilter('this year')}
+								onClick={() => setFilter('this_year')}
 								className={`tw-group tw-transition-all tw-text-sm tw-duration-200 tw-ease-in-out tw-p-1 tw-px-2 tw-rounded-md hover:tw-bg-[#8D69BF] hover:tw-text-white ${
-									filter === 'this year'
+									filter === 'this_year'
 										? 'tw-bg-[#8D69BF] tw-text-white'
 										: 'tw-bg-[#FFECF4] tw-text-[#8D69BF]'
 								} tw-cursor-pointer`}>
@@ -179,7 +174,7 @@ const Statistics = () => {
 					)}
 				</div>
 
-				{!userProfile.isLoading && USER_PROFILE && (
+				{!statisticsData.isLoading && STATISTICS_DATA && (
 					<>
 						<div className="tw-w-full tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-5">
 							<div
@@ -202,7 +197,7 @@ const Statistics = () => {
 										className={`tw-font-medium tw-cursor-pointer tw-text-3xl lg:tw-text-5xl ${
 											selected === 'all' ? 'tw-text-white' : 'tw-text-[#7862AF]'
 										}`}>
-										219
+										{STATISTICS_DATA?.travelers_count}
 									</h3>
 								</div>
 							</div>
@@ -228,7 +223,7 @@ const Statistics = () => {
 												? 'tw-text-white'
 												: 'tw-text-green-500'
 										}`}>
-										136
+										{STATISTICS_DATA?.verified_travelers_count}
 									</h3>
 								</div>
 							</div>
@@ -254,7 +249,7 @@ const Statistics = () => {
 												? 'tw-text-white'
 												: 'tw-text-red-500'
 										}`}>
-										83
+										{STATISTICS_DATA?.declined_travelers_count}
 									</h3>
 								</div>
 							</div>
@@ -264,17 +259,17 @@ const Statistics = () => {
 							COLUMNS={columns}
 							DATA={
 								selected !== 'all'
-									? data?.filter(
-											({ status }) =>
-												status?.toLowerCase() === selected?.toLowerCase()
+									? STATISTICS_DATA?.recent_travelers?.filter(
+											({ trip_status }) =>
+												trip_status?.toLowerCase() === selected?.toLowerCase()
 									  )
-									: data
+									: STATISTICS_DATA?.recent_travelers
 							}
 						/>
 					</>
 				)}
 
-				{userProfile.isLoading && (
+				{statisticsData.isLoading && (
 					<>
 						<div className="tw-w-full tw-grid tw-grid-cols-3 tw-gap-5">
 							<div className="tw-w-full tw-h-fit tw-bg-white tw-shadow-sm tw-rounded-lg tw-py-5 tw-px-4 tw-flex tw-flex-col tw-justify-center tw-items-start tw-gap-5">
@@ -410,7 +405,7 @@ const Statistics = () => {
 					</>
 				)}
 
-				{!userProfile.isLoading && !USER_PROFILE && (
+				{!statisticsData.isLoading && !STATISTICS_DATA && (
 					<h2>Failed to load data. Please reload this page to try again</h2>
 				)}
 			</div>
@@ -427,7 +422,7 @@ const Statistics = () => {
 						data-aos-duration="800"
 						className="tw-rounded-xl tw-bg-white tw-w-full md:tw-w-4/5 lg:tw-w-2/3 tw-h-full md:tw-h-fit tw-px-5 tw-py-10 tw-flex tw-flex-col overflow-auto"
 						onClick={(e) => e.stopPropagation()}>
-						<div className="section-title tw-flex tw-justify-between tw-items-center">
+						<div className="section-title tw-flex !tw-max-w-full !tw-mx-5 tw-justify-between tw-items-center">
 							<h2 className="nunito-font">Traveller Info</h2>
 
 							<span
@@ -555,7 +550,11 @@ const Statistics = () => {
 												Duration
 											</div>
 											<p className="tw-w-full tw-flex tw-justify-end tw-text-sm tw-text-gray-600 tw-font-bold">
-												{viewTravellerData?.duration} Days
+												{
+													viewTravellerData?.user_policy_transaction[0]
+														?.duration
+												}{' '}
+												Days
 											</p>
 										</div>
 									</div>
@@ -565,10 +564,14 @@ const Statistics = () => {
 												Policy Name
 											</div>
 											<span className="tw-w-full tw-flex tw-justify-end tw-items-end tw-gap-1 tw-text-sm tw-text-[#8e6abf] tw-font-bold">
-												{viewTravellerData?.plan_name}
+												{
+													viewTravellerData?.user_policy_transaction[0]
+														?.travel_plan?.plan_name
+												}
 											</span>
 										</div>
-										{viewTravellerData?.extension_start_date ? (
+										{viewTravellerData?.user_policy_transaction[0]
+											?.extension_start_date ? (
 											<div className="tw-grid tw-grid-cols-2">
 												<div className="tw-w-full tw-flex tw-justify-start tw-items-center tw-text-sm tw-text-gray-500">
 													Extension status
@@ -586,7 +589,9 @@ const Statistics = () => {
 												className={`tw-capitalize tw-w-full tw-flex tw-justify-end tw-text-base ${
 													Number(
 														differenceInDays(
-															new Date(viewTravellerData?.end_date),
+															new Date(
+																viewTravellerData?.user_policy_transaction[0]?.end_date
+															),
 															new Date()
 														)
 													) +
@@ -597,7 +602,9 @@ const Statistics = () => {
 												}  tw-font-bold`}>
 												{Number(
 													differenceInDays(
-														new Date(viewTravellerData?.end_date),
+														new Date(
+															viewTravellerData?.user_policy_transaction[0]?.end_date
+														),
 														new Date()
 													)
 												) + 1}{' '}
@@ -612,7 +619,9 @@ const Statistics = () => {
 												{Intl.NumberFormat('en-US', {
 													style: 'currency',
 													currency: 'USD',
-												}).format(viewTravellerData?.price)}{' '}
+												}).format(
+													viewTravellerData?.user_policy_transaction[0]?.price
+												)}{' '}
 											</span>
 										</div>
 									</div>

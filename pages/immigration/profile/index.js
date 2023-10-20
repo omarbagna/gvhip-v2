@@ -78,10 +78,13 @@ const Profile = () => {
 
 		*/
 		onError: async (error) => {
-			if (error?.message?.toLowercase() === 'unauthenticated') {
-				toast.error('Session expired');
-				return await signOut({ callbackUrl: '/' });
-			}
+			console.log(error);
+			/*
+				if (error?.data?.message?.toLowercase() === 'unauthenticated.') {
+					toast.error('Session expired');
+					return await signOut({ callbackUrl: '/' });
+				}
+				*/
 		},
 
 		//staleTime: 500000,
@@ -114,7 +117,7 @@ const Profile = () => {
 				}
 			},
 			onError: async (error) => {
-				if (error?.message?.toLowercase() === 'unauthenticated') {
+				if (error?.data?.message?.toLowercase() === 'unauthenticated') {
 					toast.error('Session expired');
 					return await signOut({ callbackUrl: '/' });
 				}

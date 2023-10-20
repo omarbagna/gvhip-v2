@@ -70,13 +70,11 @@ const options = {
 const LineChart = ({ chartData, chartType }) => {
 	const data = {
 		labels: chartData?.map(({ label }) =>
-			dayjs(label).format(
-				chartType === 'this_year'
-					? 'MMM'
-					: chartType === 'this_week'
-					? 'dddd'
-					: chartType === 'this_month' && 'DD MMM, YYYY'
-			)
+			chartType === 'this_year'
+				? label
+				: chartType === 'this_week'
+				? dayjs(label).format('dddd')
+				: chartType === 'this_month' && dayjs(label).format('DD MMM, YYYY')
 		),
 		datasets: [
 			{

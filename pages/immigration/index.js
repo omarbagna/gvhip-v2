@@ -52,14 +52,19 @@ const Dashboard = () => {
 
 	const [filter, setFilter] = useState('this_year');
 
-	const getDashboardData = async () => {
-		const response = await axiosPrivate.get('/admin/dashboard');
+	const getDashboardData = async (filter = 'this_year') => {
+		const response = await axiosPrivate.get(
+			`/admin/dashboard?filter=${filter}`
+		);
 
 		return response;
 	};
 
-	const dashboardData = useQuery('dashboard', getDashboardData, {
-		/*
+	const dashboardData = useQuery(
+		['dashboard', filter],
+		() => getDashboardData(filter),
+		{
+			/*
 		onSuccess: (userData) => {
 			if (userData?.status === 200) {
 				setDateState([
@@ -78,15 +83,19 @@ const Dashboard = () => {
 		},
 
 		*/
-		onError: async (error) => {
-			if (error?.message?.toLowercase() === 'unauthenticated') {
-				toast.error('Session expired');
-				return await signOut({ callbackUrl: '/' });
-			}
-		},
+			onError: async (error) => {
+				console.log(error);
+				/*
+				if (error?.data?.message?.toLowercase() === 'unauthenticated.') {
+					toast.error('Session expired');
+					return await signOut({ callbackUrl: '/' });
+				}
+				*/
+			},
 
-		//staleTime: 500000,
-	});
+			//staleTime: 500000,
+		}
+	);
 
 	const DASHBOARD_DATA = dashboardData?.data?.data?.data
 		? dashboardData?.data?.data?.data

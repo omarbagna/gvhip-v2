@@ -103,7 +103,7 @@ const FindPolicy = () => {
 			}
 		},
 		onError: async (error) => {
-			if (error?.message?.toLowercase() === 'unauthenticated') {
+			if (error?.data?.message?.toLowercase() === 'unauthenticated') {
 				toast.error('Session expired');
 				return await signOut({ callbackUrl: '/' });
 			}
@@ -181,10 +181,13 @@ const FindPolicy = () => {
 				}
 			},
 			onError: async (error) => {
-				if (error?.message?.toLowercase() === 'unauthenticated') {
+				console.log(error);
+				/*
+				if (error?.data?.message?.toLowercase() === 'unauthenticated.') {
 					toast.error('Session expired');
 					return await signOut({ callbackUrl: '/' });
 				}
+				*/
 			},
 		}
 	);
@@ -228,10 +231,13 @@ const FindPolicy = () => {
 				}
 			},
 			onError: async (error) => {
-				if (error?.message?.toLowercase() === 'unauthenticated') {
+				console.log(error);
+				/*
+				if (error?.data?.message?.toLowercase() === 'unauthenticated.') {
 					toast.error('Session expired');
 					return await signOut({ callbackUrl: '/' });
 				}
+				*/
 			},
 		}
 	);
