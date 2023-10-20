@@ -96,7 +96,6 @@ const Statistics = () => {
 	const axiosPrivate = useAxiosAuth();
 	const router = useRouter();
 	const { selectedQuery } = router.query;
-	console.log(selectedQuery);
 	const {
 		viewTraveller,
 		setViewTraveller,

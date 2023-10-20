@@ -37,6 +37,41 @@ function MyApp({ Component, pageProps }) {
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<title>GVHIP - Ghana Visitors Health Insurance Platform</title>
+				<meta
+					name="title"
+					content="GVHIP - Ghana Visitors Health Insurance Platform"
+				/>
+				<meta
+					name="description"
+					content="The Ghana Visitors Health Insurance Platform (GVHIP) ensures that you have a seamless, safe, and medically secure trip within our beautiful country.
+Ghana welcomes you with open arms!"
+				/>
+
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content="https://gvhip-v2.netlify.app/" />
+				<meta
+					property="og:title"
+					content="GVHIP - Ghana Visitors Health Insurance Platform"
+				/>
+				<meta
+					property="og:description"
+					content="The Ghana Visitors Health Insurance Platform (GVHIP) ensures that you have a seamless, safe, and medically secure trip within our beautiful country.
+Ghana welcomes you with open arms!"
+				/>
+				<meta property="og:image" content="/gsti_logo.jpeg" />
+
+				<meta property="twitter:card" content="summary_large_image" />
+				<meta property="twitter:url" content="https://gvhip-v2.netlify.app/" />
+				<meta
+					property="twitter:title"
+					content="GVHIP - Ghana Visitors Health Insurance Platform"
+				/>
+				<meta
+					property="twitter:description"
+					content="The Ghana Visitors Health Insurance Platform (GVHIP) ensures that you have a seamless, safe, and medically secure trip within our beautiful country.
+Ghana welcomes you with open arms!"
+				/>
+				<meta property="twitter:image" content="/gsti_logo.jpeg" />
 			</Head>
 
 			<QueryClientProvider client={queryClient}>
